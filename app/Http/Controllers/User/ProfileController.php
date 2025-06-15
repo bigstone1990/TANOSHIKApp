@@ -19,9 +19,13 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
+        $loginUser = Auth::guard('users')->user();
+        $officeName = $loginUser->office?->name ?? '未所属';
+
         return Inertia::render('User/Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
+            'officeName' => $officeName,
         ]);
     }
 

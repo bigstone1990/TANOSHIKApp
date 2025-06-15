@@ -9,10 +9,12 @@ import { FormEventHandler } from 'react';
 export default function UpdateProfileInformation({
     mustVerifyEmail,
     status,
+    officeName,
     className = '',
 }: {
     mustVerifyEmail: boolean;
     status?: string;
+    officeName: string;
     className?: string;
 }) {
     const user = usePage().props.auth.user;
@@ -51,6 +53,12 @@ export default function UpdateProfileInformation({
                     <label className="block text-sm font-medium text-gray-700">かな</label>
 
                     <p className="mt-1 block w-full ">{user.kana}</p>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">所属事業所</label>
+
+                    <p className="mt-1 block w-full ">{officeName}</p>
                 </div>
 
                 <div>
