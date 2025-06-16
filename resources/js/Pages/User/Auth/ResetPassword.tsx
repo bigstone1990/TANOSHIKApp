@@ -1,10 +1,17 @@
 import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { Button } from "@/components/ui/button"
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function ResetPassword({
     token,
@@ -32,69 +39,68 @@ export default function ResetPassword({
         <GuestLayout>
             <Head title="パスワードリセット" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="メールアドレス" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="パスワード" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        isFocused={true}
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="確認用パスワード"
-                    />
-
-                    <TextInput
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                    />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        パスワードリセット
-                    </PrimaryButton>
-                </div>
-            </form>
+            <div className="flex flex-col gap-6">
+                <Card>
+                    <CardHeader className="text-center">
+                        <CardTitle className="text-xl">パスワードリセット</CardTitle>
+                        <CardDescription>
+                            パスワードを再設定してください
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <form onSubmit={submit}>
+                            <div className="grid gap-6">
+                                <div className="grid gap-6">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="email">メールアドレス</Label>
+                                        <Input
+                                            id="email"
+                                            type="email"
+                                            name="email"
+                                            value={data.email}
+                                            autoComplete="username"
+                                            placeholder="user@example.com"
+                                            required
+                                            onChange={(e) => setData('email', e.target.value)}
+                                        />
+                                        <InputError message={errors.email} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="password">パスワード</Label>
+                                        <Input
+                                            id="password"
+                                            type="password"
+                                            name="password"
+                                            value={data.password}
+                                            autoComplete="new-password"
+                                            autoFocus
+                                            required
+                                            onChange={(e) => setData('password', e.target.value)}
+                                        />
+                                        <InputError message={errors.password} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="password_confirmation">確認用パスワード</Label>
+                                        <Input
+                                            id="password_confirmation"
+                                            type="password"
+                                            name="password_confirmation"
+                                            value={data.password_confirmation}
+                                            autoComplete="new-password"
+                                            required
+                                            onChange={(e) => setData('password_confirmation', e.target.value)}
+                                        />
+                                        <InputError message={errors.password_confirmation} />
+                                    </div>
+                                    <Button type="submit" className="w-full" disabled={processing}>
+                                        パスワードリセット
+                                    </Button>
+                                </div>
+                            </div>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
         </GuestLayout>
     );
 }
