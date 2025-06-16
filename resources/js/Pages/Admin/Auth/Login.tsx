@@ -46,7 +46,7 @@ export default function Login({
                     <CardHeader className="text-center">
                         <CardTitle className="text-xl">おかえりなさい</CardTitle>
                         <CardDescription>
-                            {appName}にログインしましょう
+                            {appName}に管理者ログインしましょう
                         </CardDescription>
                     </CardHeader>
                     <CardContent>

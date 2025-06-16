@@ -33,7 +33,8 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     <CardHeader className="text-center">
                         <CardTitle className="text-xl">パスワードを忘れましたか？</CardTitle>
                         <CardDescription>
-                            登録しているメールアドレスにパスワードリセット用リンクを送ることができます。
+                            登録しているメールアドレスに<br />
+                            パスワードリセット用リンクを送ることができます。
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
