@@ -12,7 +12,7 @@ export default function Guest({ children }: PropsWithChildren) {
                 <div className="flex w-full max-w-sm flex-col gap-6">
                     <div className="flex items-center gap-2 self-center font-medium">
                         <div className="flex w-80 items-center justify-center rounded-md">
-                            <ApplicationLogo className="fill-current text-gray-500" />
+                            <ApplicationLogo />
                         </div>
                     </div>
                     {children}
