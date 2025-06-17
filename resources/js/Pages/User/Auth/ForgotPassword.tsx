@@ -51,7 +51,6 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                         <Input
                                             id="email"
                                             type="email"
-                                            name="email"
                                             value={data.email}
                                             autoComplete="username"
                                             autoFocus

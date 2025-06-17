@@ -63,7 +63,6 @@ export default function Login({
                                         <Input
                                             id="email"
                                             type="email"
-                                            name="email"
                                             value={data.email}
                                             autoComplete="username"
                                             autoFocus
@@ -78,7 +77,6 @@ export default function Login({
                                         <Input
                                             id="password"
                                             type="password"
-                                            name="password"
                                             value={data.password}
                                             autoComplete="current-password"
                                             required
@@ -97,7 +95,6 @@ export default function Login({
                                     <div className="flex items-center gap-3">
                                         <Checkbox
                                             id="remember"
-                                            name="remember"
                                             checked={data.remember}
                                             onCheckedChange={(checked) => setData('remember', checked === true)}
                                         />

@@ -56,7 +56,6 @@ export default function ResetPassword({
                                         <Input
                                             id="email"
                                             type="email"
-                                            name="email"
                                             value={data.email}
                                             autoComplete="username"
                                             placeholder="user@example.com"
@@ -70,7 +69,6 @@ export default function ResetPassword({
                                         <Input
                                             id="password"
                                             type="password"
-                                            name="password"
                                             value={data.password}
                                             autoComplete="new-password"
                                             autoFocus
@@ -84,7 +82,6 @@ export default function ResetPassword({
                                         <Input
                                             id="password_confirmation"
                                             type="password"
-                                            name="password_confirmation"
                                             value={data.password_confirmation}
                                             autoComplete="new-password"
                                             required
