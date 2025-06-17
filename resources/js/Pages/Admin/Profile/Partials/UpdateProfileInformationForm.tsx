@@ -1,18 +1,14 @@
 import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
-import { Link, useForm, usePage } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 
 export default function UpdateProfileInformation({
-    mustVerifyEmail,
-    status,
     className = '',
 }: {
-    mustVerifyEmail: boolean;
-    status?: string;
     className?: string;
 }) {
     const user = usePage().props.auth.user;
@@ -30,83 +26,73 @@ export default function UpdateProfileInformation({
 
     return (
         <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900">
+            <header className="flex flex-col space-y-1.5">
+                <h2 className="font-semibold tracking-tight text-xl">
                     ユーザー情報
                 </h2>
 
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                     メールアドレスを変更できます。
                 </p>
             </header>
 
-            <form onSubmit={submit} className="mt-6 space-y-6">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">名前</label>
+            <form onSubmit={submit} className="mt-6">
+                <div className="grid gap-6">
+                    <div className="grid gap-2">
+                        <Label htmlFor="name">名前<span className="text-red-600"> *変更は管理者にご連絡ください</span></Label>
 
-                    <p className="mt-1 block w-full ">{user.name}</p>
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">かな</label>
-
-                    <p className="mt-1 block w-full ">{user.kana}</p>
-                </div>
-
-                <div>
-                    <InputLabel htmlFor="email" value="メールアドレス" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        className="mt-1 block w-full"
-                        value={data.email}
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                        isFocused
-                        autoComplete="username"
-                    />
-
-                    <InputError className="mt-2" message={errors.email} />
-                </div>
-
-                {mustVerifyEmail && user.email_verified_at === null && (
-                    <div>
-                        <p className="mt-2 text-sm text-gray-800">
-                            Your email address is unverified.
-                            <Link
-                                href={route('admin.verification.send')}
-                                method="post"
-                                as="button"
-                                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            >
-                                Click here to re-send the verification email.
-                            </Link>
-                        </p>
-
-                        {status === 'verification-link-sent' && (
-                            <div className="mt-2 text-sm font-medium text-green-600">
-                                A new verification link has been sent to your
-                                email address.
-                            </div>
-                        )}
+                        <Input
+                            id="name"
+                            type="text"
+                            className="bg-gray-100"
+                            value={user.name}
+                            readOnly
+                        />
                     </div>
-                )}
 
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>保存</PrimaryButton>
+                    <div className="grid gap-2">
+                        <Label htmlFor="kana">かな<span className="text-red-600"> *変更は管理者にご連絡ください</span></Label>
 
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">
-                            保存しました
-                        </p>
-                    </Transition>
+                        <Input
+                            id="kana"
+                            type="text"
+                            className="bg-gray-100"
+                            value={user.kana}
+                            readOnly
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="email">メールアドレス</Label>
+
+                        <Input
+                            id="email"
+                            type="email"
+                            value={data.email}
+                            autoComplete="username"
+                            autoFocus
+                            placeholder="user@example.com"
+                            required
+                            onChange={(e) => setData('email', e.target.value)}
+                        />
+                        <InputError message={errors.email} />
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                        <Button type="submit" disabled={processing}>保存</Button>
+
+                        <Transition
+                            show={recentlySuccessful}
+                            enter="transition ease-in-out"
+                            enterFrom="opacity-0"
+                            leave="transition ease-in-out"
+                            leaveTo="opacity-0"
+                        >
+                            <p className="text-sm text-gray-600">
+                                保存しました
+                            </p>
+                        </Transition>
+                    </div>
                 </div>
             </form>
         </section>

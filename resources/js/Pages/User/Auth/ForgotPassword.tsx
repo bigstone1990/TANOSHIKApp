@@ -1,10 +1,17 @@
 import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { Button } from "@/components/ui/button"
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function ForgotPassword({ status }: { status?: string }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -21,38 +28,52 @@ export default function ForgotPassword({ status }: { status?: string }) {
         <GuestLayout>
             <Head title="パスワードを忘れましたか？" />
 
-            <div className="mb-4 text-sm text-gray-600">
-                パスワードを忘れましたか？<br />
-                登録しているメールアドレスにパスワードリセット用リンクを送ることができます。
+            <div className="flex flex-col gap-6">
+                <Card>
+                    <CardHeader className="text-center">
+                        <CardTitle className="text-xl">パスワードを忘れましたか？</CardTitle>
+                        <CardDescription>
+                            登録しているメールアドレスに<br />
+                            パスワードリセット用リンクを送ることができます。
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {status && (
+                            <div className="mb-4 text-sm font-medium text-green-600">
+                                {status}
+                            </div>
+                        )}
+                        <form onSubmit={submit}>
+                            <div className="grid gap-6">
+                                <div className="grid gap-6">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="email">メールアドレス</Label>
+                                        <Input
+                                            id="email"
+                                            type="email"
+                                            value={data.email}
+                                            autoComplete="username"
+                                            autoFocus
+                                            placeholder="user@example.com"
+                                            required
+                                            onChange={(e) => setData('email', e.target.value)}
+                                        />
+                                        <InputError message={errors.email} />
+                                    </div>
+                                    <Button type="submit" className="w-full" disabled={processing}>
+                                        パスワードリセットメール送信
+                                    </Button>
+                                </div>
+                                <div className="text-center text-sm">
+                                    登録しているメールアドレスを忘れた方や<br />
+                                    パスワードリセットメールが届かない方は<br />
+                                    管理者にご連絡ください
+                                </div>
+                            </div>
+                        </form>
+                    </CardContent>
+                </Card>
             </div>
-
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
-
-            <form onSubmit={submit}>
-                <InputLabel htmlFor="email" value="メールアドレス" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    name="email"
-                    value={data.email}
-                    className="mt-1 block w-full"
-                    isFocused={true}
-                    onChange={(e) => setData('email', e.target.value)}
-                />
-
-                <InputError message={errors.email} className="mt-2" />
-
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        パスワードリセットメール送信
-                    </PrimaryButton>
-                </div>
-            </form>
         </GuestLayout>
     );
 }
