@@ -1,10 +1,10 @@
 import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import { FormEventHandler, useRef } from 'react';
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 
 export default function UpdatePasswordForm({
     className = '',
@@ -50,94 +50,80 @@ export default function UpdatePasswordForm({
 
     return (
         <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900">
+            <header className="flex flex-col space-y-1.5">
+                <h2 className="font-semibold tracking-tight text-xl">
                     パスワード変更
                 </h2>
 
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                     パスワードを変更できます。
                 </p>
             </header>
 
-            <form onSubmit={updatePassword} className="mt-6 space-y-6">
-                <div>
-                    <InputLabel
-                        htmlFor="current_password"
-                        value="現在のパスワード"
-                    />
+            <form onSubmit={updatePassword} className="mt-6">
+                <div className="grid gap-6">
+                    <div className="grid gap-2">
+                        <Label htmlFor="current_password">現在のパスワード</Label>
 
-                    <TextInput
-                        id="current_password"
-                        ref={currentPasswordInput}
-                        value={data.current_password}
-                        onChange={(e) =>
-                            setData('current_password', e.target.value)
-                        }
-                        type="password"
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                    />
+                        <Input
+                            id="current_password"
+                            type="password"
+                            ref={currentPasswordInput}
+                            value={data.current_password}
+                            autoComplete="current-password"
+                            required
+                            onChange={(e) => setData('current_password', e.target.value)}
+                        />
 
-                    <InputError
-                        message={errors.current_password}
-                        className="mt-2"
-                    />
-                </div>
+                        <InputError message={errors.current_password} />
+                    </div>
 
-                <div>
-                    <InputLabel htmlFor="password" value="新しいパスワード" />
+                    <div className="grid gap-2">
+                        <Label htmlFor="password">新しいパスワード</Label>
 
-                    <TextInput
-                        id="password"
-                        ref={passwordInput}
-                        value={data.password}
-                        onChange={(e) => setData('password', e.target.value)}
-                        type="password"
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                    />
+                        <Input
+                            id="password"
+                            type="password"
+                            ref={passwordInput}
+                            value={data.password}
+                            autoComplete="new-password"
+                            required
+                            onChange={(e) => setData('password', e.target.value)}
+                        />
 
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
+                        <InputError message={errors.password} />
+                    </div>
 
-                <div>
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="新しいパスワード確認用"
-                    />
+                    <div className="grid gap-2">
+                        <Label htmlFor="password_confirmation">新しいパスワード確認用</Label>
 
-                    <TextInput
-                        id="password_confirmation"
-                        value={data.password_confirmation}
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                        type="password"
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                    />
+                        <Input
+                            id="password_confirmation"
+                            type="password"
+                            value={data.password_confirmation}
+                            autoComplete="new-password"
+                            required
+                            onChange={(e) => setData('password_confirmation', e.target.value)}
+                        />
 
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
-                </div>
+                        <InputError message={errors.password_confirmation} />
+                    </div>
 
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>保存</PrimaryButton>
+                    <div className="flex items-center gap-4">
+                        <Button type="submit" disabled={processing}>保存</Button>
 
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">
-                            保存しました
-                        </p>
-                    </Transition>
+                        <Transition
+                            show={recentlySuccessful}
+                            enter="transition ease-in-out"
+                            enterFrom="opacity-0"
+                            leave="transition ease-in-out"
+                            leaveTo="opacity-0"
+                        >
+                            <p className="text-sm text-gray-600">
+                                保存しました
+                            </p>
+                        </Transition>
+                    </div>
                 </div>
             </form>
         </section>
