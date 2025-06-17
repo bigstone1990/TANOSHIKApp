@@ -4,19 +4,29 @@ export default function ApplicationLogo(props: SVGAttributes<SVGElement>) {
     return (
         <svg
             {...props}
-            viewBox="0 0 600 75"
+            viewBox="0 0 790 85.5"
             xmlns="http://www.w3.org/2000/svg"
         >
             <g>
-                <rect x="6.25" y="6.25" width="62.5" height="62.5" rx="12.5" ry="12.5" fill="#096FC6" />
+                <rect x="5.335" y="5.335" width="74.665" height="74.665" rx="15" ry="15" fill="#096FC6" />
 
                 <g fill="white">
-                    <rect x="21.25" y="18.75" width="32.5" height="8.75" />
-                    <rect x="33.125" y="18.75" width="8.75" height="37.5" />
+                    <rect x="18.665" y="21.335" width="48" height="12" rx="2" ry="2" />
+                    <rect x="36.665" y="21.335" width="12" height="48" rx="2" ry="2" />
                 </g>
             </g>
 
-            <text x="80" y="58.75" font-family="Arial, sans-serif" font-size="62.5" font-weight="bold" fill="#096FC6" dominant-baseline="text-bottom">TANOSHIKA APP</text>
+            <text
+                x="91.665"
+                y="74.665"
+                fontFamily="Arial, sans-serif"
+                fontSize="85.335"
+                fontWeight="bold"
+                fill="#096FC6"
+                dominantBaseline="text-bottom"
+            >
+                TANOSHIKA APP
+            </text>
         </svg>
     );
 }
