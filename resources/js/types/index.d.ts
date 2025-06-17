@@ -26,5 +26,4 @@ export type PageProps<
         permissions: Permission;
     };
     flash: Flash;
-    appName: string;
 };
