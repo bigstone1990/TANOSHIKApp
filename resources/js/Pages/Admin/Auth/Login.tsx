@@ -1,4 +1,3 @@
-import Checkbox from '@/Components/Checkbox';
 import InputError from '@/Components/InputError';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function Login({
     status,
@@ -94,22 +94,14 @@ export default function Login({
                                             </Link>
                                         )}
                                     </div>
-                                    <div>
-                                        <label className="flex items-center">
-                                            <Checkbox
-                                                name="remember"
-                                                checked={data.remember}
-                                                onChange={(e) =>
-                                                    setData(
-                                                        'remember',
-                                                        (e.target.checked || false) as false,
-                                                    )
-                                                }
-                                            />
-                                            <span className="ms-2 text-sm text-gray-600">
-                                                Remember me
-                                            </span>
-                                        </label>
+                                    <div className="flex items-center gap-3">
+                                        <Checkbox
+                                            id="remember"
+                                            name="remember"
+                                            checked={data.remember}
+                                            onCheckedChange={(checked) => setData('remember', checked === true)}
+                                        />
+                                        <Label htmlFor="remember">Remember me</Label>
                                     </div>
                                     <Button type="submit" className="w-full" disabled={processing}>
                                         ログイン
