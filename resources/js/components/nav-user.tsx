@@ -1,12 +1,13 @@
 "use client"
 
 import {
-  UserCog,
+  BadgeCheck,
   Bell,
   ChevronsUpDown,
   CreditCard,
   LogOut,
   Sparkles,
+  UserCog,
 } from "lucide-react"
 
 import {
@@ -88,8 +89,8 @@ export function NavUser({
                 <Sparkles />
                 Upgrade to Pro
               </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator /> */}
+            </DropdownMenuGroup> */}
+            {/* <DropdownMenuSeparator /> */}
             <DropdownMenuGroup>
               <Link href={isAdmin ? route('admin.profile.edit') : route('user.profile.edit')} className="w-full">
                 <DropdownMenuItem>
@@ -100,8 +101,8 @@ export function NavUser({
               {/* <DropdownMenuItem>
                 <CreditCard />
                 Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
+              </DropdownMenuItem> */}
+              {/* <DropdownMenuItem>
                 <Bell />
                 Notifications
               </DropdownMenuItem> */}
