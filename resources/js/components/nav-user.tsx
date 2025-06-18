@@ -92,12 +92,15 @@ export function NavUser({
             </DropdownMenuGroup> */}
             {/* <DropdownMenuSeparator /> */}
             <DropdownMenuGroup>
-              <Link href={isAdmin ? route('admin.profile.edit') : route('user.profile.edit')} className="w-full">
-                <DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link
+                  href={isAdmin ? route('admin.profile.edit') : route('user.profile.edit')}
+                  className="w-full relative flex cursor-default select-none items-center gap-2 rounded-sm text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0"
+                >
                   <UserCog />
                   ユーザー設定
-                </DropdownMenuItem>
-              </Link>
+                </Link>
+              </DropdownMenuItem>
               {/* <DropdownMenuItem>
                 <CreditCard />
                 Billing
@@ -109,12 +112,16 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href={isAdmin ? route('admin.logout') : route('user.logout')} method="post" className="w-full">
-                <DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link
+                  href={isAdmin ? route('admin.logout') : route('user.logout')}
+                  method="post"
+                  className="w-full relative flex cursor-default select-none items-center gap-2 rounded-sm text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0"
+                >
                   <LogOut />
                   ログアウト
-                </DropdownMenuItem>
-              </Link>
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
