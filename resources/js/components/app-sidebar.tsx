@@ -28,7 +28,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
+import { useIsMobile } from "@/hooks/use-mobile"
 
 const data = {
   user: {
@@ -158,6 +160,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = usePage().props.auth.user
 
   const isAdmin = usePage().props.auth.isAdmin
+
+  const isMobile = useIsMobile()
 
   const adminNavMain = [
     {
@@ -297,15 +301,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
-                </div>
-              </a>
+              <Link
+                href={isAdmin ? route('admin.top') : route('user.top')}
+                className="!p-0 justify-center">
+                <ApplicationLogo className={isMobile ? "!w-64 !h-12" : "!w-52 !h-12"} />
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
