@@ -2,7 +2,9 @@ import * as React from "react"
 import {
   BookOpen,
   Bot,
+  Building,
   Command,
+  FlaskConical,
   Frame,
   LifeBuoy,
   Map,
@@ -10,6 +12,7 @@ import {
   Send,
   Settings2,
   SquareTerminal,
+  UserPlus,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -152,7 +155,141 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const user = usePage().props.auth.user;
+  const user = usePage().props.auth.user
+
+  const isAdmin = usePage().props.auth.isAdmin
+
+  const adminNavMain = [
+    {
+      title: "アカウント管理",
+      url: "#",
+      icon: UserPlus,
+      isActive: false,
+      items: [
+        {
+          title: "管理者管理",
+          url: "#",
+        },
+        {
+          title: "ユーザー管理",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "事業所管理",
+      url: "#",
+      icon: Building,
+    },
+    {
+      title: "テスト管理",
+      url: "#",
+      icon: FlaskConical,
+      isActive: false,
+      items: [
+        {
+          title: "テスト1",
+          url: "#",
+        },
+        {
+          title: "テスト2",
+          url: "#",
+        },
+        {
+          title: "テスト3",
+          url: "#",
+        },
+      ],
+    },
+  ]
+
+  const userNavMain = [
+    {
+      title: "Playground",
+      url: "#",
+      icon: SquareTerminal,
+      isActive: true,
+      items: [
+        {
+          title: "History",
+          url: "#",
+        },
+        {
+          title: "Starred",
+          url: "#",
+        },
+        {
+          title: "Settings",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Models",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Genesis",
+          url: "#",
+        },
+        {
+          title: "Explorer",
+          url: "#",
+        },
+        {
+          title: "Quantum",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Documentation",
+      url: "#",
+      icon: BookOpen,
+      items: [
+        {
+          title: "Introduction",
+          url: "#",
+        },
+        {
+          title: "Get Started",
+          url: "#",
+        },
+        {
+          title: "Tutorials",
+          url: "#",
+        },
+        {
+          title: "Changelog",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Settings",
+      url: "#",
+      icon: Settings2,
+      items: [
+        {
+          title: "General",
+          url: "#",
+        },
+        {
+          title: "Team",
+          url: "#",
+        },
+        {
+          title: "Billing",
+          url: "#",
+        },
+        {
+          title: "Limits",
+          url: "#",
+        },
+      ],
+    },
+  ]
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -174,7 +311,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={isAdmin ? adminNavMain : userNavMain} />
         {/* <NavProjects projects={data.projects} /> */}
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
