@@ -39,7 +39,7 @@ export default function UpdateProfileInformation({
             <form onSubmit={submit} className="mt-6">
                 <div className="grid gap-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="name">名前<span className="text-red-600"> *管理者管理から変更ください</span></Label>
+                        <Label htmlFor="name">名前<span className="text-red-600"> *アカウント管理の管理者管理から変更ください</span></Label>
 
                         <Input
                             id="name"
@@ -51,7 +51,7 @@ export default function UpdateProfileInformation({
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="kana">かな<span className="text-red-600"> *管理者管理から変更ください</span></Label>
+                        <Label htmlFor="kana">かな<span className="text-red-600"> *アカウント管理の管理者管理から変更ください</span></Label>
 
                         <Input
                             id="kana"
