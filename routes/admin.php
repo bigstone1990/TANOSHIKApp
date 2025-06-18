@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\Admin\Account\AdminController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'verified'])->group(function () {
     Route::get('/', function () {
@@ -12,6 +13,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'verified'])-
     Route::get('/dashboard', function () {
         return Inertia::render('Admin/Dashboard');
     })->name('dashboard');
+});
+
+Route::prefix('admin')->name('admin.')->middleware('auth:admins')->group(function () {
+    Route::prefix('account')->name('account.')->group(function () {
+        Route::resource('admins', AdminController::class);
+    });
 });
 
 Route::prefix('admin')->name('admin.')->middleware('auth:admins')->group(function () {

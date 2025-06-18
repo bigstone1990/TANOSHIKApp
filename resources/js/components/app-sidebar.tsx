@@ -172,7 +172,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       items: [
         {
           title: "管理者管理",
-          url: "#",
+          url: route('admin.account.admins.index'),
         },
         {
           title: "ユーザー管理",
