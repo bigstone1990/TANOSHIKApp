@@ -23,6 +23,7 @@ export type PageProps<
 > = T & {
     auth: {
         user: User;
+        isAdmin: Boolean;
         permissions: Permission;
     };
     flash: Flash;

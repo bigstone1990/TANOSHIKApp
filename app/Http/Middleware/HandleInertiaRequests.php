@@ -44,6 +44,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => Auth::guard($guard)->user(),
+                'isAdmin' => Auth::guard('admins')->check(),
                 'permissions' => $permissions,
             ],
             'flash' => [
