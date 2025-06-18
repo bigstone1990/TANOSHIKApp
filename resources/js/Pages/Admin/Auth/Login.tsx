@@ -1,6 +1,6 @@
 import InputError from '@/Components/InputError';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 import { Button } from "@/components/ui/button"
 import {
@@ -21,7 +21,7 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
-    const appName = usePage().props.appName;
+    const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
@@ -46,7 +46,7 @@ export default function Login({
                     <CardHeader className="text-center">
                         <CardTitle className="text-xl">おかえりなさい</CardTitle>
                         <CardDescription>
-                            {appName}に管理者ログインしましょう
+                            {appName}にログインしましょう
                         </CardDescription>
                     </CardHeader>
                     <CardContent>

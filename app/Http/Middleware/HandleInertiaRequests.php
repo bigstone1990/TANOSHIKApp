@@ -44,6 +44,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => Auth::guard($guard)->user(),
+                'isAdmin' => Auth::guard('admins')->check(),
                 'permissions' => $permissions,
             ],
             'flash' => [
@@ -51,7 +52,6 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn () => $request->session()->get('flash_message'),
                 'status' => fn () => $request->session()->get('flash_status'),
             ],
-            'appName' => config('app.name'),
         ];
     }
 }
