@@ -1,42 +1,22 @@
-import toastr from 'toastr';
-import 'toastr/build/toastr.min.css';
 import { useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
+import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner"
 
 export default function FlashMessage() {
   const { id, message, status } = usePage().props.flash;
 
   useEffect(() => {
-    toastr.options = {
-      closeButton: false,
-      debug: false,
-      newestOnTop: false,
-      progressBar: false,
-      positionClass: 'toast-top-right',
-      preventDuplicates: false,
-      onclick: undefined,
-      showDuration: 300,
-      hideDuration: 1000,
-      timeOut: 5000,
-      extendedTimeOut: 1000,
-      showEasing: 'swing',
-      hideEasing: 'linear',
-      showMethod: 'fadeIn',
-      hideMethod: 'fadeOut',
-    };
-  }, []);
-
-  useEffect(() => {
     requestAnimationFrame(() => {
       if (status && message) {
         if (status === 'success') {
-          toastr.success(message);
+          toast.success(message);
         } else if (status === 'error') {
-          toastr.error(message);
+          toast.error(message);
         } else if (status === 'warning') {
-          toastr.warning(message);
+          toast.warning(message);
         } else {
-          toastr.info(message);
+          toast.info(message);
         }
 
         if (typeof window !== 'undefined') {
@@ -50,5 +30,7 @@ export default function FlashMessage() {
     });
   }, [id]);
 
-  return null;
+  return (
+    <Toaster />
+  );
 }
