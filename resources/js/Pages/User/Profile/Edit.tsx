@@ -1,8 +1,8 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { PageProps } from '@/types';
-import { Head } from '@inertiajs/react';
-import UpdatePasswordForm from './Partials/UpdatePasswordForm';
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
+import { PageProps } from '@/types'
+import { Head } from '@inertiajs/react'
+import UpdatePasswordForm from './Partials/UpdatePasswordForm'
+import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm'
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -19,7 +19,7 @@ import {
 
 export default function Edit({
     officeName,
-}: PageProps<{ officeName: string; }>) {
+}: PageProps<{ officeName: string }>) {
     return (
         <AuthenticatedLayout>
             <Head title="ユーザー設定" />
@@ -51,5 +51,5 @@ export default function Edit({
                 </div>
             </SidebarInset>
         </AuthenticatedLayout>
-    );
+    )
 }

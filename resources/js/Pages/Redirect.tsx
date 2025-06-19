@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
-import { PageProps } from '@/types';
+import { useEffect } from 'react'
+import { PageProps } from '@/types'
 
 type RedirectProps = PageProps<{
-  redirectTo: string;
-}>;
+  redirectTo: string
+}>
 
 export default function Redirect({ redirectTo }: RedirectProps) {
   useEffect(() => {
-    alert('ページを再読み込みします');
-    window.location.replace(redirectTo);
-  }, [redirectTo]);
+    alert('ページを再読み込みします')
+    window.location.replace(redirectTo)
+  }, [redirectTo])
 
-  return null;
+  return null
 }

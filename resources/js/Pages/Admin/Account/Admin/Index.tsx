@@ -17,10 +17,10 @@ import { PageProps } from '@/types'
 
 type IndexProps = PageProps<{
     users: {
-        id: number;
-        name: string;
-        email: string;
-    }[];
+        id: number
+        name: string
+        email: string
+    }[]
 }>
 
 export default function Dashboard({ users }: IndexProps) {
@@ -52,5 +52,5 @@ export default function Dashboard({ users }: IndexProps) {
                 </div>
             </SidebarInset>
         </AuthenticatedLayout>
-    );
+    )
 }

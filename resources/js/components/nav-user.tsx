@@ -30,7 +30,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react'
 
 export function NavUser({
   user,

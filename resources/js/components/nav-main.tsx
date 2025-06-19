@@ -19,7 +19,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
-import { Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react'
 
 export function NavMain({
   items,

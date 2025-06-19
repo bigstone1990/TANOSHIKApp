@@ -1,5 +1,5 @@
-import { PropsWithChildren } from 'react';
-import FlashMessage from '@/Components/FlashMessage';
+import { PropsWithChildren } from 'react'
+import FlashMessage from '@/Components/FlashMessage'
 import { AppSidebar } from "@/components/app-sidebar"
 import {
     SidebarProvider,
@@ -16,5 +16,5 @@ export default function Authenticated({
                 {children}
             </SidebarProvider>
         </>
-    );
+    )
 }

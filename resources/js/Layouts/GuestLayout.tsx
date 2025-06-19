@@ -1,7 +1,6 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import { usePage } from '@inertiajs/react';
-import { PropsWithChildren } from 'react';
-import FlashMessage from '@/Components/FlashMessage';
+import ApplicationLogo from '@/Components/ApplicationLogo'
+import { PropsWithChildren } from 'react'
+import FlashMessage from '@/Components/FlashMessage'
 
 export default function Guest({ children }: PropsWithChildren) {
     return (
@@ -18,5 +17,5 @@ export default function Guest({ children }: PropsWithChildren) {
                 </div>
             </div>
         </>
-    );
+    )
 }

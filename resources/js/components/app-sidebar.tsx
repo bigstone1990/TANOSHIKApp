@@ -28,8 +28,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Link, usePage } from '@inertiajs/react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
+import { Link, usePage } from '@inertiajs/react'
+import ApplicationLogo from '@/Components/ApplicationLogo'
 import { useIsMobile } from "@/hooks/use-mobile"
 
 const data = {
