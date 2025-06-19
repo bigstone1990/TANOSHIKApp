@@ -22,7 +22,7 @@ class AdminController extends Controller
      */
     public function index(): Response
     {
-        $admins = Admin::select('id', 'name', 'email')
+        $admins = Admin::select('id', 'name', 'kana', 'email')
             ->orderBy('kana')
             ->get();
 
