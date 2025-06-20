@@ -32,6 +32,7 @@ export function NavMain({
     items?: {
       title: string
       url: string
+      isActive?: boolean
     }[]
   }[]
 }) {
@@ -56,7 +57,7 @@ export function NavMain({
           if (!hasSubItems) {
             return (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild tooltip={item.title}>
+                <SidebarMenuButton asChild tooltip={item.title} data-active={item.isActive}>
                   <Link href={item.url}>
                     <item.icon />
                     <span>{item.title}</span>
@@ -71,7 +72,7 @@ export function NavMain({
           return (
             <Collapsible key={item.title} asChild defaultOpen={item.isActive} open={isOpen}>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip={item.title}>
+                <SidebarMenuButton asChild tooltip={item.title} data-active={item.isActive}>
                   <Link
                     href={item.url}
                     onClick={(e) => {
@@ -101,7 +102,7 @@ export function NavMain({
                       <SidebarMenuSub>
                         {item.items?.map((subItem) => (
                           <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild>
+                            <SidebarMenuSubButton asChild data-active={subItem.isActive}>
                               <Link href={subItem.url}>
                                 <span>{subItem.title}</span>
                               </Link>

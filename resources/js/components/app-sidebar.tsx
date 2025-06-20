@@ -168,11 +168,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       title: "アカウント管理",
       url: "#",
       icon: UserPlus,
-      isActive: false,
+      isActive: route().current('admin.account.*'),
       items: [
         {
           title: "管理者管理",
           url: route('admin.account.admins.index'),
+          isActive: route().current('admin.account.admins.*'),
         },
         {
           title: "ユーザー管理",
