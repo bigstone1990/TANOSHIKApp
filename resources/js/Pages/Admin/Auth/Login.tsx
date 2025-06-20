@@ -21,8 +21,6 @@ export default function Login({
     status?: string
     canResetPassword: boolean
 }) {
-    const appName = import.meta.env.VITE_APP_NAME || 'Laravel'
-
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -46,7 +44,7 @@ export default function Login({
                     <CardHeader className="text-center">
                         <CardTitle className="text-xl">おかえりなさい</CardTitle>
                         <CardDescription>
-                            {appName}にログインしましょう
+                            Webアプリケーションにログインしましょう
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
