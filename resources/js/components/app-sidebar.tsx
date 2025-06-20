@@ -302,7 +302,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href={isAdmin ? route('admin.top') : route('user.top')}>
+              <Link as="button" href={isAdmin ? route('admin.top') : route('user.top')}>
                 <ApplicationLogo className={isMobile ? "!w-64 !h-auto" : "!w-52 !h-auto"} />
               </Link>
             </SidebarMenuButton>
