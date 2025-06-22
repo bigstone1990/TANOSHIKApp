@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('office_id')->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
             $table->string('name');
-            $table->string('kana')->collation('utf8mb4_bin');
+            $table->string('kana')->collation('utf8mb4_unicode_ci');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
