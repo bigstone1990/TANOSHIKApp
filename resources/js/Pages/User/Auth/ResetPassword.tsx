@@ -1,7 +1,7 @@
-import InputError from '@/Components/InputError';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import InputError from '@/Components/InputError'
+import GuestLayout from '@/Layouts/GuestLayout'
+import { Head, useForm } from '@inertiajs/react'
+import { FormEventHandler } from 'react'
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -17,23 +17,23 @@ export default function ResetPassword({
     token,
     email,
 }: {
-    token: string;
-    email: string;
+    token: string
+    email: string
 }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         token: token,
         email: email,
         password: '',
         password_confirmation: '',
-    });
+    })
 
     const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         post(route('user.password.store'), {
             onFinish: () => reset('password', 'password_confirmation'),
-        });
-    };
+        })
+    }
 
     return (
         <GuestLayout>
@@ -99,5 +99,5 @@ export default function ResetPassword({
                 </Card>
             </div>
         </GuestLayout>
-    );
+    )
 }

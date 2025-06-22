@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class OfficeSeeder extends Seeder
 {
@@ -13,18 +14,26 @@ class OfficeSeeder extends Seeder
      */
     public function run(): void
     {
+        $datetime = Carbon::today()->format('Y-m-d H:i:s');
+
         DB::table('offices')->insert([
             [
                 'name' => 'オフィス1',
                 'kana' => 'おふぃすいち',
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
             [
                 'name' => 'オフィス2',
                 'kana' => 'おふぃすに',
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
             [
                 'name' => 'オフィス3',
                 'kana' => 'おふぃすさん',
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
         ]);
     }

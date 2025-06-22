@@ -1,7 +1,7 @@
-import InputError from '@/Components/InputError';
-import { Transition } from '@headlessui/react';
-import { useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import InputError from '@/Components/InputError'
+import { Transition } from '@headlessui/react'
+import { useForm, usePage } from '@inertiajs/react'
+import { FormEventHandler } from 'react'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -9,20 +9,20 @@ import { Button } from "@/components/ui/button"
 export default function UpdateProfileInformation({
     className = '',
 }: {
-    className?: string;
+    className?: string
 }) {
-    const user = usePage().props.auth.user;
+    const user = usePage().props.auth.user
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
             email: user.email,
-        });
+        })
 
     const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        patch(route('admin.profile.update'));
-    };
+        patch(route('admin.profile.update'))
+    }
 
     return (
         <section className={className}>
@@ -39,7 +39,7 @@ export default function UpdateProfileInformation({
             <form onSubmit={submit} className="mt-6">
                 <div className="grid gap-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="name">名前<span className="text-red-600"> *アカウント管理の管理者管理から変更ください</span></Label>
+                        <Label htmlFor="name">名前<span className="text-red-600"> *管理者管理から変更ください</span></Label>
 
                         <Input
                             id="name"
@@ -51,7 +51,7 @@ export default function UpdateProfileInformation({
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="kana">かな<span className="text-red-600"> *アカウント管理の管理者管理から変更ください</span></Label>
+                        <Label htmlFor="kana">かな<span className="text-red-600"> *管理者管理から変更ください</span></Label>
 
                         <Input
                             id="kana"
@@ -96,5 +96,5 @@ export default function UpdateProfileInformation({
                 </div>
             </form>
         </section>
-    );
+    )
 }

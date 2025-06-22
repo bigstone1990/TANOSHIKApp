@@ -28,9 +28,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Link, usePage } from '@inertiajs/react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import { useIsMobile } from "@/hooks/use-mobile"
+import { Link, usePage } from '@inertiajs/react'
+import ApplicationLogo from '@/Components/ApplicationLogo'
 
 const data = {
   user: {
@@ -161,18 +160,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const isAdmin = usePage().props.auth.isAdmin
 
-  const isMobile = useIsMobile()
-
   const adminNavMain = [
     {
       title: "アカウント管理",
       url: "#",
       icon: UserPlus,
-      isActive: false,
+      isActive: route().current('admin.account.*'),
       items: [
         {
           title: "管理者管理",
-          url: "#",
+          url: route('admin.account.admins.index'),
+          isActive: route().current('admin.account.admins.*'),
         },
         {
           title: "ユーザー管理",
@@ -301,10 +299,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link
-                href={isAdmin ? route('admin.top') : route('user.top')}
-                className="!p-0 justify-center">
-                <ApplicationLogo className={isMobile ? "!w-64 !h-12" : "!w-52 !h-12"} />
+              <Link href={isAdmin ? route('admin.top') : route('user.top')} className="[&>svg]:size-auto [&>svg]:shrink">
+                <ApplicationLogo  />
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class UserSeeder extends Seeder
 {
@@ -14,6 +15,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        $datetime = Carbon::today()->format('Y-m-d H:i:s');
+
         DB::table('users')->insert([
             [
                 'office_id' => 1,
@@ -21,6 +24,8 @@ class UserSeeder extends Seeder
                 'kana' => 'ゆーざーいち',
                 'email' => 'user1@test.com',
                 'password' => Hash::make('password'),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
             [
                 'office_id' => 1,
@@ -28,6 +33,8 @@ class UserSeeder extends Seeder
                 'kana' => 'ゆーざーに',
                 'email' => 'user2@test.com',
                 'password' => Hash::make('password'),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
             [
                 'office_id' => 1,
@@ -35,6 +42,8 @@ class UserSeeder extends Seeder
                 'kana' => 'ゆーざーさん',
                 'email' => 'user3@test.com',
                 'password' => Hash::make('password'),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
             [
                 'office_id' => 1,
@@ -42,6 +51,8 @@ class UserSeeder extends Seeder
                 'kana' => 'ゆーざーよん',
                 'email' => 'user4@test.com',
                 'password' => Hash::make('password'),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
             [
                 'office_id' => 1,
@@ -49,6 +60,8 @@ class UserSeeder extends Seeder
                 'kana' => 'ゆーざーご',
                 'email' => 'user5@test.com',
                 'password' => Hash::make('password'),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
             [
                 'office_id' => 1,
@@ -56,6 +69,8 @@ class UserSeeder extends Seeder
                 'kana' => 'ゆーざーろく',
                 'email' => 'user6@test.com',
                 'password' => Hash::make('password'),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
             [
                 'office_id' => 2,
@@ -63,6 +78,8 @@ class UserSeeder extends Seeder
                 'kana' => 'ゆーざーなな',
                 'email' => 'user7@test.com',
                 'password' => Hash::make('password'),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
             [
                 'office_id' => 2,
@@ -70,6 +87,8 @@ class UserSeeder extends Seeder
                 'kana' => 'ゆーざーはち',
                 'email' => 'user8@test.com',
                 'password' => Hash::make('password'),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
             [
                 'office_id' => 3,
@@ -77,6 +96,8 @@ class UserSeeder extends Seeder
                 'kana' => 'ゆーざーきゅう',
                 'email' => 'user9@test.com',
                 'password' => Hash::make('password'),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
             [
                 'office_id' => null,
@@ -84,6 +105,8 @@ class UserSeeder extends Seeder
                 'kana' => 'ゆーざーじゅう',
                 'email' => 'user10@test.com',
                 'password' => Hash::make('password'),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ],
         ]);
     }

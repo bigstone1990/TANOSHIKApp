@@ -1,7 +1,7 @@
-import InputError from '@/Components/InputError';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import InputError from '@/Components/InputError'
+import GuestLayout from '@/Layouts/GuestLayout'
+import { Head, Link, useForm } from '@inertiajs/react'
+import { FormEventHandler } from 'react'
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -18,24 +18,22 @@ export default function Login({
     status,
     canResetPassword,
 }: {
-    status?: string;
-    canResetPassword: boolean;
+    status?: string
+    canResetPassword: boolean
 }) {
-    const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
-
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
         remember: false as boolean,
-    });
+    })
 
     const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         post(route('admin.login'), {
             onFinish: () => reset('password'),
-        });
-    };
+        })
+    }
 
     return (
         <GuestLayout>
@@ -46,7 +44,7 @@ export default function Login({
                     <CardHeader className="text-center">
                         <CardTitle className="text-xl">おかえりなさい</CardTitle>
                         <CardDescription>
-                            {appName}にログインしましょう
+                            Webアプリケーションにログインしましょう
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -114,5 +112,5 @@ export default function Login({
                 </Card>
             </div>
         </GuestLayout>
-    );
+    )
 }

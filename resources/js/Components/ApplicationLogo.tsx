@@ -1,4 +1,4 @@
-import { SVGAttributes } from 'react';
+import { SVGAttributes } from 'react'
 
 export default function ApplicationLogo(props: SVGAttributes<SVGElement>) {
     return (
@@ -28,5 +28,5 @@ export default function ApplicationLogo(props: SVGAttributes<SVGElement>) {
                 TANOSHIKA APP
             </text>
         </svg>
-    );
+    )
 }

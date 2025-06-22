@@ -1,7 +1,7 @@
-import InputError from '@/Components/InputError';
-import { Transition } from '@headlessui/react';
-import { useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import InputError from '@/Components/InputError'
+import { Transition } from '@headlessui/react'
+import { useForm, usePage } from '@inertiajs/react'
+import { FormEventHandler } from 'react'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -10,21 +10,21 @@ export default function UpdateProfileInformation({
     officeName,
     className = '',
 }: {
-    officeName: string;
-    className?: string;
+    officeName: string
+    className?: string
 }) {
-    const user = usePage().props.auth.user;
+    const user = usePage().props.auth.user
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
             email: user.email,
-        });
+        })
 
     const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        patch(route('user.profile.update'));
-    };
+        patch(route('user.profile.update'))
+    }
 
     return (
         <section className={className}>
@@ -110,5 +110,5 @@ export default function UpdateProfileInformation({
                 </div>
             </form>
         </section>
-    );
+    )
 }

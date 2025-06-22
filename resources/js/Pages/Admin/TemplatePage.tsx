@@ -1,8 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { PageProps } from '@/types'
 import { Head } from '@inertiajs/react'
-import UpdatePasswordForm from './Partials/UpdatePasswordForm'
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm'
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -17,12 +14,10 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar"
 
-export default function Edit({
-    officeName,
-}: PageProps<{ officeName: string }>) {
+export default function Dashboard() {
     return (
         <AuthenticatedLayout>
-            <Head title="ユーザー設定" />
+            <Head title="テンプレートページ" />
 
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2">
@@ -31,23 +26,26 @@ export default function Edit({
                         <Separator orientation="vertical" className="mr-2 h-4" />
                         <Breadcrumb>
                             <BreadcrumbList>
+                                <BreadcrumbItem className="hidden md:block">
+                                    <BreadcrumbLink href="#">
+                                        Building Your Application
+                                    </BreadcrumbLink>
+                                </BreadcrumbItem>
+                                <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem>
-                                    <BreadcrumbPage>ユーザー設定</BreadcrumbPage>
+                                    <BreadcrumbPage>Data Fetching</BreadcrumbPage>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
                     </div>
                 </header>
                 <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-                    <div className="bg-white p-4 border shadow sm:rounded-lg sm:p-8">
-                        <UpdateProfileInformationForm
-                            officeName={officeName}
-                            className="max-w-xl"
-                        />
+                    <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                        <div className="aspect-video rounded-xl bg-muted/50" />
+                        <div className="aspect-video rounded-xl bg-muted/50" />
+                        <div className="aspect-video rounded-xl bg-muted/50" />
                     </div>
-                    <div className="bg-white p-4 border shadow sm:rounded-lg sm:p-8">
-                        <UpdatePasswordForm className="max-w-xl" />
-                    </div>
+                    <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
                 </div>
             </SidebarInset>
         </AuthenticatedLayout>
