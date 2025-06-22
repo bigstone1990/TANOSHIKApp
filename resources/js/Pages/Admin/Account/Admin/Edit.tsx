@@ -21,6 +21,18 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import InputError from '@/Components/InputError'
 
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 import { PageProps } from '@/types'
 
 type Admin = {
@@ -36,7 +48,7 @@ type EditProps = PageProps<{
 }>
 
 export default function Create({ admin }: EditProps) {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put, delete: destroy, processing, errors } = useForm({
         name: admin.name,
         kana: admin.kana,
         updatedAt: admin.updated_at,
@@ -46,6 +58,10 @@ export default function Create({ admin }: EditProps) {
         e.preventDefault();
 
         put(route('admin.account.admins.update', { admin: admin.id }));
+    };
+
+    const handleDelete = () => {
+        destroy(route('admin.account.admins.destroy', { admin: admin.id }));
     };
 
     return (
@@ -139,19 +155,49 @@ export default function Create({ admin }: EditProps) {
                                     <div className="flex items-center gap-4">
                                         <Link
                                             as="button"
+                                            href={route('admin.account.admins.show', { admin: admin.id })}
+                                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
+                                        >
+                                            詳細に戻る
+                                        </Link>
+                                        <Button type="submit" disabled={processing}>更新する</Button>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button
+                                                    type="button"
+                                                    variant="destructive"
+                                                    disabled={processing}
+                                                >
+                                                    削除する
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>管理者を削除しますか？</AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        この操作は取り消すことができません。<br />管理者「{admin.name}」を完全に削除し、すべてのデータが失われます。
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        onClick={handleDelete}
+                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                    >
+                                                        削除する
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <Link
+                                            as="button"
                                             href={route('admin.account.admins.index')}
                                             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
                                         >
                                             一覧に戻る
                                         </Link>
-                                        <Link
-                                            as="button"
-                                            href={route('admin.account.admins.show', { admin: admin.id })}
-                                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
-                                        >
-                                            詳細を見る
-                                        </Link>
-                                        <Button type="submit" disabled={processing}>更新する</Button>
                                     </div>
                                 </div>
                             </form>
