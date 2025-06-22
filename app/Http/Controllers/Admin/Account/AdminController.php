@@ -80,9 +80,11 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Admin $admin)
+    public function show(Admin $admin): Response
     {
-        dd($admin);
+        return Inertia::render('Admin/Account/Admin/Show', [
+            'admin' => $admin->only(['id', 'name', 'kana', 'email']),
+        ]);
     }
 
     /**

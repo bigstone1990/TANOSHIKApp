@@ -30,22 +30,14 @@ type Admin = {
     email: string
 }
 
-export default function Create() {
-    const { data, setData, post, processing, errors } = useForm({
-        name: '',
-        kana: '',
-        email: '',
-    });
+type ShowProps = PageProps<{
+    admin: Admin
+}>
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-
-        post(route('admin.account.admins.store'));
-    };
-
+export default function Show({ admin }: ShowProps) {
     return (
         <AuthenticatedLayout>
-            <Head title="管理者作成" />
+            <Head title="管理者詳細" />
 
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2">
@@ -63,7 +55,7 @@ export default function Create() {
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem>
-                                    <BreadcrumbPage>管理者作成</BreadcrumbPage>
+                                    <BreadcrumbPage>管理者詳細</BreadcrumbPage>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
@@ -74,15 +66,15 @@ export default function Create() {
                         <section className="max-w-xl">
                             <header className="flex flex-col space-y-1.5">
                                 <h2 className="font-semibold tracking-tight text-xl">
-                                    管理者作成
+                                    管理者詳細
                                 </h2>
 
                                 <p className="text-sm text-muted-foreground">
-                                    管理者を作成できます。
+                                    管理者の詳細を確認できます。
                                 </p>
                             </header>
 
-                            <form onSubmit={submit} className="mt-6">
+                            <div className="mt-6">
                                 <div className="grid gap-6">
                                     <div className="grid gap-2">
                                         <Label htmlFor="name">名前</Label>
@@ -90,15 +82,10 @@ export default function Create() {
                                         <Input
                                             id="name"
                                             type="text"
-                                            value={data.name}
-                                            autoComplete="name"
-                                            autoFocus
-                                            placeholder="ユーザー"
-                                            required
-                                            onChange={(e) => setData('name', e.target.value)}
+                                            className="bg-gray-100"
+                                            value={admin.name}
+                                            readOnly
                                         />
-
-                                        <InputError message={errors.name} />
                                     </div>
 
                                     <div className="grid gap-2">
@@ -107,14 +94,10 @@ export default function Create() {
                                         <Input
                                             id="kana"
                                             type="text"
-                                            value={data.kana}
-                                            autoComplete="kana"
-                                            placeholder="ゆーざー"
-                                            required
-                                            onChange={(e) => setData('kana', e.target.value)}
+                                            className="bg-gray-100"
+                                            value={admin.kana}
+                                            readOnly
                                         />
-
-                                        <InputError message={errors.kana} />
                                     </div>
 
                                     <div className="grid gap-2">
@@ -123,13 +106,10 @@ export default function Create() {
                                         <Input
                                             id="email"
                                             type="email"
-                                            value={data.email}
-                                            autoComplete="username"
-                                            placeholder="user@example.com"
-                                            required
-                                            onChange={(e) => setData('email', e.target.value)}
+                                            className="bg-gray-100"
+                                            value={admin.email}
+                                            readOnly
                                         />
-                                        <InputError message={errors.email} />
                                     </div>
 
                                     <div className="flex items-center gap-4">
@@ -140,10 +120,16 @@ export default function Create() {
                                         >
                                             一覧に戻る
                                         </Link>
-                                        <Button type="submit" disabled={processing}>作成する</Button>
+                                        <Link
+                                            as="button"
+                                            href={route('admin.account.admins.edit', { admin: admin.id })}
+                                            className="whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
+                                        >
+                                            編集する
+                                        </Link>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </section>
                     </div>
                 </div>
