@@ -28,24 +28,29 @@ type Admin = {
     name: string
     kana: string
     email: string
+    updated_at: string
 }
 
-export default function Create() {
-    const { data, setData, post, processing, errors } = useForm({
-        name: '',
-        kana: '',
-        email: '',
+type EditProps = PageProps<{
+    admin: Admin
+}>
+
+export default function Create({ admin }: EditProps) {
+    const { data, setData, put, processing, errors } = useForm({
+        name: admin.name,
+        kana: admin.kana,
+        updatedAt: admin.updated_at,
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('admin.account.admins.store'));
+        put(route('admin.account.admins.update', { admin: admin.id }));
     };
 
     return (
         <AuthenticatedLayout>
-            <Head title="管理者作成" />
+            <Head title="管理者編集" />
 
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2">
@@ -63,7 +68,7 @@ export default function Create() {
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem>
-                                    <BreadcrumbPage>管理者作成</BreadcrumbPage>
+                                    <BreadcrumbPage>管理者編集</BreadcrumbPage>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
@@ -74,11 +79,11 @@ export default function Create() {
                         <section className="max-w-xl">
                             <header className="flex flex-col space-y-1.5">
                                 <h2 className="font-semibold tracking-tight text-xl">
-                                    管理者作成
+                                    管理者編集
                                 </h2>
 
                                 <p className="text-sm text-muted-foreground">
-                                    管理者を作成できます。
+                                    管理者を編集できます。
                                 </p>
                             </header>
 
@@ -118,18 +123,15 @@ export default function Create() {
                                     </div>
 
                                     <div className="grid gap-2">
-                                        <Label htmlFor="email">メールアドレス</Label>
+                                        <Label htmlFor="email">メールアドレス<span className="text-red-600"> *ユーザー設定からのみ変更可能です</span></Label>
 
                                         <Input
                                             id="email"
                                             type="email"
-                                            value={data.email}
-                                            autoComplete="username"
-                                            placeholder="user@example.com"
-                                            required
-                                            onChange={(e) => setData('email', e.target.value)}
+                                            className="bg-gray-100"
+                                            value={admin.email}
+                                            readOnly
                                         />
-                                        <InputError message={errors.email} />
                                     </div>
 
                                     <div className="flex items-center gap-4">
@@ -140,7 +142,14 @@ export default function Create() {
                                         >
                                             一覧に戻る
                                         </Link>
-                                        <Button type="submit" disabled={processing}>作成する</Button>
+                                        <Link
+                                            as="button"
+                                            href={route('admin.account.admins.show', { admin: admin.id })}
+                                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
+                                        >
+                                            詳細を見る
+                                        </Link>
+                                        <Button type="submit" disabled={processing}>更新する</Button>
                                     </div>
                                 </div>
                             </form>
