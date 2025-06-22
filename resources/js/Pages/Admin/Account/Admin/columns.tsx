@@ -1,4 +1,5 @@
-import { Link } from '@inertiajs/react'
+import { useForm } from '@inertiajs/react'
+import { useState } from 'react'
 
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
@@ -13,6 +14,17 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 type Admin = {
     id: number
@@ -109,39 +121,72 @@ export const columns: ColumnDef<Admin>[] = [
         enableHiding: false,
         cell: ({ row }) => {
             const admin = row.original
+            const [open, setOpen] = useState(false)
+            const { delete: destroy, processing } = useForm()
+
+            const handleDelete = () => {
+                destroy(route('admin.account.admins.destroy', { admin: admin.id }), {
+                    preserveScroll: true,
+                    onFinish: () => {
+                        setOpen(false)
+                    }
+                })
+            }
 
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>操作</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                            <a
-                                href={route('admin.account.admins.show', { admin: admin.id })}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                詳細
-                            </a>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                            <a
-                                href={route('admin.account.admins.edit', { admin: admin.id })}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                編集
-                            </a>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>削除</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>操作</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild>
+                                <a
+                                    href={route('admin.account.admins.show', { admin: admin.id })}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    詳細
+                                </a>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <a
+                                    href={route('admin.account.admins.edit', { admin: admin.id })}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    編集
+                                </a>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setOpen(true)}>削除</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <AlertDialog open={open} onOpenChange={setOpen}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>管理者を削除しますか？</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    この操作は取り消すことができません。<br />管理者「{admin.name}」を完全に削除し、すべてのデータが失われます。
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={handleDelete}
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    disabled={processing}
+                                >
+                                    削除する
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </>
             )
         },
     },

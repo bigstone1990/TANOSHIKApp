@@ -182,6 +182,7 @@ export default function Create({ admin }: EditProps) {
                                                     <AlertDialogAction
                                                         onClick={handleDelete}
                                                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                        disabled={processing}
                                                     >
                                                         削除する
                                                     </AlertDialogAction>
