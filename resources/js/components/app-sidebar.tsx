@@ -30,7 +30,6 @@ import {
 } from "@/components/ui/sidebar"
 import { Link, usePage } from '@inertiajs/react'
 import ApplicationLogo from '@/Components/ApplicationLogo'
-import { useIsMobile } from "@/hooks/use-mobile"
 
 const data = {
   user: {
@@ -160,8 +159,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = usePage().props.auth.user
 
   const isAdmin = usePage().props.auth.isAdmin
-
-  const isMobile = useIsMobile()
 
   const adminNavMain = [
     {
@@ -302,8 +299,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link as="button" href={isAdmin ? route('admin.top') : route('user.top')}>
-                <ApplicationLogo className={isMobile ? "!w-64 !h-auto" : "!w-52 !h-auto"} />
+              <Link href={isAdmin ? route('admin.top') : route('user.top')} className="[&>svg]:size-auto [&>svg]:shrink">
+                <ApplicationLogo  />
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -61,7 +61,7 @@ export function NavMain({
             <SidebarMenuItem>
               {!item.items?.length ? (
                 <SidebarMenuButton asChild tooltip={item.title} data-active={item.isActive}>
-                  <Link as="button" href={item.url}>
+                  <Link href={item.url}>
                     <item.icon />
                     <span>{item.title}</span>
                   </Link>
@@ -82,7 +82,7 @@ export function NavMain({
                       {item.items.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild data-active={subItem.isActive}>
-                            <Link as="button" href={subItem.url} className="w-full">
+                            <Link href={subItem.url}>
                               <span>{subItem.title}</span>
                             </Link>
                           </SidebarMenuSubButton>

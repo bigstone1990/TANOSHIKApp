@@ -123,18 +123,14 @@ export const columns: ColumnDef<Admin>[] = [
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
                             <Link
-                                as="button"
                                 href={route('admin.account.admins.show', { admin: admin.id })}
-                                className="w-full"
                             >
                                 詳細
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                             <Link
-                                as="button"
                                 href={route('admin.account.admins.edit', { admin: admin.id })}
-                                className="w-full"
                                 >
                                 編集
                             </Link>
