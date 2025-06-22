@@ -134,6 +134,8 @@ export default function Create({ admin }: EditProps) {
                                         />
                                     </div>
 
+                                    <InputError message={errors.updatedAt} />
+
                                     <div className="flex items-center gap-4">
                                         <Link
                                             as="button"
