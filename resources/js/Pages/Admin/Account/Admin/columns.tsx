@@ -122,18 +122,22 @@ export const columns: ColumnDef<Admin>[] = [
                         <DropdownMenuLabel>操作</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
-                            <Link
+                            <a
                                 href={route('admin.account.admins.show', { admin: admin.id })}
+                                target="_blank"
+                                rel="noopener noreferrer"
                             >
                                 詳細
-                            </Link>
+                            </a>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                            <Link
+                            <a
                                 href={route('admin.account.admins.edit', { admin: admin.id })}
-                                >
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
                                 編集
-                            </Link>
+                            </a>
                         </DropdownMenuItem>
                         <DropdownMenuItem>削除</DropdownMenuItem>
                     </DropdownMenuContent>
