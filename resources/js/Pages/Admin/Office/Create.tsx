@@ -21,52 +21,29 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import InputError from '@/Components/InputError'
 
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-
 import { PageProps } from '@/types'
 
-type Admin = {
+type Office = {
     id: number
     name: string
     kana: string
-    email: string
-    updated_at: string
 }
 
-type EditProps = PageProps<{
-    admin: Admin
-}>
-
-export default function Edit({ admin }: EditProps) {
-    const { data, setData, put, delete: destroy, processing, errors } = useForm({
-        name: admin.name,
-        kana: admin.kana,
-        updatedAt: admin.updated_at,
+export default function Create() {
+    const { data, setData, post, processing, errors } = useForm({
+        name: '',
+        kana: '',
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        put(route('admin.account.admins.update', { admin: admin.id }));
-    };
-
-    const handleDelete = () => {
-        destroy(route('admin.account.admins.destroy', { admin: admin.id }));
+        post(route('admin.offices.store'));
     };
 
     return (
         <AuthenticatedLayout>
-            <Head title="管理者編集" />
+            <Head title="事業所作成" />
 
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2">
@@ -77,14 +54,14 @@ export default function Edit({ admin }: EditProps) {
                             <BreadcrumbList>
                                 <BreadcrumbItem className="hidden md:block">
                                     <BreadcrumbLink asChild>
-                                        <Link href={route('admin.account.admins.index')}>
-                                            管理者一覧
+                                        <Link href={route('admin.offices.index')}>
+                                            事業所一覧
                                         </Link>
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem>
-                                    <BreadcrumbPage>管理者編集</BreadcrumbPage>
+                                    <BreadcrumbPage>事業所作成</BreadcrumbPage>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
@@ -95,11 +72,11 @@ export default function Edit({ admin }: EditProps) {
                         <section className="max-w-xl">
                             <header className="flex flex-col space-y-1.5">
                                 <h2 className="font-semibold tracking-tight text-xl">
-                                    管理者編集
+                                    事業所作成
                                 </h2>
 
                                 <p className="text-sm text-muted-foreground">
-                                    管理者を編集できます。
+                                    事業所を作成できます。
                                 </p>
                             </header>
 
@@ -114,7 +91,7 @@ export default function Edit({ admin }: EditProps) {
                                             value={data.name}
                                             autoComplete="name"
                                             autoFocus
-                                            placeholder="ユーザー"
+                                            placeholder="オフィス"
                                             required
                                             onChange={(e) => setData('name', e.target.value)}
                                         />
@@ -130,7 +107,7 @@ export default function Edit({ admin }: EditProps) {
                                             type="text"
                                             value={data.kana}
                                             autoComplete="kana"
-                                            placeholder="ゆーざー"
+                                            placeholder="おふぃす"
                                             required
                                             onChange={(e) => setData('kana', e.target.value)}
                                         />
@@ -138,57 +115,14 @@ export default function Edit({ admin }: EditProps) {
                                         <InputError message={errors.kana} />
                                     </div>
 
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="email">メールアドレス<span className="text-red-600"> *ユーザー設定からのみ変更可能です</span></Label>
-
-                                        <Input
-                                            id="email"
-                                            type="email"
-                                            className="bg-gray-100"
-                                            value={admin.email}
-                                            readOnly
-                                        />
-                                    </div>
-
-                                    <InputError message={errors.updatedAt} />
-
                                     <div className="flex items-center gap-4">
                                         <Link
-                                            href={route('admin.account.admins.show', { admin: admin.id })}
+                                            href={route('admin.offices.index')}
                                             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
                                         >
-                                            詳細に戻る
+                                            一覧に戻る
                                         </Link>
-                                        <Button type="submit" disabled={processing}>更新する</Button>
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button
-                                                    type="button"
-                                                    variant="destructive"
-                                                    disabled={processing}
-                                                >
-                                                    削除する
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>管理者を削除しますか？</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        この操作は取り消すことができません。<br />管理者「{admin.name}」を完全に削除し、すべてのデータが失われます。
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                        onClick={handleDelete}
-                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                                        disabled={processing}
-                                                    >
-                                                        削除する
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
+                                        <Button type="submit" disabled={processing}>作成する</Button>
                                     </div>
                                 </div>
                             </form>

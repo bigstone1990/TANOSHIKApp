@@ -1,38 +1,35 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Account;
+namespace App\Http\Controllers\Admin\Office;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\Admin\Account\StoreAdminRequest;
-use App\Http\Requests\Admin\Account\UpdateAdminRequest;
+use App\Http\Requests\Admin\Office\StoreOfficeRequest;
+use App\Http\Requests\Admin\Office\UpdateOfficeRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
 use Exception;
-use App\Jobs\SendAdminCreatedMail;
 use App\Exceptions\OptimisticLockException;
 
-use App\Models\Admin;
+use App\Models\Office;
 
-
-class AdminController extends Controller
+class OfficeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
     {
-        $admins = Admin::select('id', 'name', 'kana', 'email')
+        $offices = Office::select('id', 'name', 'kana')
             ->orderBy('kana')
             ->get();
 
-        return Inertia::render('Admin/Account/Admin/Index', [
-            'admins' => $admins,
+        return Inertia::render('Admin/Office/Index', [
+            'offices' => $offices,
         ]);
     }
 
@@ -41,30 +38,23 @@ class AdminController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Admin/Account/Admin/Create');
+        return Inertia::render('Admin/Office/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAdminRequest $request): RedirectResponse
+    public function store(StoreOfficeRequest $request): RedirectResponse
     {
         try {
-            $password = Str::random(8);
-            $admin = null;
-
-            DB::transaction(function () use ($request, &$admin, $password) {
-                $admin = Admin::create([
+            DB::transaction(function () use ($request) {
+                Office::create([
                     'name' => $request->name,
                     'kana' => $request->kana,
-                    'email' => $request->email,
-                    'password' => Hash::make($password),
                 ]);
             });
 
-            SendAdminCreatedMail::dispatch($admin, $password);
-
-            return to_route('admin.account.admins.index')->with([
+            return to_route('admin.offices.index')->with([
                 'flash_id' => Str::uuid(),
                 'flash_message' => '登録しました',
                 'flash_status' => 'success',
@@ -81,14 +71,13 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Admin $admin): Response
+    public function show(Office $office): Response
     {
-        return Inertia::render('Admin/Account/Admin/Show', [
-            'admin' => [
-                'id' => $admin->id,
-                'name' => $admin->name,
-                'kana' => $admin->kana,
-                'email' => $admin->email,
+        return Inertia::render('Admin/Office/Show', [
+            'office' => [
+                'id' => $office->id,
+                'name' => $office->name,
+                'kana' => $office->kana,
             ],
         ]);
     }
@@ -96,15 +85,14 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Admin $admin): Response
+    public function edit(Office $office): Response
     {
-        return Inertia::render('Admin/Account/Admin/Edit', [
-            'admin' => [
-                'id' => $admin->id,
-                'name' => $admin->name,
-                'kana' => $admin->kana,
-                'email' => $admin->email,
-                'updated_at' => $admin->updated_at->format('Y-m-d H:i:s'),
+        return Inertia::render('Admin/Office/Edit', [
+            'office' => [
+                'id' => $office->id,
+                'name' => $office->name,
+                'kana' => $office->kana,
+                'updated_at' => $office->updated_at->format('Y-m-d H:i:s'),
             ],
         ]);
     }
@@ -112,21 +100,21 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAdminRequest $request, Admin $admin)
+    public function update(UpdateOfficeRequest $request, Office $office): RedirectResponse
     {
         try {
-            DB::transaction(function () use ($request, $admin) {
-                if ($admin->updated_at->format('Y-m-d H:i:s') !== $request->updatedAt) {
+            DB::transaction(function () use ($request, $office) {
+                if ($office->updated_at->format('Y-m-d H:i:s') !== $request->updatedAt) {
                     throw new OptimisticLockException;
                 }
 
-                $admin->name = $request->name;
-                $admin->kana = $request->kana;
+                $office->name = $request->name;
+                $office->kana = $request->kana;
 
-                $admin->save();
+                $office->save();
             });
 
-            return to_route('admin.account.admins.show', ['admin' => $admin->id])->with([
+            return to_route('admin.offices.show', ['office' => $office->id])->with([
                 'flash_id' => Str::uuid(),
                 'flash_message' => '更新しました',
                 'flash_status' => 'success',
@@ -149,14 +137,14 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Admin $admin): RedirectResponse
+    public function destroy(Office $office): RedirectResponse
     {
         try {
-            DB::transaction(function () use ($admin) {
-                $admin->delete();
+            DB::transaction(function () use ($office) {
+                $office->delete();
             });
 
-            return to_route('admin.account.admins.index')->with([
+            return to_route('admin.offices.index')->with([
                 'flash_id' => Str::uuid(),
                 'flash_message' => '削除しました',
                 'flash_status' => 'success',
