@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Office;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\Admin\StoreOfficeRequest;
-use App\Http\Requests\Admin\UpdateOfficeRequest;
+use App\Http\Requests\Admin\Office\StoreOfficeRequest;
+use App\Http\Requests\Admin\Office\UpdateOfficeRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
