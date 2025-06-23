@@ -47,7 +47,7 @@ type EditProps = PageProps<{
     admin: Admin
 }>
 
-export default function Create({ admin }: EditProps) {
+export default function Edit({ admin }: EditProps) {
     const { data, setData, put, delete: destroy, processing, errors } = useForm({
         name: admin.name,
         kana: admin.kana,

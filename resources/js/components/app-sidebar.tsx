@@ -180,28 +180,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
     {
       title: "事業所管理",
-      url: "#",
+      url: route('admin.offices.index'),
       icon: Building,
-    },
-    {
-      title: "テスト管理",
-      url: "#",
-      icon: FlaskConical,
-      isActive: false,
-      items: [
-        {
-          title: "テスト1",
-          url: "#",
-        },
-        {
-          title: "テスト2",
-          url: "#",
-        },
-        {
-          title: "テスト3",
-          url: "#",
-        },
-      ],
+      isActive: route().current('admin.offices.*'),
     },
   ]
 

@@ -24,24 +24,22 @@ const columnLabelMap: Record<string, string> = {
     id: "ID",
     name: "名前",
     kana: "かな",
-    email: "メールアドレス",
 }
 
-type Admin = {
+type Office = {
     id: number
     name: string
     kana: string
-    email: string
 }
 
 type IndexProps = PageProps<{
-    admins: Admin[]
+    offices: Office[]
 }>
 
-export default function Index({ admins }: IndexProps) {
+export default function Index({ offices }: IndexProps) {
     return (
         <AuthenticatedLayout>
-            <Head title="管理者一覧" />
+            <Head title="事業所一覧" />
 
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2">
@@ -51,7 +49,7 @@ export default function Index({ admins }: IndexProps) {
                         <Breadcrumb>
                             <BreadcrumbList>
                                 <BreadcrumbItem>
-                                    <BreadcrumbPage>管理者一覧</BreadcrumbPage>
+                                    <BreadcrumbPage>事業所一覧</BreadcrumbPage>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
@@ -60,7 +58,7 @@ export default function Index({ admins }: IndexProps) {
                 <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
                     <div className="flex justify-end">
                         <Link
-                            href={route('admin.account.admins.create')}
+                            href={route('admin.offices.create')}
                             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
                         >
                             新規作成
@@ -68,8 +66,8 @@ export default function Index({ admins }: IndexProps) {
                     </div>
                     <DataTable
                         columns={columns}
-                        data={admins}
-                        searchableColumns={['name', 'kana', 'email']}
+                        data={offices}
+                        searchableColumns={['name', 'kana']}
                         columnLabelMap={columnLabelMap}
                         initialColumnVisibility={{
                             id: false,
