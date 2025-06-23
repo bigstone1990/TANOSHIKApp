@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Account;
+namespace App\Http\Controllers\Admin\Account\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\Admin\Account\StoreAdminRequest;
-use App\Http\Requests\Admin\Account\UpdateAdminRequest;
+use App\Http\Requests\Admin\Account\Admin\StoreAdminRequest;
+use App\Http\Requests\Admin\Account\Admin\UpdateAdminRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +18,6 @@ use App\Jobs\SendAdminCreatedMail;
 use App\Exceptions\OptimisticLockException;
 
 use App\Models\Admin;
-
 
 class AdminController extends Controller
 {

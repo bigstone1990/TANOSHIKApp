@@ -4,8 +4,8 @@ use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\Admin\Account\AdminController;
-use App\Http\Controllers\Admin\OfficeController;
+use App\Http\Controllers\Admin\Account\Admin\AdminController;
+use App\Http\Controllers\Admin\Office\OfficeController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'verified'])->group(function () {
     Route::get('/', function () {

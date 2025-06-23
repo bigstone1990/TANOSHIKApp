@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Account;
-use App\Models\Admin;
+namespace App\Http\Requests\Admin\Account\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAdminRequest extends FormRequest
+class UpdateAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +24,7 @@ class StoreAdminRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:30'],
             'kana' => ['required', 'string', 'regex:/^[ぁ-ゖー０-９0-9\x{3000}\x{0020}]+$/u', 'max:255'],
-            'email' => 'required|string|lowercase|email|max:255|unique:'.Admin::class,
+            'updatedAt' => ['required', 'date', 'date_format:Y-m-d H:i:s'],
         ];
     }
 
