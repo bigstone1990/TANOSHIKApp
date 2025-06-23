@@ -71,9 +71,15 @@ class OfficeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Office $office): Response
     {
-        //
+        return Inertia::render('Admin/Office/Show', [
+            'office' => [
+                'id' => $office->id,
+                'name' => $office->name,
+                'kana' => $office->kana,
+            ],
+        ]);
     }
 
     /**
