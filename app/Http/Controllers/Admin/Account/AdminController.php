@@ -112,7 +112,7 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAdminRequest $request, Admin $admin)
+    public function update(UpdateAdminRequest $request, Admin $admin): RedirectResponse
     {
         try {
             DB::transaction(function () use ($request, $admin) {
