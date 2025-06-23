@@ -125,6 +125,10 @@ export const columns: ColumnDef<Admin>[] = [
             const { delete: destroy, processing } = useForm()
 
             const handleDelete = () => {
+                if (row.getIsSelected()) {
+                    row.toggleSelected(false)
+                }
+
                 destroy(route('admin.account.admins.destroy', { admin: admin.id }), {
                     preserveScroll: true,
                     onFinish: () => {
