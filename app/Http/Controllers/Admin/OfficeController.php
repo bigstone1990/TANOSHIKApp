@@ -11,6 +11,7 @@ use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Exception;
 use App\Exceptions\OptimisticLockException;
 
@@ -43,9 +44,28 @@ class OfficeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreOfficeRequest $request): RedirectResponse
     {
-        //
+        try {
+            DB::transaction(function () use ($request) {
+                Office::create([
+                    'name' => $request->name,
+                    'kana' => $request->kana,
+                ]);
+            });
+
+            return to_route('admin.offices.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '登録しました',
+                'flash_status' => 'success',
+            ]);
+        } catch (Exception $e) {
+            return back()->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '登録に失敗しました',
+                'flash_status' => 'error',
+            ])->withInput();
+        }
     }
 
     /**

@@ -11,7 +11,7 @@ class StoreOfficeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,15 @@ class StoreOfficeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:30'],
+            'kana' => ['required', 'string', 'regex:/^[ぁ-ゖー０-９0-9\x{3000}\x{0020}]+$/u', 'max:255'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'kana.regex' => 'かなは、ひらがな、全角・半角スペース、全角・半角数字のみで入力してください。',
         ];
     }
 }
