@@ -56,7 +56,10 @@ export default function UpdatePasswordForm({
                 </h2>
 
                 <p className="text-sm text-muted-foreground">
-                    パスワードを変更できます。
+                    パスワードを変更できます。<br />
+                    <span className="text-red-600 font-medium">
+                        ※スマートフォンでキーボード操作ができない場合は、お手数ですが、PCから操作をお願いいたします。
+                    </span>
                 </p>
             </header>
 
