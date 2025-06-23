@@ -124,7 +124,7 @@ export const columns: ColumnDef<Admin>[] = [
             const [open, setOpen] = useState(false)
             const { delete: destroy, processing } = useForm()
 
-            const handleDelete = () => {
+            const handleDelete: () => void = () => {
                 if (row.getIsSelected()) {
                     row.toggleSelected(false)
                 }

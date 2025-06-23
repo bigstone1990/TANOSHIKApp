@@ -108,7 +108,11 @@ export const columns: ColumnDef<Office>[] = [
             const [open, setOpen] = useState(false)
             const { delete: destroy, processing } = useForm()
 
-            const handleDelete = () => {
+            const handleDelete: () => void = () => {
+                if (row.getIsSelected()) {
+                    row.toggleSelected(false)
+                }
+
                 destroy(route('admin.offices.destroy', { office: office.id }), {
                     preserveScroll: true,
                     onFinish: () => {

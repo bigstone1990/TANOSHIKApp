@@ -59,7 +59,7 @@ export default function Edit({ office }: EditProps) {
         put(route('admin.offices.update', { office: office.id }));
     };
 
-    const handleDelete = () => {
+    const handleDelete: () => void = () => {
         destroy(route('admin.offices.destroy', { office: office.id }));
     };
 

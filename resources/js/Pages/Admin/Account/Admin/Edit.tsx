@@ -60,7 +60,7 @@ export default function Edit({ admin }: EditProps) {
         put(route('admin.account.admins.update', { admin: admin.id }));
     };
 
-    const handleDelete = () => {
+    const handleDelete: () => void = () => {
         destroy(route('admin.account.admins.destroy', { admin: admin.id }));
     };
 
