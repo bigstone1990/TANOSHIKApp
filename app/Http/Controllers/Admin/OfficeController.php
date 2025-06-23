@@ -85,9 +85,16 @@ class OfficeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Office $office): Response
     {
-        //
+        return Inertia::render('Admin/Office/Edit', [
+            'office' => [
+                'id' => $office->id,
+                'name' => $office->name,
+                'kana' => $office->kana,
+                'updated_at' => $office->updated_at->format('Y-m-d H:i:s'),
+            ],
+        ]);
     }
 
     /**
