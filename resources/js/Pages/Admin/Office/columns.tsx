@@ -147,7 +147,15 @@ export const columns: ColumnDef<Office>[] = [
                                     編集
                                 </a>
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setOpen(true)}>削除</DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <button
+                                    type="button"
+                                    className="w-full"
+                                    onClick={() => setOpen(true)}
+                                >
+                                    削除
+                                </button>
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <AlertDialog open={open} onOpenChange={setOpen}>
