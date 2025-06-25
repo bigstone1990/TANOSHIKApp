@@ -147,6 +147,24 @@ export default function DataTable<TData extends { id: number | string }, TValue>
                     {table.getFilteredRowModel().rows.length}件中
                     {table.getFilteredSelectedRowModel().rows.length}件を選択中
                 </div>
+                <div className="space-x-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.toggleAllRowsSelected(true)}
+                        disabled={table.getIsAllRowsSelected()}
+                    >
+                        全件選択
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.toggleAllRowsSelected(false)}
+                        disabled={!table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}
+                    >
+                        全件解除
+                    </Button>
+                </div>
             </div>
             <div className="rounded-md border">
                 <Table>
