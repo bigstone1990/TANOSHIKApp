@@ -181,7 +181,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
         {
           title: "ユーザー管理",
-          url: "#",
+          url: route('admin.account.users.index'),
+          isActive: route().current('admin.account.users.*'),
         },
       ],
     },

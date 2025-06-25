@@ -4,6 +4,22 @@ namespace App\Http\Controllers\Admin\Account\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\Account\User\StoreUserRequest;
+use App\Http\Requests\Admin\Account\User\UpdateUserRequest;
+use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Exception;
+use App\Jobs\SendUserCreatedMail;
+use App\Exceptions\OptimisticLockException;
+
+use App\Models\User;
+use App\Models\Office;
+use App\Enums\Account\AccountRoleType;
 
 class UserController extends Controller
 {
@@ -12,7 +28,22 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $staff = User::select('id', 'office_id', 'name', 'kana', 'email', 'can_manage_job_postings', 'can_manage_groupings')
+        ->with(['office:id,name'])
+        ->where('role', intval(AccountRoleType::STAFF->value))
+        ->orderBy('kana')
+        ->get();
+
+        $members = User::select('id', 'office_id', 'name', 'kana', 'email', 'can_manage_job_postings', 'can_manage_groupings')
+        ->with(['office:id,name'])
+        ->where('role', intval(AccountRoleType::MEMBER->value))
+        ->orderBy('kana')
+        ->get();
+
+        return Inertia::render('Admin/Account/User/Index', [
+            'staff' => $staff,
+            'members' => $members,
+        ]);
     }
 
     /**

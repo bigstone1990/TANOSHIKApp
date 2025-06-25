@@ -26,14 +26,17 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-type Admin = {
+type UserTableData = {
     id: number
     name: string
     kana: string
     email: string
+    office_name: string
+    can_manage_job_postings: boolean
+    can_manage_groupings: boolean
 }
 
-export const columns: ColumnDef<Admin>[] = [
+export const columns: ColumnDef<UserTableData>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -117,15 +120,60 @@ export const columns: ColumnDef<Admin>[] = [
         cell: ({ row }) => <div>{row.getValue("email")}</div>,
     },
     {
+        accessorKey: "office_name",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    所属事業所名
+                    <ArrowUpDown />
+                </Button>
+            )
+        },
+        cell: ({ row }) => <div>{row.getValue("office_name")}</div>,
+    },
+    {
+        accessorKey: "can_manage_job_postings",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    求人管理機能
+                    <ArrowUpDown />
+                </Button>
+            )
+        },
+        cell: ({ row }) => <div>{row.getValue("can_manage_job_postings") ? '〇' : '×'}</div>,
+    },
+    {
+        accessorKey: "can_manage_groupings",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    グループ分け機能
+                    <ArrowUpDown />
+                </Button>
+            )
+        },
+        cell: ({ row }) => <div>{row.getValue("can_manage_groupings") ? '〇' : '×'}</div>,
+    },
+    {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
-            const admin = row.original
+            const user = row.original
             const [open, setOpen] = useState(false)
             const { delete: destroy, processing } = useForm()
 
             const handleDelete: () => void = () => {
-                destroy(route('admin.account.admins.destroy', { admin: admin.id }), {
+                destroy(route('admin.account.users.destroy', { user: user.id }), {
                     preserveScroll: true,
                     onFinish: () => {
                         setOpen(false)
@@ -147,7 +195,7 @@ export const columns: ColumnDef<Admin>[] = [
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
                                 <a
-                                    href={route('admin.account.admins.show', { admin: admin.id })}
+                                    href={route('admin.account.users.show', { user: user.id })}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -156,7 +204,7 @@ export const columns: ColumnDef<Admin>[] = [
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                                 <a
-                                    href={route('admin.account.admins.edit', { admin: admin.id })}
+                                    href={route('admin.account.users.edit', { user: user.id })}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -177,9 +225,9 @@ export const columns: ColumnDef<Admin>[] = [
                     <AlertDialog open={open} onOpenChange={setOpen}>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>管理者を削除しますか？</AlertDialogTitle>
+                                <AlertDialogTitle>ユーザーを削除しますか？</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    この操作は取り消すことができません。<br />管理者「{admin.name}」を完全に削除し、すべてのデータが失われます。
+                                    この操作は取り消すことができません。<br />ユーザー「{user.name}」を完全に削除し、すべてのデータが失われます。
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
