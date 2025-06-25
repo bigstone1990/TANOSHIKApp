@@ -75,6 +75,7 @@ export default function Index({ admins }: IndexProps) {
                             id: false,
                             kana: false,
                         }}
+                        deleteUrl='admin.account.admins.bulk-destroy'
                     />
                 </div>
             </SidebarInset>

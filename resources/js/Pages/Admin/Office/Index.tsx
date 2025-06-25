@@ -73,6 +73,7 @@ export default function Index({ offices }: IndexProps) {
                             id: false,
                             kana: false,
                         }}
+                        deleteUrl='admin.offices.bulk-destroy'
                     />
                 </div>
             </SidebarInset>

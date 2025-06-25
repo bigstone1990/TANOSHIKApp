@@ -1,4 +1,5 @@
-import { Link } from '@inertiajs/react'
+import { router, usePage } from '@inertiajs/react'
+import { useState } from 'react'
 
 import * as React from "react"
 import {
@@ -31,6 +32,19 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
+import InputError from '@/Components/InputError'
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -38,6 +52,7 @@ interface DataTableProps<TData, TValue> {
     searchableColumns?: string[]
     columnLabelMap?: Record<string, string>
     initialColumnVisibility?: VisibilityState
+    deleteUrl: string
 }
 
 export default function DataTable<TData extends { id: number | string }, TValue>({
@@ -46,12 +61,18 @@ export default function DataTable<TData extends { id: number | string }, TValue>
     searchableColumns = [],
     columnLabelMap = {},
     initialColumnVisibility = {},
+    deleteUrl,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(initialColumnVisibility)
     const [rowSelection, setRowSelection] = React.useState({})
     const [globalFilter, setGlobalFilter] = React.useState("")
+
+    const [open, setOpen] = useState(false)
+    const [isProcessing, setIsProcessing] = useState(false)
+
+    const errors = usePage().props.errors
 
     const table = useReactTable({
         data,
@@ -105,6 +126,25 @@ export default function DataTable<TData extends { id: number | string }, TValue>
             globalFilter,
         },
     })
+
+    const handleBulkDelete: () => void = () => {
+        console.log('getSelectedRowModel before delete', table.getSelectedRowModel())
+        console.log('getFilteredSelectedRowModel before delete', table.getFilteredSelectedRowModel())
+
+        setIsProcessing(true)
+
+        router.post(route(deleteUrl), {
+            ids: table.getFilteredSelectedRowModel().rows.map((row) => Number(row.id)),
+        }, {
+            preserveScroll: true,
+            onFinish: () => {
+                setOpen(false)
+                setIsProcessing(false)
+                console.log('getSelectedRowModel after delete', table.getSelectedRowModel())
+                console.log('getFilteredSelectedRowModel after delete', table.getFilteredSelectedRowModel())
+            },
+        })
+    }
 
     return (
         <div className="w-full">
@@ -164,8 +204,52 @@ export default function DataTable<TData extends { id: number | string }, TValue>
                     >
                         全件解除
                     </Button>
+                    <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => setOpen(true)}
+                        disabled={table.getFilteredSelectedRowModel().rows.length === 0 || isProcessing}
+                    >
+                        一括削除
+                    </Button>
+                    <AlertDialog open={open} onOpenChange={setOpen}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>{table.getFilteredSelectedRowModel().rows.length}件のデータを削除しますか？</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    この操作は取り消すことができません。<br />選択された{table.getFilteredSelectedRowModel().rows.length}件を完全に削除し、すべてのデータが失われます。
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={handleBulkDelete}
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    disabled={isProcessing}
+                                >
+                                    削除する
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             </div>
+            {errors && Object.keys(errors).length > 0 && (
+                <div className="flex items-center justify-end space-x-2 py-4">
+                    <div className="text-muted-foreground flex-1 text-sm">
+                        {Object.entries(errors).map(([field, messages]) => (
+                            <div key={field}>
+                                {Array.isArray(messages) 
+                                    ? messages.map((message: string, index: number) => (
+                                        <InputError key={`${field}-${index}`} message={message} />
+                                    ))
+                                    : <InputError key={field} message={messages} />
+                                }
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
