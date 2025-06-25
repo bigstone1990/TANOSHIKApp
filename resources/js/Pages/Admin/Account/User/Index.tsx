@@ -14,6 +14,12 @@ import {
     SidebarInset,
     SidebarTrigger,
 } from "@/components/ui/sidebar"
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs"
 
 import DataTable from '@/Components/DataTable'
 import { columns } from './columns'
@@ -97,17 +103,38 @@ export default function Index({ staff, members }: IndexProps) {
                             新規作成
                         </Link>
                     </div>
-                    <DataTable
-                        columns={columns}
-                        data={staffTableData}
-                        searchableColumns={['name', 'kana', 'email', 'office_name']}
-                        columnLabelMap={columnLabelMap}
-                        initialColumnVisibility={{
-                            id: false,
-                            kana: false,
-                        }}
-                        deleteUrl='admin.account.users.bulk-destroy'
-                    />
+                    <Tabs defaultValue="staff">
+                        <TabsList>
+                            <TabsTrigger value="staff">スタッフ</TabsTrigger>
+                            <TabsTrigger value="member">メンバー</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="staff">
+                            <DataTable
+                                columns={columns}
+                                data={staffTableData}
+                                searchableColumns={['name', 'kana', 'email', 'office_name']}
+                                columnLabelMap={columnLabelMap}
+                                initialColumnVisibility={{
+                                    id: false,
+                                    kana: false,
+                                }}
+                                deleteUrl='admin.account.users.bulk-destroy'
+                            />
+                        </TabsContent>
+                        <TabsContent value="member">
+                            <DataTable
+                                columns={columns}
+                                data={memberTableData}
+                                searchableColumns={['name', 'kana', 'email', 'office_name']}
+                                columnLabelMap={columnLabelMap}
+                                initialColumnVisibility={{
+                                    id: false,
+                                    kana: false,
+                                }}
+                                deleteUrl='admin.account.users.bulk-destroy'
+                            />
+                        </TabsContent>
+                    </Tabs>
                 </div>
             </SidebarInset>
         </AuthenticatedLayout>
