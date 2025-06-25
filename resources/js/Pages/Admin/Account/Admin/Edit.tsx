@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react';
+import { FormEventHandler } from 'react'
 
 import {
     Breadcrumb,
@@ -52,17 +52,17 @@ export default function Edit({ admin }: EditProps) {
         name: admin.name,
         kana: admin.kana,
         updatedAt: admin.updated_at,
-    });
+    })
 
     const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        put(route('admin.account.admins.update', { admin: admin.id }));
-    };
+        put(route('admin.account.admins.update', { admin: admin.id }))
+    }
 
     const handleDelete: () => void = () => {
-        destroy(route('admin.account.admins.destroy', { admin: admin.id }));
-    };
+        destroy(route('admin.account.admins.destroy', { admin: admin.id }))
+    }
 
     return (
         <AuthenticatedLayout>

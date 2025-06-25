@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react';
+import { FormEventHandler } from 'react'
 
 import {
     Breadcrumb,
