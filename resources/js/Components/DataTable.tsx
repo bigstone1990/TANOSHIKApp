@@ -40,7 +40,7 @@ interface DataTableProps<TData, TValue> {
     initialColumnVisibility?: VisibilityState
 }
 
-export default function DataTable<TData extends { id: string }, TValue>({
+export default function DataTable<TData extends { id: number | string }, TValue>({
     columns,
     data,
     searchableColumns = [],
@@ -56,7 +56,7 @@ export default function DataTable<TData extends { id: string }, TValue>({
     const table = useReactTable({
         data,
         columns,
-        getRowId: (row) => row.id,
+        getRowId: (row) => String(row.id),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
