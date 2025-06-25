@@ -49,7 +49,7 @@ export function NavMain({
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>機能一覧</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible

@@ -6,6 +6,7 @@ import {
   Command,
   FlaskConical,
   Frame,
+  LayoutDashboard,
   LifeBuoy,
   Map,
   PieChart,
@@ -162,6 +163,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const adminNavMain = [
     {
+      title: "ダッシュボード",
+      url: route('admin.dashboard'),
+      icon: LayoutDashboard,
+      isActive: route().current('admin.dashboard'),
+    },
+    {
       title: "アカウント管理",
       url: "#",
       icon: UserPlus,
@@ -187,6 +194,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   ]
 
   const userNavMain = [
+    {
+      title: "ダッシュボード",
+      url: route('user.dashboard'),
+      icon: LayoutDashboard,
+      isActive: route().current('user.dashboard'),
+    },
     {
       title: "Playground",
       url: "#",
