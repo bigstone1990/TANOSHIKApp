@@ -4,7 +4,10 @@ export interface User {
     email: string;
     email_verified_at?: string;
     kana: string; // 共通
+    role?: number; // User用
     office_id?: number | null; // User用
+    can_manage_job_postings?: boolean; // User用
+    can_manage_groupings?: boolean; // User用
 }
 
 interface Permission {
@@ -28,3 +31,5 @@ export type PageProps<
     };
     flash: Flash;
 };
+
+export * from './option';

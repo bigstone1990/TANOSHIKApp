@@ -51,7 +51,16 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roleroleTypeOptions =  AccountRoleType::options();
+
+        $offices = Office::select('id', 'name')
+            ->orderBy('kana')
+            ->get();
+
+        return Inertia::render('Admin/Account/User/Create', [
+            'roleTypeOptions' => $roleroleTypeOptions,
+            'offices' => $offices,
+        ]);
     }
 
     /**
@@ -59,7 +68,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
