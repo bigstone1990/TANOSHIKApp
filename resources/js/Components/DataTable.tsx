@@ -128,9 +128,6 @@ export default function DataTable<TData extends { id: number | string }, TValue>
     })
 
     const handleBulkDelete: () => void = () => {
-        console.log('getSelectedRowModel before delete', table.getSelectedRowModel())
-        console.log('getFilteredSelectedRowModel before delete', table.getFilteredSelectedRowModel())
-
         setIsProcessing(true)
 
         router.post(route(deleteUrl), {
@@ -140,8 +137,6 @@ export default function DataTable<TData extends { id: number | string }, TValue>
             onFinish: () => {
                 setOpen(false)
                 setIsProcessing(false)
-                console.log('getSelectedRowModel after delete', table.getSelectedRowModel())
-                console.log('getFilteredSelectedRowModel after delete', table.getFilteredSelectedRowModel())
             },
         })
     }
@@ -200,7 +195,7 @@ export default function DataTable<TData extends { id: number | string }, TValue>
                         variant="outline"
                         size="sm"
                         onClick={() => table.toggleAllRowsSelected(false)}
-                        disabled={!table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}
+                        disabled={table.getFilteredSelectedRowModel().rows.length === 0}
                     >
                         全件解除
                     </Button>
