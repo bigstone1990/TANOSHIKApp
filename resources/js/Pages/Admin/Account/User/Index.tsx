@@ -1,5 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link } from '@inertiajs/react'
+import { useState } from 'react'
 
 import {
     Breadcrumb,
@@ -56,6 +57,8 @@ type IndexProps = PageProps<{
 }>
 
 export default function Index({ staff, members }: IndexProps) {
+    const [activeTab, setActiveTab] = useState('staff')
+
     const staffTableData = staff.map((user) => ({
         id: user.id,
         name: user.name,
@@ -103,37 +106,39 @@ export default function Index({ staff, members }: IndexProps) {
                             新規作成
                         </Link>
                     </div>
-                    <Tabs defaultValue="staff">
+                    <Tabs value={activeTab} onValueChange={setActiveTab}>
                         <TabsList>
                             <TabsTrigger value="staff">スタッフ</TabsTrigger>
                             <TabsTrigger value="member">メンバー</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="staff">
-                            <DataTable
-                                columns={columns}
-                                data={staffTableData}
-                                searchableColumns={['name', 'kana', 'email', 'office_name']}
-                                columnLabelMap={columnLabelMap}
-                                initialColumnVisibility={{
-                                    id: false,
-                                    kana: false,
-                                }}
-                                deleteUrl='admin.account.users.bulk-destroy'
-                            />
-                        </TabsContent>
-                        <TabsContent value="member">
-                            <DataTable
-                                columns={columns}
-                                data={memberTableData}
-                                searchableColumns={['name', 'kana', 'email', 'office_name']}
-                                columnLabelMap={columnLabelMap}
-                                initialColumnVisibility={{
-                                    id: false,
-                                    kana: false,
-                                }}
-                                deleteUrl='admin.account.users.bulk-destroy'
-                            />
-                        </TabsContent>
+                        <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                            <div style={{ display: activeTab === 'staff' ? 'block' : 'none' }}>
+                                <DataTable
+                                    columns={columns}
+                                    data={staffTableData}
+                                    searchableColumns={['name', 'kana', 'email', 'office_name']}
+                                    columnLabelMap={columnLabelMap}
+                                    initialColumnVisibility={{
+                                        id: false,
+                                        kana: false,
+                                    }}
+                                    deleteUrl='admin.account.users.bulk-destroy'
+                                />
+                            </div>
+                            <div style={{ display: activeTab === 'member' ? 'block' : 'none' }}>
+                                <DataTable
+                                    columns={columns}
+                                    data={memberTableData}
+                                    searchableColumns={['name', 'kana', 'email', 'office_name']}
+                                    columnLabelMap={columnLabelMap}
+                                    initialColumnVisibility={{
+                                        id: false,
+                                        kana: false,
+                                    }}
+                                    deleteUrl='admin.account.users.bulk-destroy'
+                                />
+                            </div>
+                        </div>
                     </Tabs>
                 </div>
             </SidebarInset>
