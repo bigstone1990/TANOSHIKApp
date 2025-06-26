@@ -55,7 +55,8 @@ class UserController extends Controller
 
         $offices = Office::select('id', 'name')
             ->orderBy('kana')
-            ->get();
+            ->get()
+            ->prepend(['id' => 0, 'name' => '未所属']);
 
         return Inertia::render('Admin/Account/User/Create', [
             'roleTypeOptions' => $roleroleTypeOptions,

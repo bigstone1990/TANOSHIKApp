@@ -21,6 +21,8 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import InputError from '@/Components/InputError'
 
+import Combobox from '@/Components/Combobox'
+
 import { PageProps, Option } from '@/types'
 
 type RoleTypeOption = Option
@@ -35,7 +37,7 @@ type CreateProps = PageProps<{
     offices: Office[]
 }>
 
-export default function Create({roleTypeOptions, offices}: CreateProps) {
+export default function Create({ roleTypeOptions, offices }: CreateProps) {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         kana: '',
@@ -138,7 +140,23 @@ export default function Create({roleTypeOptions, offices}: CreateProps) {
                                             required
                                             onChange={(e) => setData('email', e.target.value)}
                                         />
+
                                         <InputError message={errors.email} />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="role">役割</Label>
+
+                                        <Combobox
+                                            id="role"
+                                            className="font-normal flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm"
+                                            options={roleTypeOptions}
+                                            value={data.role}
+                                            onValueChange={(value) => setData('role', value)}
+                                            placeholder="役割を選択してください..."
+                                        />
+
+                                        <InputError message={errors.role} />
                                     </div>
 
                                     <div className="flex items-center gap-4">
