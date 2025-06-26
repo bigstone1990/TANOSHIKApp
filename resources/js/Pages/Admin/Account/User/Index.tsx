@@ -34,7 +34,7 @@ const columnLabelMap: Record<string, string> = {
     email: "メールアドレス",
     office_name: "所属事業所名",
     can_manage_job_postings: "求人管理機能",
-    can_manage_groupings: "グループ分け機能",
+    can_manage_groupings: "グループ分け管理機能",
 }
 
 type User = {

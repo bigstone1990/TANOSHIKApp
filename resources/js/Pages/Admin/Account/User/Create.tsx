@@ -219,9 +219,9 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
                                             >
                                                 <div className="space-y-0.5">
                                                     <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                                        グループ管理機能<br />
+                                                        グループ分け管理機能<br />
                                                         <span className="text-muted-foreground text-sm font-normal">
-                                                            グループの管理ができるようになります
+                                                            グループ分けの管理ができるようになります
                                                         </span>
                                                     </div>
                                                 </div>

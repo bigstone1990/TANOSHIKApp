@@ -157,7 +157,7 @@ export const columns: ColumnDef<UserTableData>[] = [
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    グループ分け機能
+                    グループ分け管理機能
                     <ArrowUpDown />
                 </Button>
             )
