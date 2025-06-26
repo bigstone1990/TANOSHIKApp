@@ -125,7 +125,7 @@ export default function Create() {
                                             type="email"
                                             value={data.email}
                                             autoComplete="username"
-                                            placeholder="user@example.com"
+                                            placeholder="admin@example.com"
                                             required
                                             onChange={(e) => setData('email', e.target.value)}
                                         />
