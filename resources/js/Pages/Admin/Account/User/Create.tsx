@@ -190,7 +190,7 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
 
                                     <div className="grid gap-2">
                                         <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                            権限設定
+                                            権限設定<span className="text-red-600"> *役割によっては機能の一部が制限されます</span>
                                         </p>
 
                                         <div className="space-y-4">
