@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
 import InputError from '@/Components/InputError'
 
 import Combobox from '@/Components/Combobox'
@@ -38,14 +39,27 @@ type CreateProps = PageProps<{
 }>
 
 export default function Create({ roleTypeOptions, offices }: CreateProps) {
-    const { data, setData, post, processing, errors } = useForm({
+    const officeOptions = offices.map(office => ({
+        label: office.name,
+        value: String(office.id),
+    }))
+
+    const { data, setData, post, processing, errors } = useForm<{
+        name: string
+        kana: string
+        email: string
+        role: string
+        office: string
+        canManageJobPostings: boolean
+        canManageGroupings: boolean
+    }>({
         name: '',
         kana: '',
         email: '',
         role: '',
         office: '',
-        canManageJobPostings: '',
-        canManageGroupings: '',
+        canManageJobPostings: false,
+        canManageGroupings: false,
     })
 
     const submit: FormEventHandler = (e) => {
@@ -159,10 +173,74 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
                                         <InputError message={errors.role} />
                                     </div>
 
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="office">所属事業所</Label>
+
+                                        <Combobox
+                                            id="office"
+                                            className="font-normal flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm"
+                                            options={officeOptions}
+                                            value={data.office}
+                                            onValueChange={(value) => setData('office', value)}
+                                            placeholder="所属事業所を選択してください..."
+                                        />
+
+                                        <InputError message={errors.office} />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                            権限設定
+                                        </p>
+
+                                        <div className="space-y-4">
+                                            <Label
+                                                htmlFor="canManageJobPostings"
+                                                className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+                                            >
+                                                <div className="space-y-0.5">
+                                                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                                        求人管理機能<br />
+                                                        <span className="text-muted-foreground text-sm font-normal">
+                                                            求人の管理ができるようになります
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <Switch
+                                                    id="canManageJobPostings"
+                                                    checked={data.canManageJobPostings}
+                                                    onCheckedChange={(checked) => setData('canManageJobPostings', checked)}
+                                                />
+                                            </Label>
+
+                                            <Label
+                                                htmlFor="canManageGroupings"
+                                                className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+                                            >
+                                                <div className="space-y-0.5">
+                                                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                                        グループ管理機能<br />
+                                                        <span className="text-muted-foreground text-sm font-normal">
+                                                            グループの管理ができるようになります
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <Switch
+                                                    id="canManageGroupings"
+                                                    checked={data.canManageGroupings}
+                                                    onCheckedChange={(checked) => setData('canManageGroupings', checked)}
+                                                />
+                                            </Label>
+                                        </div>
+
+                                        <InputError message={errors.canManageJobPostings} />
+                                        <InputError message={errors.canManageGroupings} />
+                                    </div>
+
                                     <div className="flex items-center gap-4">
                                         <Link
                                             href={route('admin.account.users.index')}
-                                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
+                                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-secondary text-secondary-foreground shadow hover:bg-secondary/90 h-9 px-4 py-2"
                                         >
                                             一覧に戻る
                                         </Link>
