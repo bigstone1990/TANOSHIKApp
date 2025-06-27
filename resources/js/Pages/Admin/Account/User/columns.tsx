@@ -170,7 +170,7 @@ export const columns: ColumnDef<UserTableData>[] = [
         cell: ({ row }) => {
             const user = row.original
             const [open, setOpen] = useState(false)
-            const { delete: destroy, processing } = useForm()
+            const { delete: destroy, processing } = useForm({})
 
             const handleDelete: () => void = () => {
                 destroy(route('admin.account.users.destroy', { user: user.id }), {

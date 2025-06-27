@@ -44,22 +44,14 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
         value: String(office.id),
     }))
 
-    const { data, setData, post, processing, errors } = useForm<{
-        name: string
-        kana: string
-        email: string
-        role: string
-        office: string
-        canManageJobPostings: boolean
-        canManageGroupings: boolean
-    }>({
+    const { data, setData, post, processing, errors } = useForm({
         name: '',
         kana: '',
         email: '',
         role: '',
         office: '',
-        canManageJobPostings: false,
-        canManageGroupings: false,
+        canManageJobPostings: false as boolean,
+        canManageGroupings: false as boolean,
     })
 
     const submit: FormEventHandler = (e) => {

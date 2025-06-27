@@ -106,7 +106,7 @@ export const columns: ColumnDef<Office>[] = [
         cell: ({ row }) => {
             const office = row.original
             const [open, setOpen] = useState(false)
-            const { delete: destroy, processing } = useForm()
+            const { delete: destroy, processing } = useForm({})
 
             const handleDelete: () => void = () => {
                 destroy(route('admin.offices.destroy', { office: office.id }), {
