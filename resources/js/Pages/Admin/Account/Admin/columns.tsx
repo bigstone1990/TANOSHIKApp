@@ -179,7 +179,8 @@ export const columns: ColumnDef<Admin>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>管理者を削除しますか？</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    この操作は取り消すことができません。<br />管理者「{admin.name}」を完全に削除し、すべてのデータが失われます。
+                                    この操作は取り消すことができません。<br />
+                                    管理者「{admin.name}」を完全に削除し、すべてのデータが失われます。
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

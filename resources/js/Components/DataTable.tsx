@@ -1,5 +1,4 @@
 import { router, usePage } from '@inertiajs/react'
-import { useState } from 'react'
 
 import * as React from "react"
 import {
@@ -13,6 +12,7 @@ import {
     SortingState,
     useReactTable,
     VisibilityState,
+    Row,
 } from "@tanstack/react-table"
 import { ChevronDown } from "lucide-react"
 
@@ -41,7 +41,6 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
 import InputError from '@/Components/InputError'
@@ -55,7 +54,7 @@ interface DataTableProps<TData, TValue> {
     deleteUrl: string
 }
 
-export default function DataTable<TData extends { id: number | string }, TValue>({
+export default function DataTable<TData extends { id: number }, TValue>({
     columns,
     data,
     searchableColumns = [],
@@ -67,12 +66,44 @@ export default function DataTable<TData extends { id: number | string }, TValue>
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(initialColumnVisibility)
     const [rowSelection, setRowSelection] = React.useState({})
+
     const [globalFilter, setGlobalFilter] = React.useState("")
 
-    const [open, setOpen] = useState(false)
-    const [isProcessing, setIsProcessing] = useState(false)
+    const [open, setOpen] = React.useState(false)
+    const [isProcessing, setIsProcessing] = React.useState(false)
 
     const errors = usePage().props.errors
+
+    const globalFilterFn = React.useCallback(
+        (row: Row<TData>, columnId: string, value: string): boolean => {
+            if (!value?.trim()) return true
+
+            const columnsToSearch = searchableColumns.length > 0
+                ? searchableColumns
+                : Object.keys(row.original)
+                    .filter(key => key !== 'id')
+
+            const keywords = value
+                .split(/[\s　]+/)
+                .map(k => k.trim().toLowerCase())
+                .filter(Boolean)
+
+            if (keywords.length === 0) return true
+
+            const searchText = columnsToSearch
+                .map(column => {
+                    try {
+                        const value = row.getValue(column)
+                        return value?.toString().toLowerCase() ?? ''
+                    } catch {
+                        return ''
+                    }
+                })
+                .join(' ')
+
+            return keywords.every(keyword => searchText.includes(keyword))
+        }, [searchableColumns]
+    )
 
     const table = useReactTable({
         data,
@@ -87,37 +118,7 @@ export default function DataTable<TData extends { id: number | string }, TValue>
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
         onGlobalFilterChange: setGlobalFilter,
-        globalFilterFn: (row, columnId, value) => {
-            const columnsToSearch = searchableColumns.length > 0
-                ? searchableColumns
-                : columns
-                    .map(col => {
-                        if ('accessorKey' in col && typeof col.accessorKey === 'string') {
-                            return col.accessorKey
-                        }
-                        if ('id' in col && typeof col.id === 'string') {
-                            return col.id
-                        }
-                        return null
-                    })
-                    .filter((key): key is string => key !== null)
-
-            const keywords = value
-                .split(/[\s　]+/)
-                .filter((keyword: string) => keyword.trim() !== '')
-                .map((keyword: string) => keyword.toLowerCase())
-
-            if (keywords.length === 0) return true
-
-            const rowData = columnsToSearch
-                .map(column => {
-                    const cellValue = row.getValue(column) as string
-                    return cellValue?.toLowerCase() || ''
-                })
-                .join(' ')
-
-            return keywords.every((keyword: string) => rowData.includes(keyword))
-        },
+        globalFilterFn: globalFilterFn,
         state: {
             sorting,
             columnFilters,
@@ -127,11 +128,17 @@ export default function DataTable<TData extends { id: number | string }, TValue>
         },
     })
 
-    const handleBulkDelete: () => void = () => {
+    const handleBulkDelete = React.useCallback((): void => {
+        const selectedIds = table.getFilteredSelectedRowModel().rows.map(row => Number(row.id))
+
+        if (selectedIds.length === 0) {
+            return
+        }
+
         setIsProcessing(true)
 
         router.post(route(deleteUrl), {
-            ids: table.getFilteredSelectedRowModel().rows.map((row) => Number(row.id)),
+            ids: selectedIds,
         }, {
             preserveScroll: true,
             onFinish: () => {
@@ -139,14 +146,14 @@ export default function DataTable<TData extends { id: number | string }, TValue>
                 setIsProcessing(false)
             },
         })
-    }
+    }, [table, deleteUrl])
 
     return (
         <div className="w-full">
             <div className="flex items-center py-4 gap-4">
                 <Input
                     placeholder="キーワード検索"
-                    value={globalFilter ?? ""}
+                    value={globalFilter}
                     onChange={(event) => setGlobalFilter(event.target.value)}
                     className="max-w-sm"
                 />
@@ -159,24 +166,23 @@ export default function DataTable<TData extends { id: number | string }, TValue>
                     <DropdownMenuContent align="end">
                         {table
                             .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {columnLabelMap[column.id] ?? column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
+                            .filter(column => column.getCanHide())
+                            .map(column => (
+                                <DropdownMenuCheckboxItem
+                                    key={column.id}
+                                    className="capitalize"
+                                    checked={column.getIsVisible()}
+                                    onCheckedChange={value =>
+                                        column.toggleVisibility(!!value)
+                                    }
+                                >
+                                    {columnLabelMap[column.id] ?? column.id}
+                                </DropdownMenuCheckboxItem>
+                            ))}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
+
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="text-muted-foreground flex-1 text-sm">
                     {table.getFilteredRowModel().rows.length}件中
@@ -210,9 +216,12 @@ export default function DataTable<TData extends { id: number | string }, TValue>
                     <AlertDialog open={open} onOpenChange={setOpen}>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>{table.getFilteredSelectedRowModel().rows.length}件のデータを削除しますか？</AlertDialogTitle>
+                                <AlertDialogTitle>
+                                    {table.getFilteredSelectedRowModel().rows.length}件のデータを削除しますか？
+                                </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    この操作は取り消すことができません。<br />選択された{table.getFilteredSelectedRowModel().rows.length}件を完全に削除し、すべてのデータが失われます。
+                                    この操作は取り消すことができません。<br />
+                                    選択された{table.getFilteredSelectedRowModel().rows.length}件を完全に削除し、すべてのデータが失われます。
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -229,50 +238,51 @@ export default function DataTable<TData extends { id: number | string }, TValue>
                     </AlertDialog>
                 </div>
             </div>
+
             {errors && Object.keys(errors).length > 0 && (
                 <div className="flex items-center justify-end space-x-2 py-4">
                     <div className="text-muted-foreground flex-1 text-sm">
-                        {Object.entries(errors).map(([field, messages]) => (
+                        {Object.entries(errors).map(([field, value]) => (
                             <div key={field}>
-                                {Array.isArray(messages) 
-                                    ? messages.map((message: string, index: number) => (
-                                        <InputError key={`${field}-${index}`} message={message} />
+                                {typeof value === 'string' ? (
+                                    <InputError message={value} />
+                                ) : (
+                                    Object.entries(value as Record<string, string>).map(([subField, subValue]) => (
+                                        <InputError key={`${field}-${subField}`} message={subValue} />
                                     ))
-                                    : <InputError key={field} message={messages} />
-                                }
+                                )}
                             </div>
                         ))}
                     </div>
                 </div>
             )}
+
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
+                        {table.getHeaderGroups().map(headerGroup => (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
-                                        </TableHead>
-                                    )
-                                })}
+                                {headerGroup.headers.map(header => (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                    </TableHead>
+                                ))}
                             </TableRow>
                         ))}
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
+                            table.getRowModel().rows.map(row => (
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                 >
-                                    {row.getVisibleCells().map((cell) => (
+                                    {row.getVisibleCells().map(cell => (
                                         <TableCell key={cell.id}>
                                             {flexRender(
                                                 cell.column.columnDef.cell,
@@ -295,6 +305,7 @@ export default function DataTable<TData extends { id: number | string }, TValue>
                     </TableBody>
                 </Table>
             </div>
+
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="space-x-2">
                     <Button

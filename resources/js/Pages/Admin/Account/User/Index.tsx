@@ -79,6 +79,13 @@ export default function Index({ staff, members }: IndexProps) {
         can_manage_groupings: user.can_manage_groupings,
     }))
 
+    const searchableColumns = ['name', 'kana', 'email', 'office_name']
+
+    const initialColumnVisibility = {
+        id: false,
+        kana: false,
+    }
+
     return (
         <AuthenticatedLayout>
             <Head title="ユーザー一覧" />
@@ -116,26 +123,20 @@ export default function Index({ staff, members }: IndexProps) {
                                 <DataTable
                                     columns={columns}
                                     data={staffTableData}
-                                    searchableColumns={['name', 'kana', 'email', 'office_name']}
+                                    searchableColumns={searchableColumns}
                                     columnLabelMap={columnLabelMap}
-                                    initialColumnVisibility={{
-                                        id: false,
-                                        kana: false,
-                                    }}
-                                    deleteUrl='admin.account.users.bulk-destroy'
+                                    initialColumnVisibility={initialColumnVisibility}
+                                    deleteUrl="admin.account.users.bulk-destroy"
                                 />
                             </div>
                             <div style={{ display: activeTab === 'member' ? 'block' : 'none' }}>
                                 <DataTable
                                     columns={columns}
                                     data={memberTableData}
-                                    searchableColumns={['name', 'kana', 'email', 'office_name']}
+                                    searchableColumns={searchableColumns}
                                     columnLabelMap={columnLabelMap}
-                                    initialColumnVisibility={{
-                                        id: false,
-                                        kana: false,
-                                    }}
-                                    deleteUrl='admin.account.users.bulk-destroy'
+                                    initialColumnVisibility={initialColumnVisibility}
+                                    deleteUrl="admin.account.users.bulk-destroy"
                                 />
                             </div>
                         </div>

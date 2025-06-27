@@ -37,6 +37,13 @@ type IndexProps = PageProps<{
 }>
 
 export default function Index({ offices }: IndexProps) {
+    const searchableColumns = ['name', 'kana']
+    
+    const initialColumnVisibility = {
+        id: false,
+        kana: false,
+    }
+
     return (
         <AuthenticatedLayout>
             <Head title="事業所一覧" />
@@ -67,13 +74,10 @@ export default function Index({ offices }: IndexProps) {
                     <DataTable
                         columns={columns}
                         data={offices}
-                        searchableColumns={['name', 'kana']}
+                        searchableColumns={searchableColumns}
                         columnLabelMap={columnLabelMap}
-                        initialColumnVisibility={{
-                            id: false,
-                            kana: false,
-                        }}
-                        deleteUrl='admin.offices.bulk-destroy'
+                        initialColumnVisibility={initialColumnVisibility}
+                        deleteUrl="admin.offices.bulk-destroy"
                     />
                 </div>
             </SidebarInset>

@@ -163,7 +163,8 @@ export const columns: ColumnDef<Office>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>事業所を削除しますか？</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    この操作は取り消すことができません。<br />事業所「{office.name}」を完全に削除し、すべてのデータが失われます。
+                                    この操作は取り消すことができません。<br />
+                                    事業所「{office.name}」を完全に削除し、すべてのデータが失われます。
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

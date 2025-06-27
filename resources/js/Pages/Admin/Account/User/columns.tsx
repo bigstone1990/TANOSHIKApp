@@ -227,7 +227,8 @@ export const columns: ColumnDef<UserTableData>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>ユーザーを削除しますか？</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    この操作は取り消すことができません。<br />ユーザー「{user.name}」を完全に削除し、すべてのデータが失われます。
+                                    この操作は取り消すことができません。<br />
+                                    ユーザー「{user.name}」を完全に削除し、すべてのデータが失われます。
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
