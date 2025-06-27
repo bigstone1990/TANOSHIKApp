@@ -90,7 +90,7 @@ export default function Login({
                                             </Link>
                                         )}
                                     </div>
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-2">
                                         <Checkbox
                                             id="remember"
                                             checked={data.remember}

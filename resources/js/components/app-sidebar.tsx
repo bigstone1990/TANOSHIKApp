@@ -4,7 +4,6 @@ import {
   Bot,
   Building,
   Command,
-  FlaskConical,
   Frame,
   LayoutDashboard,
   LifeBuoy,
