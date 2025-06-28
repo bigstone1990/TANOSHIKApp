@@ -84,12 +84,12 @@ export default function Index({ offices }: IndexProps) {
                         </Link>
                     </div>
                     <DataTable
-                        columns={columns}
                         data={offices}
+                        columns={columns}
                         searchableColumns={searchableColumns}
                         columnLabelMap={columnLabelMap}
                         initialColumnVisibility={initialColumnVisibility}
-                        deleteUrl="admin.offices.bulk-destroy"
+                        bulkDestroyRouteName="admin.offices.bulk-destroy"
                     />
                 </div>
             </SidebarInset>

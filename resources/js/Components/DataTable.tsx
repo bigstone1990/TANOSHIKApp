@@ -47,21 +47,21 @@ import {
 import InputError from '@/Components/InputError'
 
 interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    columns: ColumnDef<TData, TValue>[]
     searchableColumns?: string[]
     columnLabelMap?: Record<string, string>
     initialColumnVisibility?: VisibilityState
-    deleteUrl: string
+    bulkDestroyRouteName: string
 }
 
 export default function DataTable<TData extends { id: number }, TValue>({
-    columns,
     data,
+    columns,
     searchableColumns = [],
     columnLabelMap = {},
     initialColumnVisibility = {},
-    deleteUrl,
+    bulkDestroyRouteName,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -138,7 +138,7 @@ export default function DataTable<TData extends { id: number }, TValue>({
 
         setIsProcessing(true)
 
-        router.post(route(deleteUrl), {
+        router.post(route(bulkDestroyRouteName), {
             ids: selectedIds,
         }, {
             preserveScroll: true,
@@ -147,7 +147,7 @@ export default function DataTable<TData extends { id: number }, TValue>({
                 setIsProcessing(false)
             },
         })
-    }, [table, deleteUrl])
+    }, [table, bulkDestroyRouteName])
 
     return (
         <div className="w-full">

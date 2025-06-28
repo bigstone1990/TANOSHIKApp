@@ -133,22 +133,22 @@ export default function Index({ staff, members }: IndexProps) {
                         <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                             <div style={{ display: activeTab === 'staff' ? 'block' : 'none' }}>
                                 <DataTable
-                                    columns={columns}
                                     data={staffTableData}
+                                    columns={columns}
                                     searchableColumns={searchableColumns}
                                     columnLabelMap={columnLabelMap}
                                     initialColumnVisibility={initialColumnVisibility}
-                                    deleteUrl="admin.account.users.bulk-destroy"
+                                    bulkDestroyRouteName="admin.account.users.bulk-destroy"
                                 />
                             </div>
                             <div style={{ display: activeTab === 'member' ? 'block' : 'none' }}>
                                 <DataTable
-                                    columns={columns}
                                     data={memberTableData}
+                                    columns={columns}
                                     searchableColumns={searchableColumns}
                                     columnLabelMap={columnLabelMap}
                                     initialColumnVisibility={initialColumnVisibility}
-                                    deleteUrl="admin.account.users.bulk-destroy"
+                                    bulkDestroyRouteName="admin.account.users.bulk-destroy"
                                 />
                             </div>
                         </div>
