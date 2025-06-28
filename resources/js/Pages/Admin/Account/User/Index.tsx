@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { Head, Link } from '@inertiajs/react'
+import { Head, Link, useForm } from '@inertiajs/react'
 import { useState } from 'react'
 
 import {
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/tabs"
 
 import DataTable from '@/Components/DataTable'
-import { columns } from './columns'
+import { createColumns } from './columns'
 
 import { PageProps } from '@/types'
 
@@ -59,6 +59,8 @@ type IndexProps = PageProps<{
 export default function Index({ staff, members }: IndexProps) {
     const [activeTab, setActiveTab] = useState('staff')
 
+    const { delete: destroy, processing } = useForm({})
+
     const staffTableData = staff.map((user) => ({
         id: user.id,
         name: user.name,
@@ -85,6 +87,17 @@ export default function Index({ staff, members }: IndexProps) {
         id: false,
         kana: false,
     }
+
+    const handleDelete = (id: number) => {
+        destroy(route('admin.account.users.destroy', { user: id }), {
+            preserveScroll: true,
+        })
+    }
+
+    const columns = createColumns({
+        onDelete: handleDelete,
+        isProcessing: processing
+    })
 
     return (
         <AuthenticatedLayout>

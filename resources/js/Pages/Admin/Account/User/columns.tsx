@@ -1,4 +1,3 @@
-import { useForm } from '@inertiajs/react'
 import { useState } from 'react'
 
 import { ColumnDef } from "@tanstack/react-table"
@@ -36,7 +35,12 @@ type UserTableData = {
     can_manage_groupings: boolean
 }
 
-export const columns: ColumnDef<UserTableData>[] = [
+type CreateColumnsProps = {
+    onDelete: (id: number) => void
+    isProcessing?: boolean
+}
+
+export const createColumns = ({ onDelete, isProcessing = false }: CreateColumnsProps): ColumnDef<UserTableData>[] => [
     {
         id: "select",
         header: ({ table }) => (
@@ -169,82 +173,96 @@ export const columns: ColumnDef<UserTableData>[] = [
         enableHiding: false,
         cell: ({ row }) => {
             const user = row.original
-            const [open, setOpen] = useState(false)
-            const { delete: destroy, processing } = useForm({})
-
-            const handleDelete: () => void = () => {
-                destroy(route('admin.account.users.destroy', { user: user.id }), {
-                    preserveScroll: true,
-                    onFinish: () => {
-                        setOpen(false)
-                    }
-                })
-            }
 
             return (
-                <>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>操作</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem asChild>
-                                <a
-                                    href={route('admin.account.users.show', { user: user.id })}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    詳細
-                                </a>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <a
-                                    href={route('admin.account.users.edit', { user: user.id })}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    編集
-                                </a>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <button
-                                    type="button"
-                                    className="w-full"
-                                    onClick={() => setOpen(true)}
-                                >
-                                    削除
-                                </button>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    <AlertDialog open={open} onOpenChange={setOpen}>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>ユーザーを削除しますか？</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    この操作は取り消すことができません。<br />
-                                    ユーザー「{user.name}」を完全に削除し、すべてのデータが失われます。
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={handleDelete}
-                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                    disabled={processing}
-                                >
-                                    削除する
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                </>
+                <ActionsCell
+                    user={user}
+                    onDelete={onDelete}
+                    isProcessing={isProcessing}
+                />
             )
         },
     },
 ]
+
+const ActionsCell = ({
+    user,
+    onDelete,
+    isProcessing
+}: {
+    user: UserTableData
+    onDelete: (id: number) => void
+    isProcessing: boolean
+}) => {
+    const [open, setOpen] = useState(false)
+
+    const handleDelete = () => {
+        onDelete(user.id)
+        setOpen(false)
+    }
+
+    return (
+        <>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreHorizontal />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>操作</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                        <a
+                            href={route('admin.account.users.show', { user: user.id })}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            詳細
+                        </a>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <a
+                            href={route('admin.account.users.edit', { user: user.id })}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            編集
+                        </a>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <button
+                            type="button"
+                            className="w-full"
+                            onClick={() => setOpen(true)}
+                        >
+                            削除
+                        </button>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+            <AlertDialog open={open} onOpenChange={setOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>ユーザーを削除しますか？</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            この操作は取り消すことができません。<br />
+                            ユーザー「{user.name}」を完全に削除し、すべてのデータが失われます。
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleDelete}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            disabled={isProcessing}
+                        >
+                            削除する
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
+    )
+}

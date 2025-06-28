@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { Head, Link } from '@inertiajs/react'
+import { Head, Link, useForm } from '@inertiajs/react'
 
 import {
     Breadcrumb,
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import DataTable from '@/Components/DataTable'
-import { columns } from './columns'
+import { createColumns } from './columns'
 
 import { PageProps } from '@/types'
 
@@ -38,11 +38,24 @@ type IndexProps = PageProps<{
 
 export default function Index({ offices }: IndexProps) {
     const searchableColumns = ['name', 'kana']
-    
+
+    const { delete: destroy, processing } = useForm({})
+
     const initialColumnVisibility = {
         id: false,
         kana: false,
     }
+
+    const handleDelete = (id: number) => {
+        destroy(route('admin.offices.destroy', { office: id }), {
+            preserveScroll: true,
+        })
+    }
+
+    const columns = createColumns({
+        onDelete: handleDelete,
+        isProcessing: processing
+    })
 
     return (
         <AuthenticatedLayout>
