@@ -84,7 +84,6 @@ export default function Index({ staff, members }: IndexProps) {
     const searchableColumns = ['name', 'kana', 'email', 'office_name']
 
     const initialColumnVisibility = {
-        id: false,
         kana: false,
     }
 

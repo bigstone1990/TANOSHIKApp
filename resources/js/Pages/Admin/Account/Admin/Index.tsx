@@ -44,7 +44,6 @@ export default function Index({ admins }: IndexProps) {
     const { delete: destroy, processing } = useForm({})
 
     const initialColumnVisibility = {
-        id: false,
         kana: false,
     }
 
