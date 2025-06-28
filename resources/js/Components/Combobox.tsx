@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 
@@ -22,21 +20,21 @@ import {
 import { Option } from '@/types'
 
 interface ComboboxProps {
+    id?: string
+    className?: string
     options: Option[]
     value: string
     onValueChange: (value: string) => void
     placeholder?: string
-    className?: string
-    id?: string
 }
 
 export default function Combobox({
+    id,
+    className,
     options,
     value,
     onValueChange,
     placeholder = "選択してください...",
-    className,
-    id,
 }: ComboboxProps) {
     const [open, setOpen] = React.useState(false)
 
