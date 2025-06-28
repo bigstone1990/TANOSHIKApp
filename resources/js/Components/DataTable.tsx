@@ -12,6 +12,7 @@ import {
     SortingState,
     useReactTable,
     VisibilityState,
+    RowSelectionState,
     Row,
 } from "@tanstack/react-table"
 import { ChevronDown } from "lucide-react"
@@ -65,7 +66,7 @@ export default function DataTable<TData extends { id: number }, TValue>({
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(initialColumnVisibility)
-    const [rowSelection, setRowSelection] = React.useState({})
+    const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({})
 
     const [globalFilter, setGlobalFilter] = React.useState("")
 
