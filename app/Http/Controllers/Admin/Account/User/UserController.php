@@ -51,7 +51,7 @@ class UserController extends Controller
      */
     public function create(): Response
     {
-        $roleroleTypeOptions =  AccountRoleType::options();
+        $roleTypeOptions =  AccountRoleType::options();
 
         $offices = Office::select('id', 'name')
             ->orderBy('kana')
@@ -59,7 +59,7 @@ class UserController extends Controller
             ->prepend(['id' => 0, 'name' => '未所属']);
 
         return Inertia::render('Admin/Account/User/Create', [
-            'roleTypeOptions' => $roleroleTypeOptions,
+            'roleTypeOptions' => $roleTypeOptions,
             'offices' => $offices,
         ]);
     }
@@ -105,9 +105,18 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user): Response
     {
-        //
+        $user = User::select('id', 'office_id', 'name', 'kana', 'email', 'role', 'can_manage_job_postings', 'can_manage_groupings')
+            ->with(['office:id,name'])
+            ->findOrFail($user->id);
+
+        $roleTypeOptions =  AccountRoleType::options();
+        
+        return Inertia::render('Admin/Account/User/Show', [
+            'user' => $user,
+            'roleTypeOptions' => $roleTypeOptions,
+        ]);
     }
 
     /**
