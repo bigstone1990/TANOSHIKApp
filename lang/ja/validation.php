@@ -263,6 +263,9 @@ return [
         // カスタマイズ
         'kana'=> 'かな',
         'updatedAt' => '更新日時',
+        'office' => '事業所',
+        'canManageJobPostings' => '求人管理機能',
+        'canManageGroupings' => 'グループ分け管理機能',
     ],
 
 ];
