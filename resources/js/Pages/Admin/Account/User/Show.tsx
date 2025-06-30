@@ -76,7 +76,7 @@ export default function Show({ user, roleTypeOptions }: ShowProps) {
                                 <BreadcrumbItem className="hidden md:block">
                                     <BreadcrumbLink asChild>
                                         <Link href={route('admin.account.users.index')}>
-                                            ユーザー詳細
+                                            ユーザー一覧
                                         </Link>
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
