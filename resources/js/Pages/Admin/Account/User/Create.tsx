@@ -38,6 +38,19 @@ type CreateProps = PageProps<{
     offices: Office[]
 }>
 
+const PERMISSIONS = [
+    {
+        key: 'canManageJobPostings',
+        label: '求人管理機能',
+        description: '求人の管理ができるようになります'
+    },
+    {
+        key: 'canManageGroupings',
+        label: 'グループ分け管理機能',
+        description: 'グループ分けの管理ができるようになります'
+    },
+] as const
+
 export default function Create({ roleTypeOptions, offices }: CreateProps) {
     const officeOptions = offices.map(office => ({
         label: office.name,
@@ -58,6 +71,32 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
         e.preventDefault()
 
         post(route('admin.account.users.store'))
+    }
+
+    const enableAllPermissions = () => {
+        const updates: Partial<typeof data> = {}
+        PERMISSIONS.forEach(permission => {
+            updates[permission.key] = true
+        })
+
+        setData(prev => ({ ...prev, ...updates }))
+    }
+
+    const disableAllPermissions = () => {
+        const updates: Partial<typeof data> = {}
+        PERMISSIONS.forEach(permission => {
+            updates[permission.key] = false
+        })
+
+        setData(prev => ({ ...prev, ...updates }))
+    }
+
+    const areAllPermissionsEnabled = () => {
+        return PERMISSIONS.every(permission => data[permission.key] === true)
+    }
+
+    const areAllPermissionsDisabled = () => {
+        return PERMISSIONS.every(permission => data[permission.key] === false)
     }
 
     return (
@@ -185,44 +224,49 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
                                             権限設定<span className="text-red-600"> *役割によっては機能の一部が制限されます</span>
                                         </p>
 
-                                        <div className="space-y-4">
-                                            <Label
-                                                htmlFor="canManageJobPostings"
-                                                className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+                                        <div className="flex gap-2">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={enableAllPermissions}
+                                                disabled={areAllPermissionsEnabled()}
                                             >
-                                                <div className="space-y-0.5">
-                                                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                                        求人管理機能<br />
-                                                        <span className="text-muted-foreground text-sm font-normal">
-                                                            求人の管理ができるようになります
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <Switch
-                                                    id="canManageJobPostings"
-                                                    checked={data.canManageJobPostings}
-                                                    onCheckedChange={(checked) => setData('canManageJobPostings', checked)}
-                                                />
-                                            </Label>
+                                                全て有効
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={disableAllPermissions}
+                                                disabled={areAllPermissionsDisabled()}
+                                            >
+                                                全て無効
+                                            </Button>
+                                        </div>
 
-                                            <Label
-                                                htmlFor="canManageGroupings"
-                                                className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
-                                            >
-                                                <div className="space-y-0.5">
-                                                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                                        グループ分け管理機能<br />
-                                                        <span className="text-muted-foreground text-sm font-normal">
-                                                            グループ分けの管理ができるようになります
-                                                        </span>
+                                        <div className="space-y-4">
+                                            {PERMISSIONS.map(permission => (
+                                                <Label
+                                                    key={permission.key}
+                                                    htmlFor={permission.key}
+                                                    className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+                                                >
+                                                    <div className="space-y-0.5">
+                                                        <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                                            {permission.label}<br />
+                                                            <span className="text-muted-foreground text-sm font-normal">
+                                                                {permission.description}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <Switch
-                                                    id="canManageGroupings"
-                                                    checked={data.canManageGroupings}
-                                                    onCheckedChange={(checked) => setData('canManageGroupings', checked)}
-                                                />
-                                            </Label>
+                                                    <Switch
+                                                        id={permission.key}
+                                                        checked={data[permission.key]}
+                                                        onCheckedChange={(checked) => setData(permission.key, checked)}
+                                                    />
+                                                </Label>
+                                            ))}
                                         </div>
 
                                         <InputError message={errors.canManageJobPostings} />
