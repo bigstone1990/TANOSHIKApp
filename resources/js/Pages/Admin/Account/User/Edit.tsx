@@ -22,6 +22,18 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import InputError from '@/Components/InputError'
 
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 import Combobox from '@/Components/Combobox'
 
 import { PageProps, Option } from '@/types'
@@ -70,7 +82,7 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
         value: String(office.id),
     }))
 
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put, delete: destroy, processing, errors } = useForm({
         name: user.name,
         kana: user.kana,
         role: String(user.role),
@@ -84,6 +96,10 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
         e.preventDefault()
 
         put(route('admin.account.users.update', { user: user.id }))
+    }
+
+    const handleDelete: () => void = () => {
+        destroy(route('admin.account.users.destroy', { user: user.id }))
     }
 
     const enableAllPermissions = () => {
@@ -294,6 +310,36 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
                                             一覧に戻る
                                         </Link>
                                         <Button type="submit" disabled={processing}>更新する</Button>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button
+                                                    type="button"
+                                                    variant="destructive"
+                                                    disabled={processing}
+                                                >
+                                                    削除する
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>ユーザーを削除しますか？</AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        この操作は取り消すことができません。<br />
+                                                        ユーザー「{user.name}」を完全に削除し、すべてのデータが失われます。
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        onClick={handleDelete}
+                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                        disabled={processing}
+                                                    >
+                                                        削除する
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                     </div>
                                 </div>
                             </form>
