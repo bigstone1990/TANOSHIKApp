@@ -149,7 +149,10 @@ export default function Edit({ admin }: EditProps) {
                                         />
                                     </div>
 
-                                    <InputError message={errors.updatedAt} />
+                                    <div className="grid gap-2">
+                                        <InputError message={errors.updatedAt} />
+                                    </div>
+
 
                                     <div className="flex items-center gap-4">
                                         <Link
