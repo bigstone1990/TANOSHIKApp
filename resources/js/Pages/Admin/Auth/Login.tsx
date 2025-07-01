@@ -64,7 +64,7 @@ export default function Login({
                                             value={data.email}
                                             autoComplete="username"
                                             autoFocus
-                                            placeholder="user@example.com"
+                                            placeholder="admin@example.com"
                                             required
                                             onChange={(e) => setData('email', e.target.value)}
                                         />
@@ -90,7 +90,7 @@ export default function Login({
                                             </Link>
                                         )}
                                     </div>
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-2">
                                         <Checkbox
                                             id="remember"
                                             checked={data.remember}

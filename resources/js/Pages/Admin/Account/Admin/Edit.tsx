@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react';
+import { FormEventHandler } from 'react'
 
 import {
     Breadcrumb,
@@ -52,17 +52,17 @@ export default function Edit({ admin }: EditProps) {
         name: admin.name,
         kana: admin.kana,
         updatedAt: admin.updated_at,
-    });
+    })
 
     const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        put(route('admin.account.admins.update', { admin: admin.id }));
-    };
+        put(route('admin.account.admins.update', { admin: admin.id }))
+    }
 
-    const handleDelete = () => {
-        destroy(route('admin.account.admins.destroy', { admin: admin.id }));
-    };
+    const handleDelete: () => void = () => {
+        destroy(route('admin.account.admins.destroy', { admin: admin.id }))
+    }
 
     return (
         <AuthenticatedLayout>
@@ -144,18 +144,20 @@ export default function Edit({ admin }: EditProps) {
                                         <Input
                                             id="email"
                                             type="email"
-                                            className="bg-gray-100"
                                             value={admin.email}
-                                            readOnly
+                                            disabled
                                         />
                                     </div>
 
-                                    <InputError message={errors.updatedAt} />
+                                    <div className="grid gap-2">
+                                        <InputError message={errors.updatedAt} />
+                                    </div>
+
 
                                     <div className="flex items-center gap-4">
                                         <Link
                                             href={route('admin.account.admins.show', { admin: admin.id })}
-                                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
+                                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-secondary text-secondary-foreground shadow hover:bg-secondary/90 h-9 px-4 py-2"
                                         >
                                             詳細に戻る
                                         </Link>
@@ -174,7 +176,8 @@ export default function Edit({ admin }: EditProps) {
                                                 <AlertDialogHeader>
                                                     <AlertDialogTitle>管理者を削除しますか？</AlertDialogTitle>
                                                     <AlertDialogDescription>
-                                                        この操作は取り消すことができません。<br />管理者「{admin.name}」を完全に削除し、すべてのデータが失われます。
+                                                        この操作は取り消すことができません。<br />
+                                                        管理者「{admin.name}」を完全に削除し、すべてのデータが失われます。
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>

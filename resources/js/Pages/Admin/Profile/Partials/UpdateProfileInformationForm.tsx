@@ -44,9 +44,8 @@ export default function UpdateProfileInformation({
                         <Input
                             id="name"
                             type="text"
-                            className="bg-gray-100"
                             value={user.name}
-                            readOnly
+                            disabled
                         />
                     </div>
 
@@ -56,9 +55,8 @@ export default function UpdateProfileInformation({
                         <Input
                             id="kana"
                             type="text"
-                            className="bg-gray-100"
                             value={user.kana}
-                            readOnly
+                            disabled
                         />
                     </div>
 
@@ -71,7 +69,7 @@ export default function UpdateProfileInformation({
                             value={data.email}
                             autoComplete="username"
                             autoFocus
-                            placeholder="user@example.com"
+                            placeholder="admin@example.com"
                             required
                             onChange={(e) => setData('email', e.target.value)}
                         />

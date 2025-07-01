@@ -1,4 +1,3 @@
-import { useForm } from '@inertiajs/react'
 import { useState } from 'react'
 
 import { ColumnDef } from "@tanstack/react-table"
@@ -32,7 +31,12 @@ type Office = {
     kana: string
 }
 
-export const columns: ColumnDef<Office>[] = [
+type CreateColumnsProps = {
+    onDelete: (id: number) => void
+    isProcessing?: boolean
+}
+
+export const createColumns = ({ onDelete, isProcessing = false }: CreateColumnsProps): ColumnDef<Office>[] => [
     {
         id: "select",
         header: ({ table }) => (
@@ -105,73 +109,96 @@ export const columns: ColumnDef<Office>[] = [
         enableHiding: false,
         cell: ({ row }) => {
             const office = row.original
-            const [open, setOpen] = useState(false)
-            const { delete: destroy, processing } = useForm()
-
-            const handleDelete = () => {
-                destroy(route('admin.offices.destroy', { office: office.id }), {
-                    preserveScroll: true,
-                    onFinish: () => {
-                        setOpen(false)
-                    }
-                })
-            }
 
             return (
-                <>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>操作</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem asChild>
-                                <a
-                                    href={route('admin.offices.show', { office: office.id })}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    詳細
-                                </a>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <a
-                                    href={route('admin.offices.edit', { office: office.id })}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    編集
-                                </a>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setOpen(true)}>削除</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    <AlertDialog open={open} onOpenChange={setOpen}>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>事業所を削除しますか？</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    この操作は取り消すことができません。<br />事業所「{office.name}」を完全に削除し、すべてのデータが失われます。
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={handleDelete}
-                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                    disabled={processing}
-                                >
-                                    削除する
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                </>
+                <ActionsCell
+                    office={office}
+                    onDelete={onDelete}
+                    isProcessing={isProcessing}
+                />
             )
         },
     },
 ]
+
+const ActionsCell = ({
+    office,
+    onDelete,
+    isProcessing
+}: {
+    office: Office
+    onDelete: (id: number) => void
+    isProcessing: boolean
+}) => {
+    const [open, setOpen] = useState(false)
+
+    const handleDelete = () => {
+        onDelete(office.id)
+        setOpen(false)
+    }
+
+    return (
+        <>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreHorizontal />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>操作</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                        <a
+                            href={route('admin.offices.show', { office: office.id })}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            詳細
+                        </a>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <a
+                            href={route('admin.offices.edit', { office: office.id })}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            編集
+                        </a>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <button
+                            type="button"
+                            className="w-full"
+                            onClick={() => setOpen(true)}
+                        >
+                            削除
+                        </button>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+            <AlertDialog open={open} onOpenChange={setOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>事業所を削除しますか？</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            この操作は取り消すことができません。<br />
+                            事業所「{office.name}」を完全に削除し、すべてのデータが失われます。
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleDelete}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            disabled={isProcessing}
+                        >
+                            削除する
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
+    )
+}

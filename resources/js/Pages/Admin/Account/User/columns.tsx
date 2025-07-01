@@ -25,11 +25,14 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-type Admin = {
+type UserTableData = {
     id: number
     name: string
     kana: string
     email: string
+    office_name: string
+    can_manage_job_postings: boolean
+    can_manage_groupings: boolean
 }
 
 type CreateColumnsProps = {
@@ -37,7 +40,7 @@ type CreateColumnsProps = {
     isProcessing?: boolean
 }
 
-export const createColumns = ({ onDelete, isProcessing = false }: CreateColumnsProps): ColumnDef<Admin>[] => [
+export const createColumns = ({ onDelete, isProcessing = false }: CreateColumnsProps): ColumnDef<UserTableData>[] => [
     {
         id: "select",
         header: ({ table }) => (
@@ -121,14 +124,59 @@ export const createColumns = ({ onDelete, isProcessing = false }: CreateColumnsP
         cell: ({ row }) => <div>{row.getValue("email")}</div>,
     },
     {
+        accessorKey: "office_name",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    所属事業所名
+                    <ArrowUpDown />
+                </Button>
+            )
+        },
+        cell: ({ row }) => <div>{row.getValue("office_name")}</div>,
+    },
+    {
+        accessorKey: "can_manage_job_postings",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    求人管理機能
+                    <ArrowUpDown />
+                </Button>
+            )
+        },
+        cell: ({ row }) => <div>{row.getValue("can_manage_job_postings") ? '〇' : '×'}</div>,
+    },
+    {
+        accessorKey: "can_manage_groupings",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    グループ分け管理機能
+                    <ArrowUpDown />
+                </Button>
+            )
+        },
+        cell: ({ row }) => <div>{row.getValue("can_manage_groupings") ? '〇' : '×'}</div>,
+    },
+    {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
-            const admin = row.original
+            const user = row.original
 
             return (
                 <ActionsCell
-                    admin={admin}
+                    user={user}
                     onDelete={onDelete}
                     isProcessing={isProcessing}
                 />
@@ -138,18 +186,18 @@ export const createColumns = ({ onDelete, isProcessing = false }: CreateColumnsP
 ]
 
 const ActionsCell = ({
-    admin,
+    user,
     onDelete,
     isProcessing
 }: {
-    admin: Admin
+    user: UserTableData
     onDelete: (id: number) => void
     isProcessing: boolean
 }) => {
     const [open, setOpen] = useState(false)
 
     const handleDelete = () => {
-        onDelete(admin.id)
+        onDelete(user.id)
         setOpen(false)
     }
 
@@ -167,7 +215,7 @@ const ActionsCell = ({
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                         <a
-                            href={route('admin.account.admins.show', { admin: admin.id })}
+                            href={route('admin.account.users.show', { user: user.id })}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -176,7 +224,7 @@ const ActionsCell = ({
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <a
-                            href={route('admin.account.admins.edit', { admin: admin.id })}
+                            href={route('admin.account.users.edit', { user: user.id })}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -197,10 +245,10 @@ const ActionsCell = ({
             <AlertDialog open={open} onOpenChange={setOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>管理者を削除しますか？</AlertDialogTitle>
+                        <AlertDialogTitle>ユーザーを削除しますか？</AlertDialogTitle>
                         <AlertDialogDescription>
                             この操作は取り消すことができません。<br />
-                            管理者「{admin.name}」を完全に削除し、すべてのデータが失われます。
+                            ユーザー「{user.name}」を完全に削除し、すべてのデータが失われます。
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

@@ -25,6 +25,9 @@ class User extends Authenticatable
         'kana',
         'email',
         'password',
+        'role',
+        'can_manage_job_postings',
+        'can_manage_groupings',
     ];
 
     /**

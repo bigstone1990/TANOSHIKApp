@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->tinyInteger('role');
+            $table->boolean('can_manage_job_postings');
+            $table->boolean('can_manage_groupings');
             $table->rememberToken();
             $table->timestamps();
         });

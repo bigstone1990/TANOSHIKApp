@@ -4,8 +4,8 @@ import {
   Bot,
   Building,
   Command,
-  FlaskConical,
   Frame,
+  LayoutDashboard,
   LifeBuoy,
   Map,
   PieChart,
@@ -162,6 +162,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const adminNavMain = [
     {
+      title: "ダッシュボード",
+      url: route('admin.dashboard'),
+      icon: LayoutDashboard,
+      isActive: route().current('admin.dashboard'),
+    },
+    {
       title: "アカウント管理",
       url: "#",
       icon: UserPlus,
@@ -174,7 +180,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
         {
           title: "ユーザー管理",
-          url: "#",
+          url: route('admin.account.users.index'),
+          isActive: route().current('admin.account.users.*'),
         },
       ],
     },
@@ -187,6 +194,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   ]
 
   const userNavMain = [
+    {
+      title: "ダッシュボード",
+      url: route('user.dashboard'),
+      icon: LayoutDashboard,
+      isActive: route().current('user.dashboard'),
+    },
     {
       title: "Playground",
       url: "#",

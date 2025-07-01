@@ -7,30 +7,30 @@ export default function FlashMessage() {
   const { id, message, status } = usePage().props.flash
 
   useEffect(() => {
-    requestAnimationFrame(() => {
-      if (status && message) {
-        if (status === 'success') {
-          toast.success(message)
-        } else if (status === 'error') {
-          toast.error(message)
-        } else if (status === 'warning') {
-          toast.warning(message)
-        } else {
-          toast.info(message)
-        }
+    if (!id || !message || !status) return
 
-        if (typeof window !== 'undefined') {
-          const state = { ...window.history.state }
-          if (state?.page?.props?.flash) {
-            state.page.props.flash = {}
-            window.history.replaceState(state, '')
-          }
-        }
+    requestAnimationFrame(() => {
+      switch (status) {
+        case 'success':
+          toast.success(message)
+          break
+        case 'error':
+          toast.error(message)
+          break
+        case 'warning':
+          toast.warning(message)
+          break
+        default:
+          toast.info(message)
+      }
+
+      const state = { ...window.history.state }
+      if (state?.page?.props?.flash) {
+        state.page.props.flash = {}
+        window.history.replaceState(state, '')
       }
     })
   }, [id])
 
-  return (
-    <Toaster />
-  )
+  return <Toaster />
 }

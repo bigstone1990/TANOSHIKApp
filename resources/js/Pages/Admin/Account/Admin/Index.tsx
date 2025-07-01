@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { Head, Link } from '@inertiajs/react'
+import { Head, Link, useForm } from '@inertiajs/react'
 
 import {
     Breadcrumb,
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import DataTable from '@/Components/DataTable'
-import { columns } from './columns'
+import { createColumns } from './columns'
 
 import { PageProps } from '@/types'
 
@@ -39,6 +39,25 @@ type IndexProps = PageProps<{
 }>
 
 export default function Index({ admins }: IndexProps) {
+    const searchableColumns = ['name', 'kana', 'email']
+
+    const { delete: destroy, processing } = useForm({})
+
+    const initialColumnVisibility = {
+        kana: false,
+    }
+
+    const handleDelete = (id: number) => {
+        destroy(route('admin.account.admins.destroy', { admin: id }), {
+            preserveScroll: true,
+        })
+    }
+
+    const columns = createColumns({
+        onDelete: handleDelete,
+        isProcessing: processing
+    })
+
     return (
         <AuthenticatedLayout>
             <Head title="管理者一覧" />
@@ -67,14 +86,12 @@ export default function Index({ admins }: IndexProps) {
                         </Link>
                     </div>
                     <DataTable
-                        columns={columns}
                         data={admins}
-                        searchableColumns={['name', 'kana', 'email']}
+                        columns={columns}
+                        searchableColumns={searchableColumns}
                         columnLabelMap={columnLabelMap}
-                        initialColumnVisibility={{
-                            id: false,
-                            kana: false,
-                        }}
+                        initialColumnVisibility={initialColumnVisibility}
+                        bulkDestroyRouteName="admin.account.admins.bulk-destroy"
                     />
                 </div>
             </SidebarInset>
