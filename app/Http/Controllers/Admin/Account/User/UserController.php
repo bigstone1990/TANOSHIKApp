@@ -122,17 +122,38 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user): Response
     {
-        //
+        $roleTypeOptions =  AccountRoleType::options();
+
+        $offices = Office::select('id', 'name')
+            ->orderBy('kana')
+            ->get()
+            ->prepend(['id' => 0, 'name' => '未所属']);
+
+        return Inertia::render('Admin/Account/User/Edit', [
+            'user' => [
+                'id' => $user->id,
+                'office_id' => $user->office_id,
+                'name' => $user->name,
+                'kana' => $user->kana,
+                'email' => $user->email,
+                'role' => $user->role,
+                'can_manage_job_postings' => $user->can_manage_job_postings,
+                'can_manage_groupings' => $user->can_manage_groupings,
+                'updated_at' => $user->updated_at->format('Y-m-d H:i:s'),
+            ],
+            'roleTypeOptions' => $roleTypeOptions,
+            'offices' => $offices,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        dd($request, $user);
     }
 
     /**
