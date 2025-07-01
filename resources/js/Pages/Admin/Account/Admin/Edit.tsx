@@ -144,9 +144,8 @@ export default function Edit({ admin }: EditProps) {
                                         <Input
                                             id="email"
                                             type="email"
-                                            className="bg-gray-100"
                                             value={admin.email}
-                                            readOnly
+                                            disabled
                                         />
                                     </div>
 
