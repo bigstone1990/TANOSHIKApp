@@ -186,8 +186,14 @@ export default function Show({ user, roleTypeOptions }: ShowProps) {
                                                     <Input
                                                         id={permission.key}
                                                         type="text"
-                                                        className="bg-gray-100 w-20 text-center"
-                                                        value={user[permission.key] === true ? '有効' : '無効'}
+                                                        className={
+                                                            `w-20 text-center font-medium
+                                                            ${user[permission.key] == true
+                                                                ? 'bg-green-500 text-white'
+                                                                : 'bg-gray-100'
+                                                            }`
+                                                        }
+                                                        value={user[permission.key] == true ? '有効' : '無効'}
                                                         readOnly
                                                     />
                                                 </Label>
