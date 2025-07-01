@@ -247,30 +247,31 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
 
                                         <div className="space-y-4">
                                             {PERMISSIONS.map(permission => (
-                                                <Label
-                                                    key={permission.key}
-                                                    htmlFor={permission.key}
-                                                    className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
-                                                >
-                                                    <div className="space-y-0.5">
-                                                        <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                                            {permission.label}<br />
-                                                            <span className="text-muted-foreground text-sm font-normal">
-                                                                {permission.description}
-                                                            </span>
+                                                <>
+                                                    <Label
+                                                        key={permission.key}
+                                                        htmlFor={permission.key}
+                                                        className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
+                                                    >
+                                                        <div className="space-y-0.5">
+                                                            <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                                                {permission.label}<br />
+                                                                <span className="text-muted-foreground text-sm font-normal">
+                                                                    {permission.description}
+                                                                </span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <Switch
-                                                        id={permission.key}
-                                                        checked={data[permission.key]}
-                                                        onCheckedChange={(checked) => setData(permission.key, checked)}
-                                                    />
-                                                </Label>
+                                                        <Switch
+                                                            id={permission.key}
+                                                            checked={data[permission.key]}
+                                                            onCheckedChange={(checked) => setData(permission.key, checked)}
+                                                        />
+                                                    </Label>
+
+                                                    <InputError message={errors[permission.key]} />
+                                                </>
                                             ))}
                                         </div>
-
-                                        <InputError message={errors.canManageJobPostings} />
-                                        <InputError message={errors.canManageGroupings} />
                                     </div>
 
                                     <div className="flex items-center gap-4">
