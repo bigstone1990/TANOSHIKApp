@@ -85,6 +85,8 @@ export default function Index({ staff, members }: IndexProps) {
 
     const initialColumnVisibility = {
         kana: false,
+        can_manage_job_postings: false,
+        can_manage_groupings: false,
     }
 
     const handleDelete = (id: number) => {
