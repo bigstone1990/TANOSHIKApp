@@ -37,7 +37,9 @@ type IndexProps = PageProps<{
 }>
 
 export default function Index({ offices }: IndexProps) {
-    const searchableColumns = ['name', 'kana']
+    const searchableColumns = ['id', 'name', 'kana']
+
+    const keywordPlaceholder = "キーワード検索（ID、 名前、 かな）"
 
     const { delete: destroy, processing } = useForm({})
 
@@ -87,6 +89,7 @@ export default function Index({ offices }: IndexProps) {
                         data={offices}
                         columns={columns}
                         searchableColumns={searchableColumns}
+                        keywordPlaceholder={keywordPlaceholder}
                         columnLabelMap={columnLabelMap}
                         initialColumnVisibility={initialColumnVisibility}
                         bulkDestroyRouteName="admin.offices.bulk-destroy"

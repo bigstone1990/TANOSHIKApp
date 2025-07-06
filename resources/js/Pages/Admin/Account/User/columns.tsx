@@ -131,7 +131,7 @@ export const createColumns = ({ onDelete, isProcessing = false }: CreateColumnsP
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    所属事業所名
+                    所属事業所
                     <ArrowUpDown />
                 </Button>
             )

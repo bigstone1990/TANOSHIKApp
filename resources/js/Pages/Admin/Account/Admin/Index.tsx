@@ -39,7 +39,9 @@ type IndexProps = PageProps<{
 }>
 
 export default function Index({ admins }: IndexProps) {
-    const searchableColumns = ['name', 'kana', 'email']
+    const searchableColumns = ['id', 'name', 'kana', 'email']
+
+    const keywordPlaceholder = "キーワード検索（ID, 名前, かな、メールアドレス）"
 
     const { delete: destroy, processing } = useForm({})
 
@@ -89,6 +91,7 @@ export default function Index({ admins }: IndexProps) {
                         data={admins}
                         columns={columns}
                         searchableColumns={searchableColumns}
+                        keywordPlaceholder={keywordPlaceholder}
                         columnLabelMap={columnLabelMap}
                         initialColumnVisibility={initialColumnVisibility}
                         bulkDestroyRouteName="admin.account.admins.bulk-destroy"

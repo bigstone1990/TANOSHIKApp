@@ -50,6 +50,7 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
     columns: ColumnDef<TData, TValue>[]
     searchableColumns?: string[]
+    keywordPlaceholder?: string
     columnLabelMap?: Record<string, string>
     initialColumnVisibility?: VisibilityState
     bulkDestroyRouteName: string
@@ -59,6 +60,7 @@ export default function DataTable<TData extends { id: number }, TValue>({
     data,
     columns,
     searchableColumns = [],
+    keywordPlaceholder = "キーワード検索",
     columnLabelMap = {},
     initialColumnVisibility = {},
     bulkDestroyRouteName,
@@ -153,7 +155,7 @@ export default function DataTable<TData extends { id: number }, TValue>({
         <div className="w-full">
             <div className="flex items-center py-4 gap-4">
                 <Input
-                    placeholder="キーワード検索"
+                    placeholder={keywordPlaceholder}
                     value={globalFilter}
                     onChange={(event) => setGlobalFilter(event.target.value)}
                     className="max-w-sm"

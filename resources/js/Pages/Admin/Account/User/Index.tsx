@@ -32,7 +32,7 @@ const columnLabelMap: Record<string, string> = {
     name: "名前",
     kana: "かな",
     email: "メールアドレス",
-    office_name: "所属事業所名",
+    office_name: "所属事業所",
     can_manage_job_postings: "求人管理機能",
     can_manage_groupings: "グループ分け管理機能",
 }
@@ -81,7 +81,9 @@ export default function Index({ staff, members }: IndexProps) {
         can_manage_groupings: user.can_manage_groupings,
     }))
 
-    const searchableColumns = ['name', 'kana', 'email', 'office_name']
+    const searchableColumns = ['id', 'name', 'kana', 'email', 'office_name']
+
+    const keywordPlaceholder = "キーワード検索（ID、 名前、 かな、メールアドレス、所属事業所）"
 
     const initialColumnVisibility = {
         kana: false,
@@ -138,6 +140,7 @@ export default function Index({ staff, members }: IndexProps) {
                                     data={staffTableData}
                                     columns={columns}
                                     searchableColumns={searchableColumns}
+                                    keywordPlaceholder={keywordPlaceholder}
                                     columnLabelMap={columnLabelMap}
                                     initialColumnVisibility={initialColumnVisibility}
                                     bulkDestroyRouteName="admin.account.users.bulk-destroy"
@@ -148,6 +151,7 @@ export default function Index({ staff, members }: IndexProps) {
                                     data={memberTableData}
                                     columns={columns}
                                     searchableColumns={searchableColumns}
+                                    keywordPlaceholder={keywordPlaceholder}
                                     columnLabelMap={columnLabelMap}
                                     initialColumnVisibility={initialColumnVisibility}
                                     bulkDestroyRouteName="admin.account.users.bulk-destroy"
