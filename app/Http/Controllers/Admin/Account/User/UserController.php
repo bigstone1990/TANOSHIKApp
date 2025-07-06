@@ -31,13 +31,13 @@ class UserController extends Controller
         $staff = User::select('id', 'office_id', 'name', 'kana', 'email', 'can_manage_job_postings', 'can_manage_groupings')
         ->with(['office:id,name'])
         ->where('role', intval(AccountRoleType::STAFF->value))
-        ->orderBy('kana')
+        ->orderBy('id')
         ->get();
 
         $members = User::select('id', 'office_id', 'name', 'kana', 'email', 'can_manage_job_postings', 'can_manage_groupings')
         ->with(['office:id,name'])
         ->where('role', intval(AccountRoleType::MEMBER->value))
-        ->orderBy('kana')
+        ->orderBy('id')
         ->get();
 
         return Inertia::render('Admin/Account/User/Index', [
@@ -54,7 +54,7 @@ class UserController extends Controller
         $roleTypeOptions =  AccountRoleType::options();
 
         $offices = Office::select('id', 'name')
-            ->orderBy('kana')
+            ->orderBy('id')
             ->get()
             ->prepend(['id' => 0, 'name' => '未所属']);
 
@@ -127,7 +127,7 @@ class UserController extends Controller
         $roleTypeOptions =  AccountRoleType::options();
 
         $offices = Office::select('id', 'name')
-            ->orderBy('kana')
+            ->orderBy('id')
             ->get()
             ->prepend(['id' => 0, 'name' => '未所属']);
 

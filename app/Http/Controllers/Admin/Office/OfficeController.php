@@ -25,7 +25,7 @@ class OfficeController extends Controller
     public function index(): Response
     {
         $offices = Office::select('id', 'name', 'kana')
-            ->orderBy('kana')
+            ->orderBy('id')
             ->get();
 
         return Inertia::render('Admin/Office/Index', [

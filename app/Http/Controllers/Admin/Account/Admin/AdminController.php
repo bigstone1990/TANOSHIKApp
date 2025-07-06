@@ -27,7 +27,7 @@ class AdminController extends Controller
     public function index(): Response
     {
         $admins = Admin::select('id', 'name', 'kana', 'email')
-            ->orderBy('kana')
+            ->orderBy('id')
             ->get();
 
         return Inertia::render('Admin/Account/Admin/Index', [
