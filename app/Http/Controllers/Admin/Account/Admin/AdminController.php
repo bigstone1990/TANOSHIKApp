@@ -111,8 +111,18 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAdminRequest $request, Admin $admin): RedirectResponse
+    public function update(UpdateAdminRequest $request, String $id): RedirectResponse
     {
+        $admin = Admin::find($id);
+
+        if (!$admin) {
+            return to_route('admin.account.admins.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '対象のデータが見つかりません',
+                'flash_status' => 'error',
+            ]);
+        }
+
         try {
             DB::transaction(function () use ($request, $admin) {
                 if ($admin->updated_at->format('Y-m-d H:i:s') !== $request->updatedAt) {
@@ -148,8 +158,18 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Admin $admin): RedirectResponse
+    public function destroy(String $id): RedirectResponse
     {
+        $admin = Admin::find($id);
+
+        if (!$admin) {
+            return to_route('admin.account.admins.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '対象のデータが見つかりません',
+                'flash_status' => 'error',
+            ]);
+        }
+
         try {
             DB::transaction(function () use ($admin) {
                 $admin->delete();
@@ -178,7 +198,7 @@ class AdminController extends Controller
             'ids.required' => '削除対象を選択してください',
             'ids.array' => '削除対象の形式が正しくありません',
             'ids.*.integer' => '無効なIDが含まれています',
-            'ids.*.exists' => '存在しないデータが選択されています。ページを更新して再試行してください。',
+            'ids.*.exists' => '存在しないデータが選択されていたのでページを更新しました。再試行してください。',
         ]);
 
         try {

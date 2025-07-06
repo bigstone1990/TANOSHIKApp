@@ -151,8 +151,18 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user): RedirectResponse
+    public function update(UpdateUserRequest $request, String $id): RedirectResponse
     {
+        $user = User::find($id);
+
+        if (!$user) {
+            return to_route('admin.account.users.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '対象のデータが見つかりません',
+                'flash_status' => 'error',
+            ]);
+        }
+
         try {
             DB::transaction(function () use ($request, $user) {
                 if ($user->updated_at->format('Y-m-d H:i:s') !== $request->updatedAt) {
@@ -191,8 +201,18 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user): RedirectResponse
+    public function destroy(String $id): RedirectResponse
     {
+        $user = User::find($id);
+
+        if (!$user) {
+            return to_route('admin.account.users.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '対象のデータが見つかりません',
+                'flash_status' => 'error',
+            ]);
+        }
+
         try {
             DB::transaction(function () use ($user) {
                 $user->delete();
@@ -221,7 +241,7 @@ class UserController extends Controller
             'ids.required' => '削除対象を選択してください',
             'ids.array' => '削除対象の形式が正しくありません',
             'ids.*.integer' => '無効なIDが含まれています',
-            'ids.*.exists' => '存在しないデータが選択されています。ページを更新して再試行してください。',
+            'ids.*.exists' => '存在しないデータが選択されていたのでページを更新しました。再試行してください。',
         ]);
 
         try {

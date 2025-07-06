@@ -100,8 +100,18 @@ class OfficeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOfficeRequest $request, Office $office): RedirectResponse
+    public function update(UpdateOfficeRequest $request, String $id): RedirectResponse
     {
+        $office = Office::find($id);
+
+        if (!$office) {
+            return to_route('admin.offices.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '対象のデータが見つかりません',
+                'flash_status' => 'error',
+            ]);
+        }
+
         try {
             DB::transaction(function () use ($request, $office) {
                 if ($office->updated_at->format('Y-m-d H:i:s') !== $request->updatedAt) {
@@ -137,8 +147,18 @@ class OfficeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Office $office): RedirectResponse
+    public function destroy(String $id): RedirectResponse
     {
+        $office = Office::find($id);
+
+        if (!$office) {
+            return to_route('admin.offices.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '対象のデータが見つかりません',
+                'flash_status' => 'error',
+            ]);
+        }
+
         try {
             DB::transaction(function () use ($office) {
                 $office->delete();
@@ -167,7 +187,7 @@ class OfficeController extends Controller
             'ids.required' => '削除対象を選択してください',
             'ids.array' => '削除対象の形式が正しくありません',
             'ids.*.integer' => '無効なIDが含まれています',
-            'ids.*.exists' => '存在しないデータが選択されています。ページを更新して再試行してください。',
+            'ids.*.exists' => '存在しないデータが選択されていたのでページを更新しました。再試行してください。',
         ]);
 
         try {
