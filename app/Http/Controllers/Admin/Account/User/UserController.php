@@ -40,9 +40,16 @@ class UserController extends Controller
         ->orderBy('id')
         ->get();
 
+        $others = User::select('id', 'office_id', 'name', 'kana', 'email', 'can_manage_job_postings', 'can_manage_groupings')
+        ->with(['office:id,name'])
+        ->where('role', AccountRoleType::UNSET->value)
+        ->orderBy('id')
+        ->get();
+
         return Inertia::render('Admin/Account/User/Index', [
             'staff' => $staff,
             'members' => $members,
+            'others' => $others,
         ]);
     }
 
