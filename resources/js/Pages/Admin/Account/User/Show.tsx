@@ -150,7 +150,7 @@ export default function Show({ user, roleTypeOptions }: ShowProps) {
                                             id="role"
                                             type="text"
                                             className="bg-gray-100"
-                                            value={roleTypeOptions.find(option => option.value === String(user.role))?.label ?? '不明'}
+                                            value={roleTypeOptions.find(option => option.value === user.role)?.label ?? '不明'}
                                             readOnly
                                         />
                                     </div>

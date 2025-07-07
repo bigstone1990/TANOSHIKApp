@@ -37,8 +37,8 @@ type FormData = {
     name: string
     kana: string
     email: string
-    role: string
-    office: string
+    role: number
+    office: number
     can_manage_job_postings: boolean
     can_manage_groupings: boolean
 }
@@ -72,15 +72,15 @@ const PERMISSIONS: readonly Permission[] = [
 export default function Create({ roleTypeOptions, offices }: CreateProps) {
     const officeOptions = offices.map(office => ({
         label: office.name,
-        value: String(office.id),
+        value: office.id,
     }))
 
     const { data, setData, post, processing, errors } = useForm<FormData>({
         name: '',
         kana: '',
         email: '',
-        role: '',
-        office: '',
+        role: 0,
+        office: 0,
         can_manage_job_postings: false,
         can_manage_groupings: false,
     })

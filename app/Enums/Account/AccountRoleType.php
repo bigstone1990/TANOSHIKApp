@@ -2,14 +2,16 @@
 
 namespace App\Enums\Account;
 
-enum AccountRoleType: string
+enum AccountRoleType: int
 {
-    case STAFF = '1';
-    case MEMBER = '9';
+    case UNSET = 0;
+    case STAFF = 1;
+    case MEMBER = 9;
 
     public function label(): string
     {
         return match ($this) {
+            self::UNSET => '未設定',
             self::STAFF => 'スタッフ',
             self::MEMBER => 'メンバー',
         };
@@ -31,10 +33,14 @@ enum AccountRoleType: string
         return array_map(fn(self $type) => $type->value, self::cases());
     }
 
-    public static function labelByValue(string|int|null $value): ?string
+    public static function labelByValue(int|string|null $value): ?string
     {
+        if ($value === null) {
+            return null;
+        }
+
         foreach (self::cases() as $type) {
-            if ($type->value === strval($value)) {
+            if ($type->value === intval($value)) {
                 return $type->label();
             }
         }

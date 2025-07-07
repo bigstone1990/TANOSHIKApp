@@ -38,12 +38,12 @@ class StoreUserRequest extends FormRequest
             'name' => ['required', 'string', 'max:30'],
             'kana' => ['required', 'string', 'regex:/^[ぁ-ゖー０-９0-9\x{3000}\x{0020}]+$/u', 'max:255'],
             'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
-            'role' => ['required', 'string', Rule::in($this->accountRoleTypes)],
+            'role' => ['required', 'integer', Rule::in($this->accountRoleTypes)],
             'office' => [
                 'required',
-                'string',
+                'integer',
                 function ($attribute, $value, $fail) {
-                    if ($value !== '0' && !Office::where('id', $value)->exists()) {
+                    if ($value !== 0 && !Office::where('id', $value)->exists()) {
                         $fail('選択された事業所は存在しません。');
                     }
                 },

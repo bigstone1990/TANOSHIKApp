@@ -30,13 +30,13 @@ class UserController extends Controller
     {
         $staff = User::select('id', 'office_id', 'name', 'kana', 'email', 'can_manage_job_postings', 'can_manage_groupings')
         ->with(['office:id,name'])
-        ->where('role', intval(AccountRoleType::STAFF->value))
+        ->where('role', AccountRoleType::STAFF->value)
         ->orderBy('id')
         ->get();
 
         $members = User::select('id', 'office_id', 'name', 'kana', 'email', 'can_manage_job_postings', 'can_manage_groupings')
         ->with(['office:id,name'])
-        ->where('role', intval(AccountRoleType::MEMBER->value))
+        ->where('role', AccountRoleType::MEMBER->value)
         ->orderBy('id')
         ->get();
 

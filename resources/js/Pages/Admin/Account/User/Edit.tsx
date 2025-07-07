@@ -60,8 +60,8 @@ type Office = {
 type FormData = {
     name: string
     kana: string
-    role: string
-    office: string
+    role: number
+    office: number
     can_manage_job_postings: boolean
     can_manage_groupings: boolean
     updated_at: string
@@ -97,14 +97,14 @@ const PERMISSIONS: readonly Permission[] = [
 export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
     const officeOptions = offices.map(office => ({
         label: office.name,
-        value: String(office.id),
+        value: office.id,
     }))
 
     const { data, setData, put, delete: destroy, processing, errors } = useForm<FormData>({
         name: user.name,
         kana: user.kana,
-        role: String(user.role),
-        office: user.office_id ? String(user.office_id) : '',
+        role: user.role,
+        office: user.office_id ? user.office_id : 0,
         can_manage_job_postings: user.can_manage_job_postings,
         can_manage_groupings: user.can_manage_groupings,
         updated_at: user.updated_at,
