@@ -95,6 +95,7 @@ export default function Index({ admins }: IndexProps) {
                         columnLabelMap={columnLabelMap}
                         initialColumnVisibility={initialColumnVisibility}
                         bulkDestroyRouteName="admin.account.admins.bulk-destroy"
+                        deleteDialogDisplayField="name"
                     />
                 </div>
             </SidebarInset>

@@ -144,6 +144,7 @@ export default function Index({ staff, members }: IndexProps) {
                                     columnLabelMap={columnLabelMap}
                                     initialColumnVisibility={initialColumnVisibility}
                                     bulkDestroyRouteName="admin.account.users.bulk-destroy"
+                                    deleteDialogDisplayField="name"
                                 />
                             </div>
                             <div style={{ display: activeTab === 'member' ? 'block' : 'none' }}>
@@ -155,6 +156,7 @@ export default function Index({ staff, members }: IndexProps) {
                                     columnLabelMap={columnLabelMap}
                                     initialColumnVisibility={initialColumnVisibility}
                                     bulkDestroyRouteName="admin.account.users.bulk-destroy"
+                                    deleteDialogDisplayField="name"
                                 />
                             </div>
                         </div>

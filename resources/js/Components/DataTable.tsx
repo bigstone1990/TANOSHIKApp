@@ -43,6 +43,8 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
 
 import InputError from '@/Components/InputError'
 
@@ -54,6 +56,7 @@ interface DataTableProps<TData, TValue> {
     columnLabelMap?: Record<string, string>
     initialColumnVisibility?: VisibilityState
     bulkDestroyRouteName: string
+    deleteDialogDisplayField?: keyof TData
 }
 
 export default function DataTable<TData extends { id: number }, TValue>({
@@ -64,6 +67,7 @@ export default function DataTable<TData extends { id: number }, TValue>({
     columnLabelMap = {},
     initialColumnVisibility = {},
     bulkDestroyRouteName,
+    deleteDialogDisplayField,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -226,6 +230,24 @@ export default function DataTable<TData extends { id: number }, TValue>({
                                     この操作は取り消すことができません。<br />
                                     選択された{table.getFilteredSelectedRowModel().rows.length}件を完全に削除し、すべてのデータが失われます。
                                 </AlertDialogDescription>
+                                <ScrollArea className="h-72 w-80 rounded-md border self-center">
+                                    <div className="p-4">
+                                        <h4 className="mb-4 text-sm leading-none font-medium">対象データ</h4>
+                                        {table.getFilteredSelectedRowModel().rows.map((row) => (
+                                            <React.Fragment key={row.id}>
+                                                <div className="text-sm">
+                                                    <span>ID: {row.id}</span>
+                                                    {deleteDialogDisplayField && (
+                                                        <span className="ml-2">
+                                                            {columnLabelMap[String(deleteDialogDisplayField)] || String(deleteDialogDisplayField)}: {String(row.original[deleteDialogDisplayField] ?? '不明')}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <Separator className="my-2" />
+                                            </React.Fragment>
+                                        ))}
+                                    </div>
+                                </ScrollArea>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>キャンセル</AlertDialogCancel>
