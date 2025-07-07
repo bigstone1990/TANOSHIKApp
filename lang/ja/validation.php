@@ -262,10 +262,9 @@ return [
         'year' => '年',
         // カスタマイズ
         'kana'=> 'かな',
-        'updatedAt' => '更新日時',
         'office' => '事業所',
-        'canManageJobPostings' => '求人管理機能',
-        'canManageGroupings' => 'グループ分け管理機能',
+        'can_manage_job_postings' => '求人管理機能',
+        'can_manage_groupings' => 'グループ分け管理機能',
     ],
 
 ];

@@ -33,19 +33,37 @@ type Office = {
     name: string
 }
 
+type FormData = {
+    name: string
+    kana: string
+    email: string
+    role: string
+    office: string
+    can_manage_job_postings: boolean
+    can_manage_groupings: boolean
+}
+
 type CreateProps = PageProps<{
     roleTypeOptions: RoleTypeOption[]
     offices: Office[]
 }>
 
-const PERMISSIONS = [
+type PermissionKey = 'can_manage_job_postings' | 'can_manage_groupings'
+
+type Permission = {
+    key: PermissionKey
+    label: string
+    description: string
+}
+
+const PERMISSIONS: readonly Permission[] = [
     {
-        key: 'canManageJobPostings',
+        key: 'can_manage_job_postings',
         label: '求人管理機能',
         description: '求人の管理ができるようになります'
     },
     {
-        key: 'canManageGroupings',
+        key: 'can_manage_groupings',
         label: 'グループ分け管理機能',
         description: 'グループ分けの管理ができるようになります'
     },
@@ -57,14 +75,14 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
         value: String(office.id),
     }))
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm<FormData>({
         name: '',
         kana: '',
         email: '',
         role: '',
         office: '',
-        canManageJobPostings: false as boolean,
-        canManageGroupings: false as boolean,
+        can_manage_job_postings: false,
+        can_manage_groupings: false,
     })
 
     const submit: FormEventHandler = (e) => {
@@ -74,7 +92,7 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
     }
 
     const enableAllPermissions = () => {
-        const updates: Partial<typeof data> = {}
+        const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
             updates[permission.key] = true
         })
@@ -83,7 +101,7 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
     }
 
     const disableAllPermissions = () => {
-        const updates: Partial<typeof data> = {}
+        const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
             updates[permission.key] = false
         })
@@ -91,11 +109,11 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
         setData(prev => ({ ...prev, ...updates }))
     }
 
-    const areAllPermissionsEnabled = () => {
+    const areAllPermissionsEnabled = (): boolean => {
         return PERMISSIONS.every(permission => data[permission.key] === true)
     }
 
-    const areAllPermissionsDisabled = () => {
+    const areAllPermissionsDisabled = (): boolean => {
         return PERMISSIONS.every(permission => data[permission.key] === false)
     }
 
@@ -247,9 +265,8 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
 
                                         <div className="space-y-4">
                                             {PERMISSIONS.map(permission => (
-                                                <>
+                                                <div key={permission.key}>
                                                     <Label
-                                                        key={permission.key}
                                                         htmlFor={permission.key}
                                                         className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
                                                     >
@@ -269,7 +286,7 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
                                                     </Label>
 
                                                     <InputError message={errors[permission.key]} />
-                                                </>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>

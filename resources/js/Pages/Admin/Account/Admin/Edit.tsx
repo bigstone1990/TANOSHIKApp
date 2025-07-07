@@ -43,15 +43,21 @@ type Admin = {
     updated_at: string
 }
 
+type FormData = {
+    name: string
+    kana: string
+    updated_at: string
+}
+
 type EditProps = PageProps<{
     admin: Admin
 }>
 
 export default function Edit({ admin }: EditProps) {
-    const { data, setData, put, delete: destroy, processing, errors } = useForm({
+    const { data, setData, put, delete: destroy, processing, errors } = useForm<FormData>({
         name: admin.name,
         kana: admin.kana,
-        updatedAt: admin.updated_at,
+        updated_at: admin.updated_at,
     })
 
     const submit: FormEventHandler = (e) => {
@@ -60,7 +66,7 @@ export default function Edit({ admin }: EditProps) {
         put(route('admin.account.admins.update', { admin: admin.id }))
     }
 
-    const handleDelete: () => void = () => {
+    const handleDelete = () => {
         destroy(route('admin.account.admins.destroy', { admin: admin.id }))
     }
 
@@ -150,7 +156,7 @@ export default function Edit({ admin }: EditProps) {
                                     </div>
 
                                     <div className="grid gap-2">
-                                        <InputError message={errors.updatedAt} />
+                                        <InputError message={errors.updated_at} />
                                     </div>
 
 

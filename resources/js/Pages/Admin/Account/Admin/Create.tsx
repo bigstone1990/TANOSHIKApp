@@ -21,17 +21,14 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import InputError from '@/Components/InputError'
 
-import { PageProps } from '@/types'
-
-type Admin = {
-    id: number
+type FormData = {
     name: string
     kana: string
     email: string
 }
 
 export default function Create() {
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm<FormData>({
         name: '',
         kana: '',
         email: '',

@@ -81,8 +81,8 @@ class UserController extends Controller
                     'email' => $request->email,
                     'password' => Hash::make($password),
                     'role' => intval($request->role),
-                    'can_manage_job_postings' => $request->canManageJobPostings,
-                    'can_manage_groupings' => $request->canManageGroupings,
+                    'can_manage_job_postings' => $request->can_manage_job_postings,
+                    'can_manage_groupings' => $request->can_manage_groupings,
                 ]);
             });
 
@@ -165,7 +165,7 @@ class UserController extends Controller
 
         try {
             DB::transaction(function () use ($request, $user) {
-                if ($user->updated_at->format('Y-m-d H:i:s') !== $request->updatedAt) {
+                if ($user->updated_at->format('Y-m-d H:i:s') !== $request->updated_at) {
                     throw new OptimisticLockException;
                 }
                 
@@ -173,8 +173,8 @@ class UserController extends Controller
                 $user->name = $request->name;
                 $user->kana = $request->kana;
                 $user->role = intval($request->role);
-                $user->can_manage_job_postings = $request->canManageJobPostings;
-                $user->can_manage_groupings = $request->canManageGroupings;
+                $user->can_manage_job_postings = $request->can_manage_job_postings;
+                $user->can_manage_groupings = $request->can_manage_groupings;
                 $user->save();
             });
 

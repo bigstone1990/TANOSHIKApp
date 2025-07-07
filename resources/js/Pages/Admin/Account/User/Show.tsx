@@ -1,6 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { Head, Link } from '@inertiajs/react'
 
 import {
     Breadcrumb,
@@ -18,15 +17,15 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
-import InputError from '@/Components/InputError'
-
-import Combobox from '@/Components/Combobox'
 
 import { PageProps, Option } from '@/types'
 
 type RoleTypeOption = Option
+
+type Office = {
+    id: number
+    name: string
+}
 
 type User = {
     id: number
@@ -37,10 +36,7 @@ type User = {
     role: number
     can_manage_job_postings: boolean
     can_manage_groupings: boolean
-    office: {
-        id: number
-        name: string
-    } | null
+    office: Office | null
 }
 
 type ShowProps = PageProps<{
@@ -48,7 +44,15 @@ type ShowProps = PageProps<{
     roleTypeOptions: RoleTypeOption[]
 }>
 
-const PERMISSIONS = [
+type PermissionKey = 'can_manage_job_postings' | 'can_manage_groupings'
+
+type Permission = {
+    key: PermissionKey
+    label: string
+    description: string
+}
+
+const PERMISSIONS: readonly Permission[] = [
     {
         key: 'can_manage_job_postings',
         label: '求人管理機能',
@@ -158,7 +162,7 @@ export default function Show({ user, roleTypeOptions }: ShowProps) {
                                             id="office"
                                             type="text"
                                             className="bg-gray-100"
-                                            value={user.office ? user.office.name : '未所属'}
+                                            value={user.office?.name ?? '未所属'}
                                             readOnly
                                         />
                                     </div>

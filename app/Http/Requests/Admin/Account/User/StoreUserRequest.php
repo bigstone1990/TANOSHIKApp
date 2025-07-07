@@ -48,8 +48,8 @@ class StoreUserRequest extends FormRequest
                     }
                 },
             ],
-            'canManageJobPostings' => ['required', 'boolean'],
-            'canManageGroupings' => ['required', 'boolean'],
+            'can_manage_job_postings' => ['required', 'boolean'],
+            'can_manage_groupings' => ['required', 'boolean'],
         ];
     }
 

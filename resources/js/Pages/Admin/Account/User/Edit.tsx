@@ -57,20 +57,38 @@ type Office = {
     name: string
 }
 
+type FormData = {
+    name: string
+    kana: string
+    role: string
+    office: string
+    can_manage_job_postings: boolean
+    can_manage_groupings: boolean
+    updated_at: string
+}
+
 type EditProps = PageProps<{
     user: User
     roleTypeOptions: RoleTypeOption[]
     offices: Office[]
 }>
 
-const PERMISSIONS = [
+type PermissionKey = 'can_manage_job_postings' | 'can_manage_groupings'
+
+type Permission = {
+    key: PermissionKey
+    label: string
+    description: string
+}
+
+const PERMISSIONS: readonly Permission[] = [
     {
-        key: 'canManageJobPostings',
+        key: 'can_manage_job_postings',
         label: '求人管理機能',
         description: '求人の管理ができるようになります'
     },
     {
-        key: 'canManageGroupings',
+        key: 'can_manage_groupings',
         label: 'グループ分け管理機能',
         description: 'グループ分けの管理ができるようになります'
     },
@@ -82,14 +100,14 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
         value: String(office.id),
     }))
 
-    const { data, setData, put, delete: destroy, processing, errors } = useForm({
+    const { data, setData, put, delete: destroy, processing, errors } = useForm<FormData>({
         name: user.name,
         kana: user.kana,
         role: String(user.role),
         office: user.office_id ? String(user.office_id) : '',
-        canManageJobPostings: user.can_manage_job_postings,
-        canManageGroupings: user.can_manage_groupings,
-        updatedAt: user.updated_at,
+        can_manage_job_postings: user.can_manage_job_postings,
+        can_manage_groupings: user.can_manage_groupings,
+        updated_at: user.updated_at,
     })
 
     const submit: FormEventHandler = (e) => {
@@ -103,7 +121,7 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
     }
 
     const enableAllPermissions = () => {
-        const updates: Partial<typeof data> = {}
+        const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
             updates[permission.key] = true
         })
@@ -112,7 +130,7 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
     }
 
     const disableAllPermissions = () => {
-        const updates: Partial<typeof data> = {}
+        const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
             updates[permission.key] = false
         })
@@ -120,11 +138,11 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
         setData(prev => ({ ...prev, ...updates }))
     }
 
-    const areAllPermissionsEnabled = () => {
+    const areAllPermissionsEnabled = (): boolean => {
         return PERMISSIONS.every(permission => data[permission.key] === true)
     }
 
-    const areAllPermissionsDisabled = () => {
+    const areAllPermissionsDisabled = (): boolean => {
         return PERMISSIONS.every(permission => data[permission.key] === false)
     }
 
@@ -271,9 +289,8 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
 
                                         <div className="space-y-4">
                                             {PERMISSIONS.map(permission => (
-                                                <>
+                                                <div key={permission.key}>
                                                     <Label
-                                                        key={permission.key}
                                                         htmlFor={permission.key}
                                                         className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
                                                     >
@@ -293,13 +310,13 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
                                                     </Label>
 
                                                     <InputError message={errors[permission.key]} />
-                                                </>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>
 
                                     <div className="grid gap-2">
-                                        <InputError message={errors.updatedAt} />
+                                        <InputError message={errors.updated_at} />
                                     </div>
 
                                     <div className="flex items-center gap-4">

@@ -114,7 +114,7 @@ class OfficeController extends Controller
 
         try {
             DB::transaction(function () use ($request, $office) {
-                if ($office->updated_at->format('Y-m-d H:i:s') !== $request->updatedAt) {
+                if ($office->updated_at->format('Y-m-d H:i:s') !== $request->updated_at) {
                     throw new OptimisticLockException;
                 }
 

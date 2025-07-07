@@ -46,9 +46,9 @@ class UpdateUserRequest extends FormRequest
                     }
                 },
             ],
-            'canManageJobPostings' => ['required', 'boolean'],
-            'canManageGroupings' => ['required', 'boolean'],
-            'updatedAt' => ['required', 'date', 'date_format:Y-m-d H:i:s'],
+            'can_manage_job_postings' => ['required', 'boolean'],
+            'can_manage_groupings' => ['required', 'boolean'],
+            'updated_at' => ['required', 'date', 'date_format:Y-m-d H:i:s'],
         ];
     }
 
