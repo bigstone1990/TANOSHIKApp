@@ -10,6 +10,8 @@ class Office extends Model
     protected $fillable = [
         'name',
         'kana',
+        'created_by',
+        'updated_by',
     ];
 
     public function users(): HasMany

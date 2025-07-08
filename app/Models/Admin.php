@@ -23,6 +23,8 @@ class Admin extends Authenticatable
         'kana',
         'email',
         'password',
+        'created_by',
+        'updated_by',
     ];
 
     /**

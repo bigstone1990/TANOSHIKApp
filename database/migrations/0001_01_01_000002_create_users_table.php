@@ -23,6 +23,8 @@ return new class extends Migration
             $table->boolean('can_manage_job_postings');
             $table->boolean('can_manage_groupings');
             $table->rememberToken();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
 
