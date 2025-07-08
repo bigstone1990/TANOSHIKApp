@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback, memo } from 'react'
 
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
@@ -185,7 +185,7 @@ export const createColumns = ({ onDelete, isProcessing = false }: CreateColumnsP
     },
 ]
 
-const ActionsCell = ({
+const ActionsCell = memo(({
     user,
     onDelete,
     isProcessing
@@ -196,10 +196,10 @@ const ActionsCell = ({
 }) => {
     const [open, setOpen] = useState(false)
 
-    const handleDelete = () => {
+    const handleDelete = useCallback(() => {
         onDelete(user.id)
         setOpen(false)
-    }
+    }, [onDelete, user.id])
 
     return (
         <>
@@ -265,4 +265,4 @@ const ActionsCell = ({
             </AlertDialog>
         </>
     )
-}
+})

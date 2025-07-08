@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { useState } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 
 import {
     Breadcrumb,
@@ -62,7 +62,7 @@ export default function Index({ staff, members, others }: IndexProps) {
 
     const { delete: destroy, processing } = useForm({})
 
-    const staffTableData = staff.map((user) => ({
+    const staffTableData = useMemo(() => staff.map((user) => ({
         id: user.id,
         name: user.name,
         kana: user.kana,
@@ -70,9 +70,9 @@ export default function Index({ staff, members, others }: IndexProps) {
         office_name: user.office?.name || '未所属',
         can_manage_job_postings: user.can_manage_job_postings,
         can_manage_groupings: user.can_manage_groupings,
-    }))
+    })), [staff])
 
-    const memberTableData = members.map((user) => ({
+    const memberTableData = useMemo(() => members.map((user) => ({
         id: user.id,
         name: user.name,
         kana: user.kana,
@@ -80,9 +80,9 @@ export default function Index({ staff, members, others }: IndexProps) {
         office_name: user.office?.name || '未所属',
         can_manage_job_postings: user.can_manage_job_postings,
         can_manage_groupings: user.can_manage_groupings,
-    }))
+    })), [members])
 
-    const otherTableData = others.map((user) => ({
+    const otherTableData = useMemo(() => others.map((user) => ({
         id: user.id,
         name: user.name,
         kana: user.kana,
@@ -90,7 +90,7 @@ export default function Index({ staff, members, others }: IndexProps) {
         office_name: user.office?.name || '未所属',
         can_manage_job_postings: user.can_manage_job_postings,
         can_manage_groupings: user.can_manage_groupings,
-    }))
+    })), [others])
 
     const searchableColumns = ['id', 'name', 'kana', 'email', 'office_name']
 
@@ -102,16 +102,16 @@ export default function Index({ staff, members, others }: IndexProps) {
         can_manage_groupings: false,
     }
 
-    const handleDelete = (id: number) => {
+    const handleDelete = useCallback((id: number) => {
         destroy(route('admin.account.users.destroy', { user: id }), {
             preserveScroll: true,
         })
-    }
+    }, [destroy])
 
-    const columns = createColumns({
+    const columns = useMemo(() => createColumns({
         onDelete: handleDelete,
         isProcessing: processing
-    })
+    }), [handleDelete, processing])
 
     return (
         <AuthenticatedLayout>

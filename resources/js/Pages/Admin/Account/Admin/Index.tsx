@@ -1,5 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
+import { useMemo, useCallback } from 'react'
 
 import {
     Breadcrumb,
@@ -43,22 +44,22 @@ export default function Index({ admins }: IndexProps) {
 
     const keywordPlaceholder = "キーワード検索（ID, 名前, かな、メールアドレス）"
 
-    const { delete: destroy, processing } = useForm({})
-
     const initialColumnVisibility = {
         kana: false,
     }
 
-    const handleDelete = (id: number) => {
+    const { delete: destroy, processing } = useForm({})
+
+    const handleDelete = useCallback((id: number) => {
         destroy(route('admin.account.admins.destroy', { admin: id }), {
             preserveScroll: true,
         })
-    }
+    }, [destroy])
 
-    const columns = createColumns({
+    const columns = useMemo(() => createColumns({
         onDelete: handleDelete,
         isProcessing: processing
-    })
+    }), [handleDelete, processing])
 
     return (
         <AuthenticatedLayout>
