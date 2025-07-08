@@ -24,6 +24,10 @@ type Office = {
     id: number
     name: string
     kana: string
+    created_at: string
+    created_by: string
+    updated_at: string
+    updated_by: string
 }
 
 type ShowProps = PageProps<{
@@ -92,6 +96,54 @@ export default function Show({ office }: ShowProps) {
                                             type="text"
                                             className="bg-gray-100"
                                             value={office.kana}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="created_at">作成日時</Label>
+
+                                        <Input
+                                            id="created_at"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={office.created_at}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="created_by">作成者</Label>
+
+                                        <Input
+                                            id="created_by"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={office.created_by}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="updated_at">更新日時</Label>
+
+                                        <Input
+                                            id="updated_at"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={office.updated_at}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="updated_by">更新者</Label>
+
+                                        <Input
+                                            id="updated_by"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={office.updated_by}
                                             readOnly
                                         />
                                     </div>

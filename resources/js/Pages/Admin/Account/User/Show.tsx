@@ -37,6 +37,10 @@ type User = {
     role: number
     can_manage_job_postings: boolean
     can_manage_groupings: boolean
+    created_at: string
+    created_by: string
+    updated_at: string
+    updated_by: string
     office: Office | null
 }
 
@@ -208,6 +212,54 @@ export default function Show({ user, roleTypeOptions }: ShowProps) {
                                                 </Label>
                                             ))}
                                         </div>
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="created_at">作成日時</Label>
+
+                                        <Input
+                                            id="created_at"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={user.created_at}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="created_by">作成者</Label>
+
+                                        <Input
+                                            id="created_by"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={user.created_by}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="updated_at">更新日時</Label>
+
+                                        <Input
+                                            id="updated_at"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={user.updated_at}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="updated_by">更新者</Label>
+
+                                        <Input
+                                            id="updated_by"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={user.updated_by}
+                                            readOnly
+                                        />
                                     </div>
 
                                     <div className="flex items-center gap-4">

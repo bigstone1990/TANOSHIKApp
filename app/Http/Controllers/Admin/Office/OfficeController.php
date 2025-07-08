@@ -51,6 +51,8 @@ class OfficeController extends Controller
                 Office::create([
                     'name' => $request->name,
                     'kana' => $request->kana,
+                    'created_by' => Auth::guard('admins')->user()->name,
+                    'updated_by' => Auth::guard('admins')->user()->name,
                 ]);
             });
 
@@ -78,6 +80,10 @@ class OfficeController extends Controller
                 'id' => $office->id,
                 'name' => $office->name,
                 'kana' => $office->kana,
+                'created_at' => $office->created_at->format('Y-m-d H:i:s'),
+                'created_by' => $office->created_by,
+                'updated_at'=> $office->updated_at->format('Y-m-d H:i:s'),
+                'updated_by' => $office->updated_by,
             ],
         ]);
     }
@@ -120,6 +126,7 @@ class OfficeController extends Controller
 
                 $office->name = $request->name;
                 $office->kana = $request->kana;
+                $office->updated_by = Auth::guard('admins')->user()->name;
 
                 $office->save();
             });

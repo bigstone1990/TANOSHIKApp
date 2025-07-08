@@ -58,6 +58,8 @@ class AdminController extends Controller
                     'kana' => $request->kana,
                     'email' => $request->email,
                     'password' => Hash::make($password),
+                    'created_by' => Auth::guard('admins')->user()->name,
+                    'updated_by' => Auth::guard('admins')->user()->name,
                 ]);
             });
 
@@ -88,6 +90,10 @@ class AdminController extends Controller
                 'name' => $admin->name,
                 'kana' => $admin->kana,
                 'email' => $admin->email,
+                'created_at' => $admin->created_at->format('Y-m-d H:i:s'),
+                'created_by' => $admin->created_by,
+                'updated_at'=> $admin->updated_at->format('Y-m-d H:i:s'),
+                'updated_by' => $admin->updated_by,
             ],
         ]);
     }
@@ -131,6 +137,7 @@ class AdminController extends Controller
 
                 $admin->name = $request->name;
                 $admin->kana = $request->kana;
+                $admin->updated_by = Auth::guard('admins')->user()->name;
 
                 $admin->save();
             });

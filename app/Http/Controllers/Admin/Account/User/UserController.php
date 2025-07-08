@@ -90,6 +90,8 @@ class UserController extends Controller
                     'role' => intval($request->role),
                     'can_manage_job_postings' => $request->can_manage_job_postings,
                     'can_manage_groupings' => $request->can_manage_groupings,
+                    'created_by' => Auth::guard('admins')->user()->name,
+                    'updated_by' => Auth::guard('admins')->user()->name,
                 ]);
             });
 
@@ -114,14 +116,28 @@ class UserController extends Controller
      */
     public function show(User $user): Response
     {
-        $user = User::select('id', 'office_id', 'name', 'kana', 'email', 'role', 'can_manage_job_postings', 'can_manage_groupings')
+        $user = User::select('id', 'office_id', 'name', 'kana', 'email', 'role', 'can_manage_job_postings', 'can_manage_groupings', 'created_at', 'created_by', 'updated_at', 'updated_by')
             ->with(['office:id,name'])
             ->findOrFail($user->id);
 
         $roleTypeOptions =  AccountRoleType::options();
-        
+
         return Inertia::render('Admin/Account/User/Show', [
-            'user' => $user,
+            'user' => [
+                'id' => $user->id,
+                'office_id' => $user->office_id,
+                'name' => $user->name,
+                'kana' => $user->kana,
+                'email' => $user->email,
+                'role' => $user->role,
+                'can_manage_job_postings' => $user->can_manage_job_postings,
+                'can_manage_groupings' => $user->can_manage_groupings,
+                'created_at' => $user->created_at->format('Y-m-d H:i:s'),
+                'created_by' => $user->created_by,
+                'updated_at'=> $user->updated_at->format('Y-m-d H:i:s'),
+                'updated_by' => $user->updated_by,
+                'office' => $user->office,
+            ],
             'roleTypeOptions' => $roleTypeOptions,
         ]);
     }
@@ -182,6 +198,7 @@ class UserController extends Controller
                 $user->role = intval($request->role);
                 $user->can_manage_job_postings = $request->can_manage_job_postings;
                 $user->can_manage_groupings = $request->can_manage_groupings;
+                $user->updated_by = Auth::guard('admins')->user()->name;
                 $user->save();
             });
 
