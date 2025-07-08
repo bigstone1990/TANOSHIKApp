@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { Head, Link } from '@inertiajs/react'
+import { useMemo } from 'react'
 
 import {
     Breadcrumb,
@@ -18,15 +18,15 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
-import InputError from '@/Components/InputError'
-
-import Combobox from '@/Components/Combobox'
 
 import { PageProps, Option } from '@/types'
 
 type RoleTypeOption = Option
+
+type Office = {
+    id: number
+    name: string
+}
 
 type User = {
     id: number
@@ -37,10 +37,11 @@ type User = {
     role: number
     can_manage_job_postings: boolean
     can_manage_groupings: boolean
-    office: {
-        id: number
-        name: string
-    } | null
+    created_at: string
+    created_by: string
+    updated_at: string
+    updated_by: string
+    office: Office | null
 }
 
 type ShowProps = PageProps<{
@@ -48,7 +49,15 @@ type ShowProps = PageProps<{
     roleTypeOptions: RoleTypeOption[]
 }>
 
-const PERMISSIONS = [
+type PermissionKey = 'can_manage_job_postings' | 'can_manage_groupings'
+
+type Permission = {
+    key: PermissionKey
+    label: string
+    description: string
+}
+
+const PERMISSIONS: readonly Permission[] = [
     {
         key: 'can_manage_job_postings',
         label: '求人管理機能',
@@ -62,6 +71,10 @@ const PERMISSIONS = [
 ] as const
 
 export default function Show({ user, roleTypeOptions }: ShowProps) {
+    const roleLabel = useMemo(() => {
+        return roleTypeOptions.find(option => option.value === user.role)?.label ?? '不明'
+    }, [user.role, roleTypeOptions])
+
     return (
         <AuthenticatedLayout>
             <Head title="ユーザー詳細" />
@@ -146,7 +159,7 @@ export default function Show({ user, roleTypeOptions }: ShowProps) {
                                             id="role"
                                             type="text"
                                             className="bg-gray-100"
-                                            value={roleTypeOptions.find(option => option.value === String(user.role))?.label ?? '不明'}
+                                            value={roleLabel}
                                             readOnly
                                         />
                                     </div>
@@ -158,7 +171,7 @@ export default function Show({ user, roleTypeOptions }: ShowProps) {
                                             id="office"
                                             type="text"
                                             className="bg-gray-100"
-                                            value={user.office ? user.office.name : '未所属'}
+                                            value={user.office?.name ?? '未所属'}
                                             readOnly
                                         />
                                     </div>
@@ -199,6 +212,54 @@ export default function Show({ user, roleTypeOptions }: ShowProps) {
                                                 </Label>
                                             ))}
                                         </div>
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="created_at">作成日時</Label>
+
+                                        <Input
+                                            id="created_at"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={user.created_at}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="created_by">作成者</Label>
+
+                                        <Input
+                                            id="created_by"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={user.created_by}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="updated_at">更新日時</Label>
+
+                                        <Input
+                                            id="updated_at"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={user.updated_at}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="updated_by">更新者</Label>
+
+                                        <Input
+                                            id="updated_by"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={user.updated_by}
+                                            readOnly
+                                        />
                                     </div>
 
                                     <div className="flex items-center gap-4">

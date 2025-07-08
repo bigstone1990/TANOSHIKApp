@@ -1,6 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { Head, Link } from '@inertiajs/react'
 
 import {
     Breadcrumb,
@@ -18,8 +17,6 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import InputError from '@/Components/InputError'
 
 import { PageProps } from '@/types'
 
@@ -28,6 +25,10 @@ type Admin = {
     name: string
     kana: string
     email: string
+    created_at: string
+    created_by: string
+    updated_at: string
+    updated_by: string
 }
 
 type ShowProps = PageProps<{
@@ -108,6 +109,54 @@ export default function Show({ admin }: ShowProps) {
                                             type="email"
                                             className="bg-gray-100"
                                             value={admin.email}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="created_at">作成日時</Label>
+
+                                        <Input
+                                            id="created_at"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={admin.created_at}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="created_by">作成者</Label>
+
+                                        <Input
+                                            id="created_by"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={admin.created_by}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="updated_at">更新日時</Label>
+
+                                        <Input
+                                            id="updated_at"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={admin.updated_at}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="updated_by">更新者</Label>
+
+                                        <Input
+                                            id="updated_by"
+                                            type="text"
+                                            className="bg-gray-100"
+                                            value={admin.updated_by}
                                             readOnly
                                         />
                                     </div>

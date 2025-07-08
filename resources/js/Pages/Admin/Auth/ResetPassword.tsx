@@ -1,7 +1,7 @@
 import InputError from '@/Components/InputError'
 import GuestLayout from '@/Layouts/GuestLayout'
 import { Head, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -13,27 +13,36 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
+type ResetPasswordProps = {
+    token: string
+    email: string
+}
+
+type FormDataType = {
+    token: string
+    email: string
+    password: string
+    password_confirmation: string
+}
+
 export default function ResetPassword({
     token,
     email,
-}: {
-    token: string
-    email: string
-}) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+}: ResetPasswordProps) {
+    const { data, setData, post, processing, errors, reset } = useForm<FormDataType>({
         token: token,
         email: email,
         password: '',
         password_confirmation: '',
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         post(route('admin.password.store'), {
             onFinish: () => reset('password', 'password_confirmation'),
         })
-    }
+    }, [post, reset])
 
     return (
         <GuestLayout>

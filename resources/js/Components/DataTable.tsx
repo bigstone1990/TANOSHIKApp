@@ -43,6 +43,8 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
 
 import InputError from '@/Components/InputError'
 
@@ -50,18 +52,22 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
     columns: ColumnDef<TData, TValue>[]
     searchableColumns?: string[]
+    keywordPlaceholder?: string
     columnLabelMap?: Record<string, string>
     initialColumnVisibility?: VisibilityState
     bulkDestroyRouteName: string
+    deleteDialogDisplayField?: keyof TData
 }
 
 export default function DataTable<TData extends { id: number }, TValue>({
     data,
     columns,
     searchableColumns = [],
+    keywordPlaceholder = "キーワード検索",
     columnLabelMap = {},
     initialColumnVisibility = {},
     bulkDestroyRouteName,
+    deleteDialogDisplayField,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -153,7 +159,7 @@ export default function DataTable<TData extends { id: number }, TValue>({
         <div className="w-full">
             <div className="flex items-center py-4 gap-4">
                 <Input
-                    placeholder="キーワード検索"
+                    placeholder={keywordPlaceholder}
                     value={globalFilter}
                     onChange={(event) => setGlobalFilter(event.target.value)}
                     className="max-w-sm"
@@ -224,6 +230,24 @@ export default function DataTable<TData extends { id: number }, TValue>({
                                     この操作は取り消すことができません。<br />
                                     選択された{table.getFilteredSelectedRowModel().rows.length}件を完全に削除し、すべてのデータが失われます。
                                 </AlertDialogDescription>
+                                <ScrollArea className="h-72 w-80 rounded-md border self-center">
+                                    <div className="p-4">
+                                        <h4 className="mb-4 text-sm leading-none font-medium">対象データ</h4>
+                                        {table.getFilteredSelectedRowModel().rows.map((row) => (
+                                            <React.Fragment key={row.id}>
+                                                <div className="text-sm">
+                                                    <span>ID: {row.id}</span>
+                                                    {deleteDialogDisplayField && (
+                                                        <span className="ml-2">
+                                                            {columnLabelMap[String(deleteDialogDisplayField)] || String(deleteDialogDisplayField)}: {String(row.original[deleteDialogDisplayField] ?? '不明')}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <Separator className="my-2" />
+                                            </React.Fragment>
+                                        ))}
+                                    </div>
+                                </ScrollArea>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>キャンセル</AlertDialogCancel>

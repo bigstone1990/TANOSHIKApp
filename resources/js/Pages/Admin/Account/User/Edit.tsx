@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback, useMemo } from 'react'
 
 import {
     Breadcrumb,
@@ -57,76 +57,90 @@ type Office = {
     name: string
 }
 
+type FormDataType = {
+    name: string
+    kana: string
+    role: number
+    office: number
+    can_manage_job_postings: boolean
+    can_manage_groupings: boolean
+    updated_at: string
+}
+
 type EditProps = PageProps<{
     user: User
     roleTypeOptions: RoleTypeOption[]
     offices: Office[]
 }>
 
-const PERMISSIONS = [
+type PermissionKey = 'can_manage_job_postings' | 'can_manage_groupings'
+
+type Permission = {
+    key: PermissionKey
+    label: string
+    description: string
+}
+
+const PERMISSIONS: readonly Permission[] = [
     {
-        key: 'canManageJobPostings',
+        key: 'can_manage_job_postings',
         label: '求人管理機能',
         description: '求人の管理ができるようになります'
     },
     {
-        key: 'canManageGroupings',
+        key: 'can_manage_groupings',
         label: 'グループ分け管理機能',
         description: 'グループ分けの管理ができるようになります'
     },
 ] as const
 
 export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
-    const officeOptions = offices.map(office => ({
-        label: office.name,
-        value: String(office.id),
-    }))
+    const officeOptions = useMemo(() => {
+        return offices.map(office => ({
+            label: office.name,
+            value: office.id,
+        }))
+    }, [offices])
 
-    const { data, setData, put, delete: destroy, processing, errors } = useForm({
+    const { data, setData, put, delete: destroy, processing, errors } = useForm<FormDataType>({
         name: user.name,
         kana: user.kana,
-        role: String(user.role),
-        office: user.office_id ? String(user.office_id) : '',
-        canManageJobPostings: user.can_manage_job_postings,
-        canManageGroupings: user.can_manage_groupings,
-        updatedAt: user.updated_at,
+        role: user.role,
+        office: user.office_id ?? 0,
+        can_manage_job_postings: user.can_manage_job_postings,
+        can_manage_groupings: user.can_manage_groupings,
+        updated_at: user.updated_at,
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         put(route('admin.account.users.update', { user: user.id }))
-    }
+    }, [put, user.id])
 
-    const handleDelete: () => void = () => {
+    const handleDelete = useCallback(() => {
         destroy(route('admin.account.users.destroy', { user: user.id }))
-    }
+    }, [destroy, user.id])
 
-    const enableAllPermissions = () => {
-        const updates: Partial<typeof data> = {}
+    const enableAllPermissions = useCallback(() => {
         PERMISSIONS.forEach(permission => {
-            updates[permission.key] = true
+            setData(permission.key, true)
         })
+    }, [setData])
 
-        setData(prev => ({ ...prev, ...updates }))
-    }
-
-    const disableAllPermissions = () => {
-        const updates: Partial<typeof data> = {}
+    const disableAllPermissions = useCallback(() => {
         PERMISSIONS.forEach(permission => {
-            updates[permission.key] = false
+            setData(permission.key, false)
         })
+    }, [setData])
 
-        setData(prev => ({ ...prev, ...updates }))
-    }
-
-    const areAllPermissionsEnabled = () => {
+    const areAllPermissionsEnabled = useMemo(() => {
         return PERMISSIONS.every(permission => data[permission.key] === true)
-    }
+    }, [data])
 
-    const areAllPermissionsDisabled = () => {
+    const areAllPermissionsDisabled = useMemo(() => {
         return PERMISSIONS.every(permission => data[permission.key] === false)
-    }
+    }, [data])
 
     return (
         <AuthenticatedLayout>
@@ -254,7 +268,7 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={enableAllPermissions}
-                                                disabled={areAllPermissionsEnabled()}
+                                                disabled={areAllPermissionsEnabled}
                                             >
                                                 全て有効
                                             </Button>
@@ -263,7 +277,7 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={disableAllPermissions}
-                                                disabled={areAllPermissionsDisabled()}
+                                                disabled={areAllPermissionsDisabled}
                                             >
                                                 全て無効
                                             </Button>
@@ -271,9 +285,8 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
 
                                         <div className="space-y-4">
                                             {PERMISSIONS.map(permission => (
-                                                <>
+                                                <div key={permission.key}>
                                                     <Label
-                                                        key={permission.key}
                                                         htmlFor={permission.key}
                                                         className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
                                                     >
@@ -293,13 +306,13 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
                                                     </Label>
 
                                                     <InputError message={errors[permission.key]} />
-                                                </>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>
 
                                     <div className="grid gap-2">
-                                        <InputError message={errors.updatedAt} />
+                                        <InputError message={errors.updated_at} />
                                     </div>
 
                                     <div className="flex items-center gap-4">

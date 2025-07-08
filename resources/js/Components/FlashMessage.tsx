@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, memo } from 'react'
 import { usePage } from '@inertiajs/react'
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 
-export default function FlashMessage() {
+export default memo(function FlashMessage() {
   const { id, message, status } = usePage().props.flash
 
   useEffect(() => {
@@ -33,4 +33,4 @@ export default function FlashMessage() {
   }, [id])
 
   return <Toaster />
-}
+})

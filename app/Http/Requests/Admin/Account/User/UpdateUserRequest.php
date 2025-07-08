@@ -36,19 +36,19 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:30'],
             'kana' => ['required', 'string', 'regex:/^[ぁ-ゖー０-９0-9\x{3000}\x{0020}]+$/u', 'max:255'],
-            'role' => ['required', 'string', Rule::in($this->accountRoleTypes)],
+            'role' => ['required', 'integer', Rule::in($this->accountRoleTypes)],
             'office' => [
                 'required',
-                'string',
+                'integer',
                 function ($attribute, $value, $fail) {
-                    if ($value !== '0' && !Office::where('id', $value)->exists()) {
+                    if ($value !== 0 && !Office::where('id', $value)->exists()) {
                         $fail('選択された事業所は存在しません。');
                     }
                 },
             ],
-            'canManageJobPostings' => ['required', 'boolean'],
-            'canManageGroupings' => ['required', 'boolean'],
-            'updatedAt' => ['required', 'date', 'date_format:Y-m-d H:i:s'],
+            'can_manage_job_postings' => ['required', 'boolean'],
+            'can_manage_groupings' => ['required', 'boolean'],
+            'updated_at' => ['required', 'date', 'date_format:Y-m-d H:i:s'],
         ];
     }
 

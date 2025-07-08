@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback, useMemo } from 'react'
 
 import {
     Breadcrumb,
@@ -33,71 +33,85 @@ type Office = {
     name: string
 }
 
+type FormDataType = {
+    name: string
+    kana: string
+    email: string
+    role: number
+    office: number
+    can_manage_job_postings: boolean
+    can_manage_groupings: boolean
+}
+
 type CreateProps = PageProps<{
     roleTypeOptions: RoleTypeOption[]
     offices: Office[]
 }>
 
-const PERMISSIONS = [
+type PermissionKey = 'can_manage_job_postings' | 'can_manage_groupings'
+
+type Permission = {
+    key: PermissionKey
+    label: string
+    description: string
+}
+
+const PERMISSIONS: readonly Permission[] = [
     {
-        key: 'canManageJobPostings',
+        key: 'can_manage_job_postings',
         label: '求人管理機能',
         description: '求人の管理ができるようになります'
     },
     {
-        key: 'canManageGroupings',
+        key: 'can_manage_groupings',
         label: 'グループ分け管理機能',
         description: 'グループ分けの管理ができるようになります'
     },
 ] as const
 
 export default function Create({ roleTypeOptions, offices }: CreateProps) {
-    const officeOptions = offices.map(office => ({
-        label: office.name,
-        value: String(office.id),
-    }))
+    const officeOptions = useMemo(() => {
+        return offices.map(office => ({
+            label: office.name,
+            value: office.id,
+        }))
+    }, [offices])
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm<FormDataType>({
         name: '',
         kana: '',
         email: '',
-        role: '',
-        office: '',
-        canManageJobPostings: false as boolean,
-        canManageGroupings: false as boolean,
+        role: 0,
+        office: 0,
+        can_manage_job_postings: false,
+        can_manage_groupings: false,
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         post(route('admin.account.users.store'))
-    }
+    }, [post])
 
-    const enableAllPermissions = () => {
-        const updates: Partial<typeof data> = {}
+    const enableAllPermissions = useCallback(() => {
         PERMISSIONS.forEach(permission => {
-            updates[permission.key] = true
+            setData(permission.key, true)
         })
+    }, [setData])
 
-        setData(prev => ({ ...prev, ...updates }))
-    }
-
-    const disableAllPermissions = () => {
-        const updates: Partial<typeof data> = {}
+    const disableAllPermissions = useCallback(() => {
         PERMISSIONS.forEach(permission => {
-            updates[permission.key] = false
+            setData(permission.key, false)
         })
+    }, [setData])
 
-        setData(prev => ({ ...prev, ...updates }))
-    }
-
-    const areAllPermissionsEnabled = () => {
+    const areAllPermissionsEnabled = useMemo(() => {
         return PERMISSIONS.every(permission => data[permission.key] === true)
-    }
+    }, [data])
 
-    const areAllPermissionsDisabled = () => {
+    const areAllPermissionsDisabled = useMemo(() => {
         return PERMISSIONS.every(permission => data[permission.key] === false)
-    }
+    }, [data])
 
     return (
         <AuthenticatedLayout>
@@ -230,7 +244,7 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={enableAllPermissions}
-                                                disabled={areAllPermissionsEnabled()}
+                                                disabled={areAllPermissionsEnabled}
                                             >
                                                 全て有効
                                             </Button>
@@ -239,7 +253,7 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={disableAllPermissions}
-                                                disabled={areAllPermissionsDisabled()}
+                                                disabled={areAllPermissionsDisabled}
                                             >
                                                 全て無効
                                             </Button>
@@ -247,9 +261,8 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
 
                                         <div className="space-y-4">
                                             {PERMISSIONS.map(permission => (
-                                                <>
+                                                <div key={permission.key}>
                                                     <Label
-                                                        key={permission.key}
                                                         htmlFor={permission.key}
                                                         className="gap-2 flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-accent/50 transition-colors"
                                                     >
@@ -269,7 +282,7 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
                                                     </Label>
 
                                                     <InputError message={errors[permission.key]} />
-                                                </>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>

@@ -1,7 +1,7 @@
 import InputError from '@/Components/InputError'
 import GuestLayout from '@/Layouts/GuestLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -14,26 +14,34 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 
+type LoginProps = {
+    status?: string
+    canResetPassword: boolean
+}
+
+type FormDataType = {
+    email: string
+    password: string
+    remember: boolean
+}
+
 export default function Login({
     status,
     canResetPassword,
-}: {
-    status?: string
-    canResetPassword: boolean
-}) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+}: LoginProps) {
+    const { data, setData, post, processing, errors, reset } = useForm<FormDataType>({
         email: '',
         password: '',
-        remember: false as boolean,
+        remember: false,
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         post(route('user.login'), {
             onFinish: () => reset('password'),
         })
-    }
+    }, [post, reset])
 
     return (
         <GuestLayout>
@@ -83,8 +91,8 @@ export default function Login({
                                         <InputError message={errors.password} />
                                         {canResetPassword && (
                                             <Link
-                                            href={route('user.password.request')}
-                                            className="ml-auto text-sm underline-offset-4 hover:underline"
+                                                href={route('user.password.request')}
+                                                className="ml-auto text-sm underline-offset-4 hover:underline"
                                             >
                                                 パスワードを忘れましたか？
                                             </Link>

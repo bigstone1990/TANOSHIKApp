@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback } from 'react'
 
 import {
     Breadcrumb,
@@ -42,26 +42,32 @@ type Office = {
     updated_at: string
 }
 
+type FormDataType = {
+    name: string
+    kana: string
+    updated_at: string
+}
+
 type EditProps = PageProps<{
     office: Office
 }>
 
 export default function Edit({ office }: EditProps) {
-    const { data, setData, put, delete: destroy, processing, errors } = useForm({
+    const { data, setData, put, delete: destroy, processing, errors } = useForm<FormDataType>({
         name: office.name,
         kana: office.kana,
-        updatedAt: office.updated_at,
+        updated_at: office.updated_at,
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         put(route('admin.offices.update', { office: office.id }))
-    }
+    }, [put, office.id])
 
-    const handleDelete: () => void = () => {
+    const handleDelete = useCallback(() => {
         destroy(route('admin.offices.destroy', { office: office.id }))
-    }
+    }, [destroy, office.id])
 
     return (
         <AuthenticatedLayout>
@@ -137,7 +143,7 @@ export default function Edit({ office }: EditProps) {
                                         <InputError message={errors.kana} />
                                     </div>
 
-                                    <InputError message={errors.updatedAt} />
+                                    <InputError message={errors.updated_at} />
 
                                     <div className="flex items-center gap-4">
                                         <Link

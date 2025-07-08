@@ -1,6 +1,6 @@
-import { SVGAttributes } from 'react'
+import { SVGAttributes, memo } from 'react'
 
-export default function ApplicationLogo(props: SVGAttributes<SVGElement>) {
+export default memo(function ApplicationLogo(props: SVGAttributes<SVGElement>) {
     return (
         <svg
             {...props}
@@ -29,4 +29,4 @@ export default function ApplicationLogo(props: SVGAttributes<SVGElement>) {
             </text>
         </svg>
     )
-}
+})

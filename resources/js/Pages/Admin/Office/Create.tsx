@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback } from 'react'
 
 import {
     Breadcrumb,
@@ -21,25 +21,22 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import InputError from '@/Components/InputError'
 
-import { PageProps } from '@/types'
-
-type Office = {
-    id: number
+type FormDataType = {
     name: string
     kana: string
 }
 
 export default function Create() {
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm<FormDataType>({
         name: '',
         kana: '',
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         post(route('admin.offices.store'))
-    }
+    }, [post])
 
     return (
         <AuthenticatedLayout>

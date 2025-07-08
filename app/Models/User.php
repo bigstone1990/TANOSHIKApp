@@ -28,6 +28,8 @@ class User extends Authenticatable
         'role',
         'can_manage_job_postings',
         'can_manage_groupings',
+        'created_by',
+        'updated_by',
     ];
 
     /**

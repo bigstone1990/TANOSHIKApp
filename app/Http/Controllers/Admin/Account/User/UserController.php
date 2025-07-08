@@ -30,19 +30,26 @@ class UserController extends Controller
     {
         $staff = User::select('id', 'office_id', 'name', 'kana', 'email', 'can_manage_job_postings', 'can_manage_groupings')
         ->with(['office:id,name'])
-        ->where('role', intval(AccountRoleType::STAFF->value))
-        ->orderBy('kana')
+        ->where('role', AccountRoleType::STAFF->value)
+        ->orderBy('id')
         ->get();
 
         $members = User::select('id', 'office_id', 'name', 'kana', 'email', 'can_manage_job_postings', 'can_manage_groupings')
         ->with(['office:id,name'])
-        ->where('role', intval(AccountRoleType::MEMBER->value))
-        ->orderBy('kana')
+        ->where('role', AccountRoleType::MEMBER->value)
+        ->orderBy('id')
+        ->get();
+
+        $others = User::select('id', 'office_id', 'name', 'kana', 'email', 'can_manage_job_postings', 'can_manage_groupings')
+        ->with(['office:id,name'])
+        ->where('role', AccountRoleType::UNSET->value)
+        ->orderBy('id')
         ->get();
 
         return Inertia::render('Admin/Account/User/Index', [
             'staff' => $staff,
             'members' => $members,
+            'others' => $others,
         ]);
     }
 
@@ -54,7 +61,7 @@ class UserController extends Controller
         $roleTypeOptions =  AccountRoleType::options();
 
         $offices = Office::select('id', 'name')
-            ->orderBy('kana')
+            ->orderBy('id')
             ->get()
             ->prepend(['id' => 0, 'name' => '未所属']);
 
@@ -81,8 +88,10 @@ class UserController extends Controller
                     'email' => $request->email,
                     'password' => Hash::make($password),
                     'role' => intval($request->role),
-                    'can_manage_job_postings' => $request->canManageJobPostings,
-                    'can_manage_groupings' => $request->canManageGroupings,
+                    'can_manage_job_postings' => $request->can_manage_job_postings,
+                    'can_manage_groupings' => $request->can_manage_groupings,
+                    'created_by' => Auth::guard('admins')->user()->name,
+                    'updated_by' => Auth::guard('admins')->user()->name,
                 ]);
             });
 
@@ -107,14 +116,28 @@ class UserController extends Controller
      */
     public function show(User $user): Response
     {
-        $user = User::select('id', 'office_id', 'name', 'kana', 'email', 'role', 'can_manage_job_postings', 'can_manage_groupings')
+        $user = User::select('id', 'office_id', 'name', 'kana', 'email', 'role', 'can_manage_job_postings', 'can_manage_groupings', 'created_at', 'created_by', 'updated_at', 'updated_by')
             ->with(['office:id,name'])
             ->findOrFail($user->id);
 
         $roleTypeOptions =  AccountRoleType::options();
-        
+
         return Inertia::render('Admin/Account/User/Show', [
-            'user' => $user,
+            'user' => [
+                'id' => $user->id,
+                'office_id' => $user->office_id,
+                'name' => $user->name,
+                'kana' => $user->kana,
+                'email' => $user->email,
+                'role' => $user->role,
+                'can_manage_job_postings' => $user->can_manage_job_postings,
+                'can_manage_groupings' => $user->can_manage_groupings,
+                'created_at' => $user->created_at->format('Y-m-d H:i:s'),
+                'created_by' => $user->created_by,
+                'updated_at'=> $user->updated_at->format('Y-m-d H:i:s'),
+                'updated_by' => $user->updated_by,
+                'office' => $user->office,
+            ],
             'roleTypeOptions' => $roleTypeOptions,
         ]);
     }
@@ -127,7 +150,7 @@ class UserController extends Controller
         $roleTypeOptions =  AccountRoleType::options();
 
         $offices = Office::select('id', 'name')
-            ->orderBy('kana')
+            ->orderBy('id')
             ->get()
             ->prepend(['id' => 0, 'name' => '未所属']);
 
@@ -151,11 +174,21 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user): RedirectResponse
+    public function update(UpdateUserRequest $request, String $id): RedirectResponse
     {
+        $user = User::find($id);
+
+        if (!$user) {
+            return to_route('admin.account.users.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '対象のデータが見つかりません',
+                'flash_status' => 'error',
+            ]);
+        }
+
         try {
             DB::transaction(function () use ($request, $user) {
-                if ($user->updated_at->format('Y-m-d H:i:s') !== $request->updatedAt) {
+                if ($user->updated_at->format('Y-m-d H:i:s') !== $request->updated_at) {
                     throw new OptimisticLockException;
                 }
                 
@@ -163,8 +196,9 @@ class UserController extends Controller
                 $user->name = $request->name;
                 $user->kana = $request->kana;
                 $user->role = intval($request->role);
-                $user->can_manage_job_postings = $request->canManageJobPostings;
-                $user->can_manage_groupings = $request->canManageGroupings;
+                $user->can_manage_job_postings = $request->can_manage_job_postings;
+                $user->can_manage_groupings = $request->can_manage_groupings;
+                $user->updated_by = Auth::guard('admins')->user()->name;
                 $user->save();
             });
 
@@ -191,8 +225,18 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user): RedirectResponse
+    public function destroy(String $id): RedirectResponse
     {
+        $user = User::find($id);
+
+        if (!$user) {
+            return to_route('admin.account.users.index')->with([
+                'flash_id' => Str::uuid(),
+                'flash_message' => '対象のデータが見つかりません',
+                'flash_status' => 'error',
+            ]);
+        }
+
         try {
             DB::transaction(function () use ($user) {
                 $user->delete();
@@ -221,7 +265,7 @@ class UserController extends Controller
             'ids.required' => '削除対象を選択してください',
             'ids.array' => '削除対象の形式が正しくありません',
             'ids.*.integer' => '無効なIDが含まれています',
-            'ids.*.exists' => '存在しないデータが選択されています。ページを更新して再試行してください。',
+            'ids.*.exists' => '存在しないデータが選択されていたのでページを更新しました。再試行してください。',
         ]);
 
         try {

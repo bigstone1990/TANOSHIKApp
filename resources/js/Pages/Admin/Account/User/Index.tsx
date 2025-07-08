@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { useState } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 
 import {
     Breadcrumb,
@@ -32,7 +32,7 @@ const columnLabelMap: Record<string, string> = {
     name: "名前",
     kana: "かな",
     email: "メールアドレス",
-    office_name: "所属事業所名",
+    office_name: "所属事業所",
     can_manage_job_postings: "求人管理機能",
     can_manage_groupings: "グループ分け管理機能",
 }
@@ -54,14 +54,15 @@ type User = {
 type IndexProps = PageProps<{
     staff: User[]
     members: User[]
+    others: User[]
 }>
 
-export default function Index({ staff, members }: IndexProps) {
+export default function Index({ staff, members, others }: IndexProps) {
     const [activeTab, setActiveTab] = useState('staff')
 
     const { delete: destroy, processing } = useForm({})
 
-    const staffTableData = staff.map((user) => ({
+    const staffTableData = useMemo(() => staff.map((user) => ({
         id: user.id,
         name: user.name,
         kana: user.kana,
@@ -69,9 +70,9 @@ export default function Index({ staff, members }: IndexProps) {
         office_name: user.office?.name || '未所属',
         can_manage_job_postings: user.can_manage_job_postings,
         can_manage_groupings: user.can_manage_groupings,
-    }))
+    })), [staff])
 
-    const memberTableData = members.map((user) => ({
+    const memberTableData = useMemo(() => members.map((user) => ({
         id: user.id,
         name: user.name,
         kana: user.kana,
@@ -79,24 +80,38 @@ export default function Index({ staff, members }: IndexProps) {
         office_name: user.office?.name || '未所属',
         can_manage_job_postings: user.can_manage_job_postings,
         can_manage_groupings: user.can_manage_groupings,
-    }))
+    })), [members])
 
-    const searchableColumns = ['name', 'kana', 'email', 'office_name']
+    const otherTableData = useMemo(() => others.map((user) => ({
+        id: user.id,
+        name: user.name,
+        kana: user.kana,
+        email: user.email,
+        office_name: user.office?.name || '未所属',
+        can_manage_job_postings: user.can_manage_job_postings,
+        can_manage_groupings: user.can_manage_groupings,
+    })), [others])
+
+    const searchableColumns = ['id', 'name', 'kana', 'email', 'office_name']
+
+    const keywordPlaceholder = "キーワード検索（ID、 名前、 かな、メールアドレス、所属事業所）"
 
     const initialColumnVisibility = {
         kana: false,
+        can_manage_job_postings: false,
+        can_manage_groupings: false,
     }
 
-    const handleDelete = (id: number) => {
+    const handleDelete = useCallback((id: number) => {
         destroy(route('admin.account.users.destroy', { user: id }), {
             preserveScroll: true,
         })
-    }
+    }, [destroy])
 
-    const columns = createColumns({
+    const columns = useMemo(() => createColumns({
         onDelete: handleDelete,
         isProcessing: processing
-    })
+    }), [handleDelete, processing])
 
     return (
         <AuthenticatedLayout>
@@ -129,6 +144,7 @@ export default function Index({ staff, members }: IndexProps) {
                         <TabsList>
                             <TabsTrigger value="staff">スタッフ</TabsTrigger>
                             <TabsTrigger value="member">メンバー</TabsTrigger>
+                            <TabsTrigger value="other">その他</TabsTrigger>
                         </TabsList>
                         <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                             <div style={{ display: activeTab === 'staff' ? 'block' : 'none' }}>
@@ -136,9 +152,11 @@ export default function Index({ staff, members }: IndexProps) {
                                     data={staffTableData}
                                     columns={columns}
                                     searchableColumns={searchableColumns}
+                                    keywordPlaceholder={keywordPlaceholder}
                                     columnLabelMap={columnLabelMap}
                                     initialColumnVisibility={initialColumnVisibility}
                                     bulkDestroyRouteName="admin.account.users.bulk-destroy"
+                                    deleteDialogDisplayField="name"
                                 />
                             </div>
                             <div style={{ display: activeTab === 'member' ? 'block' : 'none' }}>
@@ -146,9 +164,23 @@ export default function Index({ staff, members }: IndexProps) {
                                     data={memberTableData}
                                     columns={columns}
                                     searchableColumns={searchableColumns}
+                                    keywordPlaceholder={keywordPlaceholder}
                                     columnLabelMap={columnLabelMap}
                                     initialColumnVisibility={initialColumnVisibility}
                                     bulkDestroyRouteName="admin.account.users.bulk-destroy"
+                                    deleteDialogDisplayField="name"
+                                />
+                            </div>
+                            <div style={{ display: activeTab === 'other' ? 'block' : 'none' }}>
+                                <DataTable
+                                    data={otherTableData}
+                                    columns={columns}
+                                    searchableColumns={searchableColumns}
+                                    keywordPlaceholder={keywordPlaceholder}
+                                    columnLabelMap={columnLabelMap}
+                                    initialColumnVisibility={initialColumnVisibility}
+                                    bulkDestroyRouteName="admin.account.users.bulk-destroy"
+                                    deleteDialogDisplayField="name"
                                 />
                             </div>
                         </div>

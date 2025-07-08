@@ -1,7 +1,7 @@
 import InputError from '@/Components/InputError'
 import GuestLayout from '@/Layouts/GuestLayout'
 import { Head, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -13,16 +13,24 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export default function ForgotPassword({ status }: { status?: string }) {
-    const { data, setData, post, processing, errors } = useForm({
+type ForgotPasswordProps = {
+    status?: string
+}
+
+type FormDataType = {
+    email: string
+}
+
+export default function ForgotPassword({ status }: ForgotPasswordProps) {
+    const { data, setData, post, processing, errors } = useForm<FormDataType>({
         email: '',
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         post(route('user.password.email'))
-    }
+    }, [post])
 
     return (
         <GuestLayout>

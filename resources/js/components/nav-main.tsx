@@ -22,21 +22,25 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string
-    url: string
-    icon: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: string
-      isActive?: boolean
-    }[]
-  }[]
-}) {
+type NavItemSub = {
+  title: string
+  url: string
+  isActive?: boolean
+}
+
+type NavItem = {
+  title: string
+  url: string
+  icon: LucideIcon
+  isActive?: boolean
+  items?: NavItemSub[]
+}
+
+type NavMainProps = {
+  items: NavItem[]
+}
+
+export function NavMain({ items }: NavMainProps) {
   const [openItems, setOpenItems] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {}
     items.forEach((item) => {

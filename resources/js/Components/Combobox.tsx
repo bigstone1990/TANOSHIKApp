@@ -23,8 +23,8 @@ interface ComboboxProps {
     id?: string
     className?: string
     options: Option[]
-    value: string
-    onValueChange: (value: string) => void
+    value: number
+    onValueChange: (value: number) => void
     placeholder?: string
 }
 
@@ -38,7 +38,16 @@ export default function Combobox({
 }: ComboboxProps) {
     const [open, setOpen] = React.useState(false)
 
-    const selectedOption = options.find((option) => option.value === value)
+    const selectedOption = React.useMemo(() => {
+        return options.find((option) => option.value === value)
+    }, [options, value])
+
+    const handleSelect = React.useCallback((currentLabel: string) => {
+        const selected = options.find(opt => opt.label === currentLabel)
+        const selectedValue = selected?.value ?? 0
+        onValueChange(selectedValue)
+        setOpen(false)
+    }, [options, onValueChange])
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -56,7 +65,10 @@ export default function Combobox({
             </PopoverTrigger>
             <PopoverContent className="p-0 w-[var(--radix-popover-trigger-width)]">
                 <Command>
-                    <CommandInput placeholder="キーワード検索" className="h-9 my-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+                    <CommandInput
+                        placeholder="キーワード検索"
+                        className="h-9 my-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                    />
                     <CommandList>
                         <CommandEmpty>結果が見つかりませんでした</CommandEmpty>
                         <CommandGroup>
@@ -64,12 +76,7 @@ export default function Combobox({
                                 <CommandItem
                                     key={option.value}
                                     value={option.label}
-                                    onSelect={(currentValue) => {
-                                        const selectedOption = options.find(opt => opt.label === currentValue)
-                                        const selectedValue = selectedOption?.value || ""
-                                        onValueChange(selectedValue)
-                                        setOpen(false)
-                                    }}
+                                    onSelect={handleSelect}
                                 >
                                     {option.label}
                                     <Check
