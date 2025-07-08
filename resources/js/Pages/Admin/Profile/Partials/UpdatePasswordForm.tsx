@@ -1,7 +1,7 @@
 import InputError from '@/Components/InputError'
 import { Transition } from '@headlessui/react'
 import { useForm } from '@inertiajs/react'
-import { FormEventHandler, useRef } from 'react'
+import { FormEventHandler, useRef, useCallback } from 'react'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -28,7 +28,7 @@ export default function UpdatePasswordForm({
         password_confirmation: '',
     })
 
-    const updatePassword: FormEventHandler = (e) => {
+    const updatePassword: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         put(route('admin.password.update'), {
@@ -46,7 +46,7 @@ export default function UpdatePasswordForm({
                 }
             },
         })
-    }
+    }, [put, reset])
 
     return (
         <section className={className}>

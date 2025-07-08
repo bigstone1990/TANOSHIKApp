@@ -1,5 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link } from '@inertiajs/react'
+import { useMemo } from 'react'
 
 import {
     Breadcrumb,
@@ -66,6 +67,10 @@ const PERMISSIONS: readonly Permission[] = [
 ] as const
 
 export default function Show({ user, roleTypeOptions }: ShowProps) {
+    const roleLabel = useMemo(() => {
+        return roleTypeOptions.find(option => option.value === user.role)?.label ?? '不明'
+    }, [user.role, roleTypeOptions])
+
     return (
         <AuthenticatedLayout>
             <Head title="ユーザー詳細" />
@@ -150,7 +155,7 @@ export default function Show({ user, roleTypeOptions }: ShowProps) {
                                             id="role"
                                             type="text"
                                             className="bg-gray-100"
-                                            value={roleTypeOptions.find(option => option.value === user.role)?.label ?? '不明'}
+                                            value={roleLabel}
                                             readOnly
                                         />
                                     </div>

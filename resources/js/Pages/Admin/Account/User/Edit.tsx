@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback, useMemo } from 'react'
 
 import {
     Breadcrumb,
@@ -95,56 +95,58 @@ const PERMISSIONS: readonly Permission[] = [
 ] as const
 
 export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
-    const officeOptions = offices.map(office => ({
-        label: office.name,
-        value: office.id,
-    }))
+    const officeOptions = useMemo(() => {
+        return offices.map(office => ({
+            label: office.name,
+            value: office.id,
+        }))
+    }, [offices])
 
     const { data, setData, put, delete: destroy, processing, errors } = useForm<FormData>({
         name: user.name,
         kana: user.kana,
         role: user.role,
-        office: user.office_id ? user.office_id : 0,
+        office: user.office_id ?? 0,
         can_manage_job_postings: user.can_manage_job_postings,
         can_manage_groupings: user.can_manage_groupings,
         updated_at: user.updated_at,
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         put(route('admin.account.users.update', { user: user.id }))
-    }
+    }, [put, user.id])
 
-    const handleDelete: () => void = () => {
+    const handleDelete = useCallback(() => {
         destroy(route('admin.account.users.destroy', { user: user.id }))
-    }
+    }, [destroy, user.id])
 
-    const enableAllPermissions = () => {
+    const enableAllPermissions = useCallback(() => {
         const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
             updates[permission.key] = true
         })
 
         setData(prev => ({ ...prev, ...updates }))
-    }
+    }, [setData])
 
-    const disableAllPermissions = () => {
+    const disableAllPermissions = useCallback(() => {
         const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
             updates[permission.key] = false
         })
 
         setData(prev => ({ ...prev, ...updates }))
-    }
+    }, [setData])
 
-    const areAllPermissionsEnabled = (): boolean => {
+    const areAllPermissionsEnabled = useMemo(() => {
         return PERMISSIONS.every(permission => data[permission.key] === true)
-    }
+    }, [data])
 
-    const areAllPermissionsDisabled = (): boolean => {
+    const areAllPermissionsDisabled = useMemo(() => {
         return PERMISSIONS.every(permission => data[permission.key] === false)
-    }
+    }, [data])
 
     return (
         <AuthenticatedLayout>
@@ -272,7 +274,7 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={enableAllPermissions}
-                                                disabled={areAllPermissionsEnabled()}
+                                                disabled={areAllPermissionsEnabled}
                                             >
                                                 全て有効
                                             </Button>
@@ -281,7 +283,7 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={disableAllPermissions}
-                                                disabled={areAllPermissionsDisabled()}
+                                                disabled={areAllPermissionsDisabled}
                                             >
                                                 全て無効
                                             </Button>

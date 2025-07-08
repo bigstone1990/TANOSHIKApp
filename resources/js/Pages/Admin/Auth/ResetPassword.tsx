@@ -1,7 +1,7 @@
 import InputError from '@/Components/InputError'
 import GuestLayout from '@/Layouts/GuestLayout'
 import { Head, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -27,13 +27,13 @@ export default function ResetPassword({
         password_confirmation: '',
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         post(route('admin.password.store'), {
             onFinish: () => reset('password', 'password_confirmation'),
         })
-    }
+    }, [post, reset])
 
     return (
         <GuestLayout>

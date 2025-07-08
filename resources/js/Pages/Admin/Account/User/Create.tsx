@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback, useMemo } from 'react'
 
 import {
     Breadcrumb,
@@ -70,10 +70,12 @@ const PERMISSIONS: readonly Permission[] = [
 ] as const
 
 export default function Create({ roleTypeOptions, offices }: CreateProps) {
-    const officeOptions = offices.map(office => ({
-        label: office.name,
-        value: office.id,
-    }))
+    const officeOptions = useMemo(() => {
+        return offices.map(office => ({
+            label: office.name,
+            value: office.id,
+        }))
+    }, [offices])
 
     const { data, setData, post, processing, errors } = useForm<FormData>({
         name: '',
@@ -85,37 +87,37 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
         can_manage_groupings: false,
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         post(route('admin.account.users.store'))
-    }
+    }, [post])
 
-    const enableAllPermissions = () => {
+    const enableAllPermissions = useCallback(() => {
         const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
             updates[permission.key] = true
         })
 
         setData(prev => ({ ...prev, ...updates }))
-    }
+    }, [setData])
 
-    const disableAllPermissions = () => {
+    const disableAllPermissions = useCallback(() => {
         const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
             updates[permission.key] = false
         })
 
         setData(prev => ({ ...prev, ...updates }))
-    }
+    }, [setData])
 
-    const areAllPermissionsEnabled = (): boolean => {
+    const areAllPermissionsEnabled = useMemo(() => {
         return PERMISSIONS.every(permission => data[permission.key] === true)
-    }
+    }, [data])
 
-    const areAllPermissionsDisabled = (): boolean => {
+    const areAllPermissionsDisabled = useMemo(() => {
         return PERMISSIONS.every(permission => data[permission.key] === false)
-    }
+    }, [data])
 
     return (
         <AuthenticatedLayout>
@@ -248,7 +250,7 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={enableAllPermissions}
-                                                disabled={areAllPermissionsEnabled()}
+                                                disabled={areAllPermissionsEnabled}
                                             >
                                                 全て有効
                                             </Button>
@@ -257,7 +259,7 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={disableAllPermissions}
-                                                disabled={areAllPermissionsDisabled()}
+                                                disabled={areAllPermissionsDisabled}
                                             >
                                                 全て無効
                                             </Button>

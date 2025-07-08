@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback } from 'react'
 
 import {
     Breadcrumb,
@@ -60,15 +60,15 @@ export default function Edit({ admin }: EditProps) {
         updated_at: admin.updated_at,
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         put(route('admin.account.admins.update', { admin: admin.id }))
-    }
+    }, [put, admin.id])
 
-    const handleDelete = () => {
+    const handleDelete = useCallback(() => {
         destroy(route('admin.account.admins.destroy', { admin: admin.id }))
-    }
+    }, [destroy, admin.id])
 
     return (
         <AuthenticatedLayout>
@@ -158,7 +158,6 @@ export default function Edit({ admin }: EditProps) {
                                     <div className="grid gap-2">
                                         <InputError message={errors.updated_at} />
                                     </div>
-
 
                                     <div className="flex items-center gap-4">
                                         <Link

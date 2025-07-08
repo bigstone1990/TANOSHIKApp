@@ -38,7 +38,16 @@ export default function Combobox({
 }: ComboboxProps) {
     const [open, setOpen] = React.useState(false)
 
-    const selectedOption = options.find((option) => option.value === value)
+    const selectedOption = React.useMemo(() => {
+        return options.find((option) => option.value === value)
+    }, [options, value])
+
+    const handleSelect = React.useCallback((currentLabel: string) => {
+        const selected = options.find(opt => opt.label === currentLabel)
+        const selectedValue = selected?.value ?? 0
+        onValueChange(selectedValue)
+        setOpen(false)
+    }, [options, onValueChange])
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -67,12 +76,7 @@ export default function Combobox({
                                 <CommandItem
                                     key={option.value}
                                     value={option.label}
-                                    onSelect={(currentLabel) => {
-                                        const selected = options.find(opt => opt.label === currentLabel)
-                                        const selectedValue = selected?.value || 0
-                                        onValueChange(selectedValue)
-                                        setOpen(false)
-                                    }}
+                                    onSelect={handleSelect}
                                 >
                                     {option.label}
                                     <Check

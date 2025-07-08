@@ -1,7 +1,7 @@
 import InputError from '@/Components/InputError'
 import GuestLayout from '@/Layouts/GuestLayout'
 import { Head, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -18,11 +18,11 @@ export default function ForgotPassword({ status }: { status?: string }) {
         email: '',
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         post(route('user.password.email'))
-    }
+    }, [post])
 
     return (
         <GuestLayout>

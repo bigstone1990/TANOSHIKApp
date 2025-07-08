@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback } from 'react'
 
 import {
     Breadcrumb,
@@ -32,11 +32,11 @@ export default function Create() {
         kana: '',
     })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         post(route('admin.offices.store'))
-    }
+    }, [post])
 
     return (
         <AuthenticatedLayout>

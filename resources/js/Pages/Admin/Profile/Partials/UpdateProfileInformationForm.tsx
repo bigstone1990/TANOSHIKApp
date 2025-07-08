@@ -1,7 +1,7 @@
 import InputError from '@/Components/InputError'
 import { Transition } from '@headlessui/react'
 import { useForm, usePage } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useCallback } from 'react'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -18,11 +18,11 @@ export default function UpdateProfileInformation({
             email: user.email,
         })
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = useCallback((e) => {
         e.preventDefault()
 
         patch(route('admin.profile.update'))
-    }
+    }, [patch])
 
     return (
         <section className={className}>
