@@ -13,8 +13,16 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export default function ForgotPassword({ status }: { status?: string }) {
-    const { data, setData, post, processing, errors } = useForm({
+type ForgotPasswordProps = {
+    status?: string
+}
+
+type FormDataType = {
+    email: string
+}
+
+export default function ForgotPassword({ status }: ForgotPasswordProps) {
+    const { data, setData, post, processing, errors } = useForm<FormDataType>({
         email: '',
     })
 

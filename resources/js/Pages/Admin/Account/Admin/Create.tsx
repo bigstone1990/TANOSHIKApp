@@ -21,14 +21,14 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import InputError from '@/Components/InputError'
 
-type FormData = {
+type FormDataType = {
     name: string
     kana: string
     email: string
 }
 
 export default function Create() {
-    const { data, setData, post, processing, errors } = useForm<FormData>({
+    const { data, setData, post, processing, errors } = useForm<FormDataType>({
         name: '',
         kana: '',
         email: '',

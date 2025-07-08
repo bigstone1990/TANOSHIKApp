@@ -43,7 +43,7 @@ type Admin = {
     updated_at: string
 }
 
-type FormData = {
+type FormDataType = {
     name: string
     kana: string
     updated_at: string
@@ -54,7 +54,7 @@ type EditProps = PageProps<{
 }>
 
 export default function Edit({ admin }: EditProps) {
-    const { data, setData, put, delete: destroy, processing, errors } = useForm<FormData>({
+    const { data, setData, put, delete: destroy, processing, errors } = useForm<FormDataType>({
         name: admin.name,
         kana: admin.kana,
         updated_at: admin.updated_at,

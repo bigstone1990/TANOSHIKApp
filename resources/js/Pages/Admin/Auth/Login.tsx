@@ -14,17 +14,25 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 
+type LoginProps = {
+    status?: string
+    canResetPassword: boolean
+}
+
+type FormDataType = {
+    email: string
+    password: string
+    remember: boolean
+}
+
 export default function Login({
     status,
     canResetPassword,
-}: {
-    status?: string
-    canResetPassword: boolean
-}) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+}: LoginProps) {
+    const { data, setData, post, processing, errors, reset } = useForm<FormDataType>({
         email: '',
         password: '',
-        remember: false as boolean,
+        remember: false,
     })
 
     const submit: FormEventHandler = useCallback((e) => {

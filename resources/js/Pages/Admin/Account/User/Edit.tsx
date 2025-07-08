@@ -57,7 +57,7 @@ type Office = {
     name: string
 }
 
-type FormData = {
+type FormDataType = {
     name: string
     kana: string
     role: number
@@ -102,7 +102,7 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
         }))
     }, [offices])
 
-    const { data, setData, put, delete: destroy, processing, errors } = useForm<FormData>({
+    const { data, setData, put, delete: destroy, processing, errors } = useForm<FormDataType>({
         name: user.name,
         kana: user.kana,
         role: user.role,
@@ -123,21 +123,15 @@ export default function Edit({ user, roleTypeOptions, offices }: EditProps) {
     }, [destroy, user.id])
 
     const enableAllPermissions = useCallback(() => {
-        const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
-            updates[permission.key] = true
+            setData(permission.key, true)
         })
-
-        setData(prev => ({ ...prev, ...updates }))
     }, [setData])
 
     const disableAllPermissions = useCallback(() => {
-        const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
-            updates[permission.key] = false
+            setData(permission.key, false)
         })
-
-        setData(prev => ({ ...prev, ...updates }))
     }, [setData])
 
     const areAllPermissionsEnabled = useMemo(() => {

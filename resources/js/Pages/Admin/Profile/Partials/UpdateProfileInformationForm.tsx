@@ -6,15 +6,21 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 
+type UpdateProfileInformationProps = {
+    className?: string
+}
+
+type FormDataType = {
+    email: string
+}
+
 export default function UpdateProfileInformation({
     className = '',
-}: {
-    className?: string
-}) {
+}: UpdateProfileInformationProps) {
     const user = usePage().props.auth.user
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =
-        useForm({
+        useForm<FormDataType>({
             email: user.email,
         })
 

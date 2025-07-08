@@ -23,14 +23,16 @@ import {
 } from "@/components/ui/sidebar"
 import { Link, usePage } from '@inertiajs/react'
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-  }
-}) {
+type User = {
+  name: string
+  email: string
+}
+
+type NavUserProps = {
+  user: User
+}
+
+export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar()
 
   const isAdmin = usePage().props.auth.isAdmin

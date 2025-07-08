@@ -121,15 +121,17 @@ export const createColumns = ({ onDelete, isProcessing = false }: CreateColumnsP
     },
 ]
 
+type ActionsCellProps = {
+    office: Office
+    onDelete: (id: number) => void
+    isProcessing: boolean
+}
+
 const ActionsCell = memo(({
     office,
     onDelete,
     isProcessing
-}: {
-    office: Office
-    onDelete: (id: number) => void
-    isProcessing: boolean
-}) => {
+}: ActionsCellProps) => {
     const [open, setOpen] = useState(false)
 
     const handleDelete = useCallback(() => {

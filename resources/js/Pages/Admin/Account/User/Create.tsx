@@ -33,7 +33,7 @@ type Office = {
     name: string
 }
 
-type FormData = {
+type FormDataType = {
     name: string
     kana: string
     email: string
@@ -77,7 +77,7 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
         }))
     }, [offices])
 
-    const { data, setData, post, processing, errors } = useForm<FormData>({
+    const { data, setData, post, processing, errors } = useForm<FormDataType>({
         name: '',
         kana: '',
         email: '',
@@ -94,21 +94,15 @@ export default function Create({ roleTypeOptions, offices }: CreateProps) {
     }, [post])
 
     const enableAllPermissions = useCallback(() => {
-        const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
-            updates[permission.key] = true
+            setData(permission.key, true)
         })
-
-        setData(prev => ({ ...prev, ...updates }))
     }, [setData])
 
     const disableAllPermissions = useCallback(() => {
-        const updates: Partial<FormData> = {}
         PERMISSIONS.forEach(permission => {
-            updates[permission.key] = false
+            setData(permission.key, false)
         })
-
-        setData(prev => ({ ...prev, ...updates }))
     }, [setData])
 
     const areAllPermissionsEnabled = useMemo(() => {

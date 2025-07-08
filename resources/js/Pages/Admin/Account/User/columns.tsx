@@ -185,15 +185,17 @@ export const createColumns = ({ onDelete, isProcessing = false }: CreateColumnsP
     },
 ]
 
+type ActionsCellProps = {
+    user: UserTableData
+    onDelete: (id: number) => void
+    isProcessing: boolean
+}
+
 const ActionsCell = memo(({
     user,
     onDelete,
     isProcessing
-}: {
-    user: UserTableData
-    onDelete: (id: number) => void
-    isProcessing: boolean
-}) => {
+}: ActionsCellProps) => {
     const [open, setOpen] = useState(false)
 
     const handleDelete = useCallback(() => {

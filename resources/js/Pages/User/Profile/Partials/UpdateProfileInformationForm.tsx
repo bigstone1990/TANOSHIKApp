@@ -6,13 +6,15 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 
+type UpdateProfileInformationProps = {
+    officeName: string
+    className?: string
+}
+
 export default function UpdateProfileInformation({
     officeName,
     className = '',
-}: {
-    officeName: string
-    className?: string
-}) {
+}: UpdateProfileInformationProps) {
     const user = usePage().props.auth.user
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =

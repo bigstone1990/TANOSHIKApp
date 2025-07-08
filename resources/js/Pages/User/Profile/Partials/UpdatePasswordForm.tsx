@@ -6,11 +6,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 
+type UpdatePasswordFormProps = {
+    className?: string
+}
+
+type FormDataType = {
+    current_password: string
+    password: string
+    password_confirmation: string
+}
+
 export default function UpdatePasswordForm({
     className = '',
-}: {
-    className?: string
-}) {
+}: UpdatePasswordFormProps) {
     const passwordInput = useRef<HTMLInputElement>(null)
     const currentPasswordInput = useRef<HTMLInputElement>(null)
 
@@ -22,7 +30,7 @@ export default function UpdatePasswordForm({
         reset,
         processing,
         recentlySuccessful,
-    } = useForm({
+    } = useForm<FormDataType>({
         current_password: '',
         password: '',
         password_confirmation: '',
